@@ -1,0 +1,13 @@
+{% load i18n ui %}{# Enlace de la barra lateral. Parámetros: url, label, icon_name, key #}
+{% if url %}
+<a href="{{ url }}"
+   class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors {% if key == nav_active %}bg-accent-soft text-fg{% else %}text-muted hover:bg-surface-2 hover:text-fg{% endif %}"
+   {% if key == nav_active %}aria-current="page"{% endif %}>
+  {% icon icon_name "size-5" %}<span>{{ label }}</span>
+</a>
+{% else %}
+<span class="flex cursor-default items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted/70" aria-disabled="true">
+  {% icon icon_name "size-5" %}<span class="flex-1">{{ label }}</span>
+  <span class="rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium">{% translate "Pronto" %}</span>
+</span>
+{% endif %}

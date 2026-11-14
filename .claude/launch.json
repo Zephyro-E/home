@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hogar",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "scripts\arrancar.bat"],
+      "port": 8000
+    }
+  ]
+}

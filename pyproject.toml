@@ -1,0 +1,38 @@
+[project]
+name = "hogar"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "argon2-cffi>=25.1.0",
+    "django>=5.2,<5.3",
+    "django-htmx>=1.29.0",
+    "django-tailwind-cli>=4.8.2",
+    "python-dotenv>=1.2.4",
+    "waitress>=3.0.2",
+    "whitenoise>=6.12.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-django>=4.14.0",
+    "ruff>=0.17.5",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+testpaths = ["apps"]
+python_files = ["test_*.py"]
+addopts = "-ra"
+filterwarnings = ["ignore:No directory at:UserWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["**/migrations/*"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "DJ", "SIM"]

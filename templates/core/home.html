@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Inicio" %} · Hogar{% endblock %}
+
+{% block content %}
+<section class="mb-8">
+  <p class="text-sm font-medium text-muted first-letter:uppercase">{% now "l, j \d\e F" %}</p>
+  <h1 class="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">{% translate "Hola" %} 👋</h1>
+</section>
+
+<section class="mb-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+  <div class="flex items-start gap-4">
+    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent">{% icon "settings" "size-5" %}</span>
+    <div>
+      <h2 class="font-semibold">{% translate "La aplicación está en construcción" %}</h2>
+      <p class="mt-1 text-sm text-muted">
+        {% blocktranslate %}Ya funciona la base. El siguiente paso es el inicio de sesión y la gestión del hogar; después llegarán los módulos uno a uno.{% endblocktranslate %}
+      </p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="modulos">
+  <h2 id="modulos" class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Módulos" %}</h2>
+  <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    {% for m in modules %}
+    <li>
+      {% if m.enabled %}<a href="{{ m.url }}"{% else %}<div aria-disabled="true"{% endif %}
+         class="flex h-full flex-col gap-3 rounded-2xl border border-border bg-surface p-4 shadow-sm {% if m.enabled %}transition hover:-translate-y-0.5 hover:shadow-md{% endif %}">
+        <span class="grid size-11 place-items-center rounded-xl {{ m.color }}">{% icon m.icon "size-6" %}</span>
+        <span>
+          <span class="block font-semibold">{{ m.label }}</span>
+          <span class="mt-0.5 block text-xs text-muted">{{ m.description }}</span>
+        </span>
+        {% if not m.enabled %}
+        <span class="mt-auto w-fit rounded-full bg-surface-2 px-2 py-0.5 text-[11px] font-medium text-muted">{% blocktranslate with phase=m.phase %}Fase {{ phase }}{% endblocktranslate %}</span>
+        {% endif %}
+      {% if m.enabled %}</a>{% else %}</div>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

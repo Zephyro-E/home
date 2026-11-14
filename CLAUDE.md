@@ -29,4 +29,24 @@ Guía para asistentes de IA que trabajen en este repositorio.
 
 ## Comandos
 
-Se completarán en la Fase 0.
+uv se instala en `%USERPROFILE%\.local\bin`; si no está en el PATH de la shell, añadirlo (`export PATH="$HOME/.local/bin:$PATH"`).
+
+```bash
+uv run pytest                                    # pruebas (deben pasar antes de cada commit)
+uv run ruff check . && uv run ruff format --check .   # lint y formato (la CI los exige)
+uv run python manage.py makemigrations / migrate
+uv run python manage.py tailwind build           # recompilar CSS tras tocar plantillas
+HOGAR_DEBUG=1 uv run python manage.py tailwind runserver   # desarrollo (scripts/arrancar.bat)
+```
+
+- El vigilante de Tailwind (`tailwind runserver` / `watch`) se cierra si no hay consola (procesos en segundo plano): en ese caso, ejecutar `tailwind build` tras cambiar plantillas.
+- El servidor de vista previa puede iniciarse con `.claude/launch.json` (configuración `hogar`).
+- Verificación visual: escritorio y móvil (375 px), modo claro y oscuro, sin errores en consola.
+
+## Mapa del código
+
+- `config/settings.py`: toda la configuración, leída de variables `HOGAR_*` (ver `.env.example`).
+- `apps/core/`: usuario propio (`models.User`, login por email), registro de módulos (`modules.py`), navegación (`context_processors.py`), etiqueta `{% icon %}` (`templatetags/ui.py`).
+- `templates/base.html`: estructura de la app (barra lateral, cabecera móvil, barra inferior); `templates/partials/`: componentes.
+- `assets/css/source.css`: colores semánticos (`bg-surface`, `text-muted`, `bg-accent`…) para claro/oscuro. Usarlos en lugar de colores fijos.
+- `static/icons/`: iconos Lucide 0.460.0. Para añadir uno: descargar `https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/<nombre>.svg`.

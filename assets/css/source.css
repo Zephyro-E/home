@@ -1,0 +1,56 @@
+/* Hoja de estilos de origen. Tailwind la compila en static/css/tailwind.css (no versionado). */
+@import "tailwindcss";
+
+/* El modo oscuro lo controla el atributo data-theme de <html> (ver static/js/app.js). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Colores semánticos: las plantillas usan bg-bg, bg-surface, text-fg, text-muted,
+   border-border, bg-accent… y cambian solos entre modo claro y oscuro. */
+@theme inline {
+  --color-bg: var(--app-bg);
+  --color-surface: var(--app-surface);
+  --color-surface-2: var(--app-surface-2);
+  --color-fg: var(--app-fg);
+  --color-muted: var(--app-muted);
+  --color-border: var(--app-border);
+  --color-accent: var(--app-accent);
+  --color-accent-fg: var(--app-accent-fg);
+  --color-accent-soft: var(--app-accent-soft);
+}
+
+:root {
+  --app-bg: #fafaf9;          /* stone-50 */
+  --app-surface: #ffffff;
+  --app-surface-2: #f5f5f4;   /* stone-100 */
+  --app-fg: #1c1917;          /* stone-900 */
+  --app-muted: #57534e;       /* stone-600 */
+  --app-border: #e7e5e4;      /* stone-200 */
+  --app-accent: #0f766e;      /* teal-700 */
+  --app-accent-fg: #ffffff;
+  --app-accent-soft: #ccfbf1; /* teal-100 */
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --app-bg: #0c0a09;          /* stone-950 */
+  --app-surface: #1c1917;     /* stone-900 */
+  --app-surface-2: #292524;   /* stone-800 */
+  --app-fg: #f5f5f4;          /* stone-100 */
+  --app-muted: #a8a29e;       /* stone-400 */
+  --app-border: #292524;      /* stone-800 */
+  --app-accent: #2dd4bf;      /* teal-400 */
+  --app-accent-fg: #042f2e;   /* teal-950 */
+  --app-accent-soft: #134e4a; /* teal-900 */
+  color-scheme: dark;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

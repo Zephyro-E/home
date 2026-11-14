@@ -22,7 +22,8 @@ htmlcov/
 
 # Estáticos generados
 staticfiles/
-static/css/output.css
+static/css/tailwind.css
+.django_tailwind_cli/
 bin/
 
 # Editor / sistema

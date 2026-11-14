@@ -1,0 +1,12 @@
+{% load ui %}{# Enlace de la barra inferior (móvil). Parámetros: url, label, icon_name, key #}
+{% if url %}
+<a href="{{ url }}"
+   class="flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-medium {% if key == nav_active %}text-accent{% else %}text-muted{% endif %}"
+   {% if key == nav_active %}aria-current="page"{% endif %}>
+  {% icon icon_name "size-6" %}<span class="max-w-full truncate px-1">{{ label }}</span>
+</a>
+{% else %}
+<span class="flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] font-medium text-muted/50" aria-disabled="true">
+  {% icon icon_name "size-6" %}<span class="max-w-full truncate px-1">{{ label }}</span>
+</span>
+{% endif %}

@@ -7,7 +7,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 
 | Fase | Contenido | Tamaño | Estado |
 |---|---|---|---|
-| **0. Cimientos** | Proyecto Django con uv, estructura, ajustes, Tailwind/HTMX/Alpine, ruff, pytest, CI en GitHub Actions, plantilla base con tema claro/oscuro, script de arranque | S | ⬜ |
+| **0. Cimientos** | Proyecto Django con uv, estructura, ajustes, Tailwind/HTMX/Alpine, ruff, pytest, CI en GitHub Actions, plantilla base con tema claro/oscuro, script de arranque | S | ✅ 2026-11-14 |
 | **1. Identidad y hogar** | Usuario propio (login por email), Argon2, sesiones, asistente inicial, hogar, invitaciones, roles, middleware de hogar activo, `visible_to`, pruebas de autorización, perfil (idioma, tema, avatar), i18n es/en, dashboard vacío, manifest PWA, copia de seguridad + restauración | M | ⬜ |
 | **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ⬜ |
 | **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ⬜ |
@@ -20,6 +20,12 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ⬜ |
 | **10. Servidor** | Dockerfile + Docker Compose, HTTPS, posible paso a PostgreSQL, migración de datos desde el PC | M | ⬜ |
 | **Futuro** | Planificador de comidas, mapa de sitios, TMDB, votación de películas, mantenimiento, inventario, documentos, estadísticas | — | ⬜ |
+
+## Notas de la Fase 0
+
+- Verificado: 14 pruebas automáticas, lint, página de inicio en escritorio y móvil, modo claro/oscuro, español/inglés según el navegador, servidor Waitress sin modo desarrollo (estáticos y página 404 genérica).
+- Ya existe el usuario propio (login por email, Argon2): era obligatorio antes de la primera migración.
+- Pendiente para la Fase 1: compilar traducciones en Windows sin instalar GNU gettext (opción prevista: Babel, en Python puro).
 
 ## Requisitos transversales: cuándo llega cada uno
 
