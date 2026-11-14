@@ -8,6 +8,12 @@ from django.urls import reverse
 from apps.core.modules import MODULES
 
 
+@pytest.fixture
+def client(login_as, home):
+    """Cliente con sesión iniciada como Ana, administradora del hogar de prueba."""
+    return login_as(home[1])
+
+
 @pytest.mark.django_db
 def test_inicio_responde_y_muestra_modulos(client):
     response = client.get(reverse("core:home"))
@@ -19,8 +25,9 @@ def test_inicio_responde_y_muestra_modulos(client):
 
 
 @pytest.mark.django_db
-def test_inicio_en_ingles_si_el_navegador_lo_pide(client):
-    response = client.get(reverse("core:home"), HTTP_ACCEPT_LANGUAGE="en")
+def test_entrada_en_ingles_si_el_navegador_lo_pide(client):
+    client.logout()
+    response = client.get(reverse("core:login"), HTTP_ACCEPT_LANGUAGE="en")
     assert '<html lang="en"' in response.content.decode()
 
 
@@ -66,3 +73,17 @@ def test_no_faltan_migraciones():
 
 def test_comprobaciones_de_django():
     call_command("check", stdout=StringIO())
+
+
+def test_traducciones_completas_y_compiladas():
+    """Falla si hay textos nuevos sin traducir: ejecutar `manage.py translations update`,
+    traducir en locale/en/LC_MESSAGES/django.po y `manage.py translations compile`."""
+    call_command("translations", "check", stdout=StringIO())
+
+
+@pytest.mark.django_db
+def test_la_interfaz_se_traduce_al_ingles(client):
+    client.logout()
+    html = client.get(reverse("core:login"), HTTP_ACCEPT_LANGUAGE="en").content.decode()
+    assert "Log in" in html
+    assert "Iniciar sesión" not in html

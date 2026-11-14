@@ -1,0 +1,24 @@
+{% load i18n ui %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" data-theme="light">
+<head>
+  <title>{% block title %}Hogar{% endblock %}</title>
+  {% include "partials/head.html" %}
+</head>
+<body class="min-h-dvh bg-bg text-fg antialiased">
+  <main class="mx-auto flex min-h-dvh w-full max-w-md flex-col justify-center px-4 py-10">
+    <div class="mb-8 flex items-center justify-center gap-2 text-xl font-semibold">
+      <span class="grid size-10 place-items-center rounded-xl bg-accent text-accent-fg">{% icon "house" "size-5" %}</span>
+      Hogar
+    </div>
+    {% include "partials/messages.html" %}
+    <div class="rounded-2xl border border-border bg-surface p-6 shadow-sm sm:p-8">
+      {% block content %}{% endblock %}
+    </div>
+    <div class="mt-6 flex items-center justify-center gap-2">
+      {% include "partials/language_switcher.html" %}
+      {% include "partials/theme_switcher.html" with show_label=False %}
+    </div>
+  </main>
+</body>
+</html>

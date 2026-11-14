@@ -1,0 +1,40 @@
+{% extends "base_auth.html" %}
+{% load i18n %}
+
+{% block title %}{% translate "Invitación" %} · Hogar{% endblock %}
+
+{% block content %}
+{% if error %}
+  <h1 class="text-xl font-semibold">{% translate "Invitación no válida" %}</h1>
+  <p class="mt-2 text-sm text-muted">{{ error }}</p>
+  <p class="mt-2 text-sm text-muted">{% translate "Pide a alguien del hogar que te envíe un enlace nuevo." %}</p>
+  <a href="{% url 'core:home' %}" class="mt-6 inline-block text-sm font-semibold text-accent hover:underline">{% translate "Ir al inicio" %}</a>
+{% else %}
+  <p class="text-sm font-medium text-muted">{% translate "Te han invitado a" %}</p>
+  <h1 class="text-2xl font-semibold">{{ invitation.household.name }}</h1>
+
+  {% if user.is_authenticated %}
+    {% if already_member %}
+      <p class="mt-4 text-sm text-muted">{% translate "Ya perteneces a este hogar." %}</p>
+      <a href="{% url 'core:home' %}" class="mt-6 block w-full rounded-xl bg-accent px-4 py-3 text-center font-semibold text-accent-fg hover:opacity-90">{% translate "Ir al inicio" %}</a>
+    {% else %}
+      <p class="mt-4 text-sm text-muted">{% blocktranslate trimmed with email=user.email %}Has iniciado sesión como {{ email }}.{% endblocktranslate %}</p>
+      <form method="post" class="mt-6">
+        {% csrf_token %}
+        <button type="submit" class="w-full rounded-xl bg-accent px-4 py-3 font-semibold text-accent-fg hover:opacity-90">{% translate "Unirme a este hogar" %}</button>
+      </form>
+    {% endif %}
+  {% else %}
+    <p class="mb-6 mt-2 text-sm text-muted">{% translate "Crea tu cuenta para entrar." %}</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include "partials/form_fields.html" %}
+      <button type="submit" class="mt-6 w-full rounded-xl bg-accent px-4 py-3 font-semibold text-accent-fg hover:opacity-90">{% translate "Crear cuenta y unirme" %}</button>
+    </form>
+    <p class="mt-6 text-center text-sm text-muted">
+      {% translate "¿Ya tienes cuenta?" %}
+      <a href="{% url 'core:login' %}?next={{ request.path|urlencode }}" class="font-semibold text-accent hover:underline">{% translate "Inicia sesión" %}</a>
+    </p>
+  {% endif %}
+{% endif %}
+{% endblock %}

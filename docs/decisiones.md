@@ -17,6 +17,9 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 010 | Borrado definitivo con "Deshacer" de unos segundos | Aceptada | 2026-11-14 |
 | 011 | Hogar activo en sesión, validado en cada petición | Aceptada | 2026-11-14 |
 | 012 | Recurrencias con RRULE (RFC 5545) | Aceptada | 2026-11-14 |
+| 013 | Traducciones con Babel en lugar de GNU gettext | Aceptada | 2026-11-14 |
+| 014 | Avatar de iniciales; fotos con la gestión de archivos | Aceptada | 2026-11-14 |
+| 015 | Todas las páginas exigen sesión por defecto | Aceptada | 2026-11-14 |
 
 ---
 
@@ -129,3 +132,25 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 ## ADR-012 · Recurrencias con RRULE (RFC 5545)
 
 **Decisión.** Tareas y eventos recurrentes guardan su regla en formato RRULE estándar y se expanden al consultar con `python-dateutil`. El calendario **proyecta** las tareas con fecha límite al leer, sin copiarlas como eventos, manteniendo la referencia al original.
+
+---
+
+## ADR-013 · Traducciones con Babel en lugar de GNU gettext
+
+**Contexto.** Las herramientas de traducción de Django (`makemessages`, `compilemessages`) necesitan GNU gettext, que no viene con Windows.
+
+**Decisión.** Comando propio `manage.py translations update|compile|check`, basado en Babel (Python puro, dependencia solo de desarrollo). Reconoce `_()`, `gettext()`, `gettext_lazy()`, `{% translate %}` y `{% blocktranslate %}` (reproduce cómo Django construye los textos de este último). Los `.po` y `.mo` se versionan, así que usar la app no requiere compilar nada.
+
+**Consecuencias.** Una prueba automática falla si algún texto queda sin traducir o sin compilar. No se usan plurales ni contextos (`pgettext`) por ahora; si hicieran falta, se ampliaría el comando.
+
+---
+
+## ADR-014 · Avatar de iniciales; fotos con la gestión de archivos
+
+**Decisión.** En la Fase 1 el avatar muestra las iniciales sobre el color del miembro en el hogar. La subida de fotos llegará con la gestión de archivos (Fase 8), que resolverá de una vez tamaño, formatos, eliminación de EXIF y acceso con permisos.
+
+---
+
+## ADR-015 · Todas las páginas exigen sesión por defecto
+
+**Decisión.** Se activa `LoginRequiredMiddleware` de Django: cualquier vista nueva exige sesión salvo que se marque explícitamente con `@login_not_required` (hoy solo: entrada, asistente inicial, invitación y cambio de idioma). Olvidar proteger una vista deja de ser posible.

@@ -3,12 +3,13 @@
 > Modelo conceptual. Los nombres de campos son orientativos y se concretan al implementar cada fase.
 > Identificadores: UUID. Fechas y horas: UTC (ver ADR-008). Importes: céntimos enteros (ADR-007).
 
-## Núcleo (Fase 1)
+## Núcleo (Fase 1, implementado en `apps/core/models.py`)
 
 ```
 User                 (modelo propio desde el primer día; inicio de sesión por email)
-  id, email (único), name, avatar → File?, language ('es'|'en'),
-  theme ('system'|'light'|'dark'), password (Argon2id), is_active, date_joined
+  id, email (único), name, language ('es'|'en'),
+  theme ('system'|'light'|'dark'), password (Argon2id), is_active, is_staff, date_joined
+  (avatar: iniciales + color del miembro; foto en la Fase 8, ADR-014)
 
 Household
   id, name, timezone ('Europe/Madrid'), currency ('EUR'), settings (JSON), created_at

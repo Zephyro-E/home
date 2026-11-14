@@ -5,9 +5,22 @@
 
 {% block content %}
 <section class="mb-8">
-  <p class="text-sm font-medium text-muted first-letter:uppercase">{% now "l, j \d\e F" %}</p>
-  <h1 class="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">{% translate "Hola" %} 👋</h1>
+  <p class="text-sm font-medium text-muted first-letter:uppercase">{% translate "l, j \d\e F" as date_format %}{{ today|date:date_format }}</p>
+  <h1 class="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">{% blocktranslate trimmed with name=user.get_short_name %}Hola, {{ name }}{% endblocktranslate %} 👋</h1>
 </section>
+
+{% if member_count == 1 and request.membership.is_admin %}
+<section class="mb-4 rounded-2xl border border-accent/30 bg-accent-soft p-5">
+  <div class="flex flex-wrap items-center gap-4">
+    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-surface text-accent">{% icon "user-plus" "size-5" %}</span>
+    <div class="min-w-0 flex-1">
+      <h2 class="font-semibold">{% translate "Invita al resto del hogar" %}</h2>
+      <p class="mt-1 text-sm text-muted">{% translate "Crea un enlace de invitación para que se unan los demás miembros." %}</p>
+    </div>
+    <a href="{% url 'core:household' %}#invitaciones" class="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% translate "Invitar" %}</a>
+  </div>
+</section>
+{% endif %}
 
 <section class="mb-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
   <div class="flex items-start gap-4">
@@ -15,7 +28,7 @@
     <div>
       <h2 class="font-semibold">{% translate "La aplicación está en construcción" %}</h2>
       <p class="mt-1 text-sm text-muted">
-        {% blocktranslate %}Ya funciona la base. El siguiente paso es el inicio de sesión y la gestión del hogar; después llegarán los módulos uno a uno.{% endblocktranslate %}
+        {% blocktranslate trimmed %}Ya funcionan las cuentas y el hogar. Los módulos llegarán uno a uno, empezando por la lista de la compra.{% endblocktranslate %}
       </p>
     </div>
   </div>

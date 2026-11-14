@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Hogar y miembros" %} · Hogar{% endblock %}
+
+{% block content %}
+<h1 class="mb-6 text-2xl font-semibold tracking-tight">{% translate "Hogar y miembros" %}</h1>
+
+<div class="space-y-6">
+  {# Nombre del hogar #}
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+    <h2 class="font-semibold">{% translate "Hogar" %}</h2>
+    {% if is_admin %}
+      <form method="post" action="{% url 'core:household_rename' %}" class="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end" novalidate>
+        {% csrf_token %}
+        <div class="flex-1">{% include "partials/form_fields.html" %}</div>
+        <button type="submit" class="rounded-xl bg-accent px-4 py-2.5 font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar" %}</button>
+      </form>
+    {% else %}
+      <p class="mt-2 text-lg">{{ request.household.name }}</p>
+    {% endif %}
+  </section>
+
+  {# Miembros #}
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="miembros">
+    <h2 id="miembros" class="font-semibold">{% translate "Miembros" %}</h2>
+    <ul class="mt-3 divide-y divide-border">
+      {% for m in memberships %}
+      <li class="flex flex-wrap items-center gap-3 py-3">
+        {% include "partials/avatar.html" with user=m.user color=m.color %}
+        <div class="min-w-0 flex-1">
+          <p class="truncate font-medium">{{ m.user }}{% if m.user == user %} <span class="text-sm font-normal text-muted">({% translate "tú" %})</span>{% endif %}</p>
+          <p class="truncate text-sm text-muted">{{ m.user.email }}</p>
+        </div>
+        {% if is_admin and m.user != user %}
+          <form method="post" action="{% url 'core:member_role' m.pk %}">
+            {% csrf_token %}
+            <label class="sr-only" for="role-{{ m.pk }}">{% translate "Rol" %}</label>
+            <select id="role-{{ m.pk }}" name="role" onchange="this.form.submit()" class="rounded-lg border border-border bg-surface px-2 py-1.5 text-sm">
+              {% for value, label in roles %}<option value="{{ value }}" {% if value == m.role %}selected{% endif %}>{{ label }}</option>{% endfor %}
+            </select>
+          </form>
+          <form method="post" action="{% url 'core:member_remove' m.pk %}"
+                x-data @submit="if (!confirm($el.dataset.confirm)) $event.preventDefault()"
+                data-confirm="{% blocktranslate trimmed with name=m.user %}¿Quitar a {{ name }} del hogar?{% endblocktranslate %}">
+            {% csrf_token %}
+            <button type="submit" class="grid size-9 place-items-center rounded-lg text-muted hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300" aria-label="{% blocktranslate trimmed with name=m.user %}Quitar a {{ name }}{% endblocktranslate %}">{% icon "trash-2" "size-4" %}</button>
+          </form>
+        {% else %}
+          <span class="rounded-full bg-surface-2 px-2.5 py-1 text-xs font-medium text-muted">{{ m.get_role_display }}</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  {# Invitaciones #}
+  {% if is_admin %}
+  <section id="invitaciones" class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="invitaciones-titulo">
+    <h2 id="invitaciones-titulo" class="font-semibold">{% translate "Invitar a alguien" %}</h2>
+    <p class="mt-1 text-sm text-muted">{% translate "Crea un enlace y envíaselo (por WhatsApp, por ejemplo). Sirve para una sola persona y caduca en 7 días." %}</p>
+
+    {% if new_invite_url %}
+    <div class="mt-4 rounded-xl border border-accent/40 bg-accent-soft p-4" x-data="{ copied: false }">
+      <p class="text-sm font-semibold">{% translate "Enlace creado. Cópialo ahora: por seguridad no se volverá a mostrar." %}</p>
+      <div class="mt-2 flex gap-2">
+        <input x-ref="link" type="text" readonly value="{{ new_invite_url }}" @focus="$el.select()"
+               class="min-w-0 flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm" aria-label="{% translate 'Enlace de invitación' %}">
+        <button type="button" class="flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-fg"
+                @click="$refs.link.select(); (navigator.clipboard ? navigator.clipboard.writeText($refs.link.value) : Promise.resolve(document.execCommand('copy'))).then(() => copied = true)">
+          {% icon "copy" "size-4" %}<span x-text="copied ? '{% translate "Copiado" %}' : '{% translate "Copiar" %}'">{% translate "Copiar" %}</span>
+        </button>
+      </div>
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'core:invitation_create' %}" class="mt-4 flex flex-wrap items-center gap-3">
+      {% csrf_token %}
+      <label class="text-sm" for="invite-role">{% translate "Rol" %}</label>
+      <select id="invite-role" name="role" class="rounded-lg border border-border bg-surface px-2 py-2 text-sm">
+        {% for value, label in roles %}<option value="{{ value }}" {% if value == "member" %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="flex items-center gap-2 rounded-xl bg-accent px-4 py-2.5 font-semibold text-accent-fg hover:opacity-90">
+        {% icon "user-plus" "size-4" %}{% translate "Crear enlace de invitación" %}
+      </button>
+    </form>
+
+    {% if invitations %}
+    <h3 class="mt-6 text-sm font-semibold text-muted">{% translate "Invitaciones pendientes" %}</h3>
+    <ul class="mt-2 divide-y divide-border">
+      {% for inv in invitations %}
+      <li class="flex items-center gap-3 py-2.5 text-sm">
+        {% icon "link" "size-4 text-muted" %}
+        <span class="flex-1">
+          {{ inv.get_role_display }} ·
+          {% blocktranslate trimmed with date=inv.expires_at|date:"j M, H:i" %}caduca el {{ date }}{% endblocktranslate %}
+        </span>
+        <form method="post" action="{% url 'core:invitation_revoke' inv.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="rounded-lg px-2 py-1 text-sm font-medium text-muted hover:bg-surface-2 hover:text-fg">{% translate "Anular" %}</button>
+        </form>
+      </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  {# Salir #}
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+    <h2 class="font-semibold">{% translate "Salir del hogar" %}</h2>
+    <p class="mt-1 text-sm text-muted">{% translate "Dejarás de ver la información compartida de este hogar." %}</p>
+    <form method="post" action="{% url 'core:household_leave' %}" class="mt-4"
+          x-data @submit="if (!confirm($el.dataset.confirm)) $event.preventDefault()"
+          data-confirm="{% translate '¿Seguro que quieres salir de este hogar?' %}">
+      {% csrf_token %}
+      <button type="submit" class="rounded-xl border border-red-300 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50 dark:border-red-900 dark:text-red-300 dark:hover:bg-red-950">{% translate "Salir del hogar" %}</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

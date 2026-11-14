@@ -1,0 +1,22 @@
+{% load static tailwind_cli django_htmx %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f766e">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{% static 'img/icon-192.png' %}">
+  <link rel="manifest" href="{% static 'manifest.webmanifest' %}">
+  {# Aplica el tema antes de pintar la página para evitar parpadeos. Si hay sesión, manda la preferencia del perfil. #}
+  <script>
+    (function () {
+      var p = "{% if user.is_authenticated %}{{ user.theme|escapejs }}{% endif %}";
+      if (!p) { try { p = localStorage.getItem("theme"); } catch (e) {} }
+      p = p || "system";
+      var d = p === "dark" || (p === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.dataset.theme = d ? "dark" : "light";
+      document.documentElement.dataset.themePref = p;
+    })();
+  </script>
+  {% tailwind_css %}
+  {% htmx_script %}
+  <script src="{% static 'js/app.js' %}" defer></script>
+  <script src="{% static 'js/alpine.min.js' %}" defer></script>

@@ -80,9 +80,9 @@ Hogar/
 
 ## Copias de seguridad
 
-- Comando que copia la base de datos en caliente (API de *backup* de SQLite) y comprime `media/` en `data/backups/AAAA-MM-DD/`.
-- Programación diaria con el Programador de tareas de Windows.
-- Rotación (p. ej. 14 diarias + 6 mensuales) y un script de restauración probado.
+- `manage.py backup` copia la base de datos en caliente (API de *backup* de SQLite) y comprime `media/` en `data/backups/AAAAMMDD-HHMMSS/`. Se conservan las 30 más recientes (`HOGAR_BACKUP_KEEP`).
+- `scripts/servir.bat` hace una copia cada vez que arranca; `scripts/programar-copia.bat` programa una diaria en el Programador de tareas de Windows.
+- `manage.py restore <copia>` (o `scripts/restaurar.bat`) comprueba la integridad, guarda antes el estado actual (`…-antes-de-restaurar`) y restaura. La app debe estar parada.
 - Recomendado: copiar periódicamente `data/backups/` fuera del PC (disco externo o nube).
 
 ## Exportación

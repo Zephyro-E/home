@@ -39,3 +39,22 @@ def icon(name: str, css: str = "size-5") -> str:
         f'stroke-linejoin="round" class="{escape(css)}" aria-hidden="true" focusable="false">'
     )
     return mark_safe(_SVG_OPEN.sub(opening, svg, count=1))
+
+
+# Clases completas (Tailwind solo incluye las que aparecen escritas literalmente).
+MEMBER_COLOR_CLASSES = {
+    "teal": "bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100",
+    "violet": "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-100",
+    "amber": "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100",
+    "rose": "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-100",
+    "sky": "bg-sky-100 text-sky-800 dark:bg-sky-900 dark:text-sky-100",
+    "lime": "bg-lime-100 text-lime-800 dark:bg-lime-900 dark:text-lime-100",
+    "orange": "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-100",
+    "fuchsia": "bg-fuchsia-100 text-fuchsia-800 dark:bg-fuchsia-900 dark:text-fuchsia-100",
+}
+
+
+@register.simple_tag
+def member_color(color: str) -> str:
+    """Clases de color de un miembro: {% member_color membership.color %}."""
+    return MEMBER_COLOR_CLASSES.get(color, MEMBER_COLOR_CLASSES["teal"])

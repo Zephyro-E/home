@@ -1,0 +1,11 @@
+{% load i18n %}{% if messages %}
+<div class="mb-4 space-y-2" role="status" aria-live="polite">
+  {% for message in messages %}
+  <div x-data="{ open: true }" x-show="open"
+       class="flex items-start gap-3 rounded-xl border px-4 py-3 text-sm {% if message.level_tag == 'error' %}border-red-300 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200{% else %}border-accent/30 bg-accent-soft text-fg{% endif %}">
+    <p class="flex-1">{{ message }}</p>
+    <button type="button" @click="open = false" class="-m-1 rounded p-1 opacity-70 hover:opacity-100" aria-label="{% translate 'Cerrar' %}">✕</button>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

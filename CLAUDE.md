@@ -39,6 +39,15 @@ uv run python manage.py tailwind build           # recompilar CSS tras tocar pla
 HOGAR_DEBUG=1 uv run python manage.py tailwind runserver   # desarrollo (scripts/arrancar.bat)
 ```
 
+```bash
+uv run python manage.py translations update      # tras añadir textos: los vuelca a locale/en/LC_MESSAGES/django.po
+uv run python manage.py translations compile     # tras traducir: genera el .mo (se versiona)
+uv run python manage.py backup / restore <copia>
+```
+
+- Las pruebas usan `config/settings_test.py` (añade `apps/core/tests/testapp`, un modelo de ejemplo con el patrón de permisos, y contraseñas rápidas). Fixtures comunes en `apps/conftest.py`: `home` (Ana admin + Luis miembro), `other_home` (Eva), `make_user`, `login_as`.
+- Una prueba falla si hay textos sin traducir: tras tocar textos, `translations update`, traducir en el `.po` y `translations compile`.
+- `data/` contiene los datos reales del propietario: no borrarla ni hacer pruebas contra ella. Para probar en el navegador usar otra carpeta: `HOGAR_DATA_DIR=<carpeta temporal>` y otro puerto.
 - El vigilante de Tailwind (`tailwind runserver` / `watch`) se cierra si no hay consola (procesos en segundo plano): en ese caso, ejecutar `tailwind build` tras cambiar plantillas.
 - El servidor de vista previa puede iniciarse con `.claude/launch.json` (configuración `hogar`).
 - Verificación visual: escritorio y móvil (375 px), modo claro y oscuro, sin errores en consola.
@@ -46,7 +55,11 @@ HOGAR_DEBUG=1 uv run python manage.py tailwind runserver   # desarrollo (scripts
 ## Mapa del código
 
 - `config/settings.py`: toda la configuración, leída de variables `HOGAR_*` (ver `.env.example`).
-- `apps/core/`: usuario propio (`models.User`, login por email), registro de módulos (`modules.py`), navegación (`context_processors.py`), etiqueta `{% icon %}` (`templatetags/ui.py`).
-- `templates/base.html`: estructura de la app (barra lateral, cabecera móvil, barra inferior); `templates/partials/`: componentes.
+- `apps/core/models.py`: `User`, `Household`, `Membership` (rol, color, reparto), `Invitation` (solo hash del token), `HouseholdOwnedModel` + `visible_to()` (ADR-005).
+- `apps/core/middleware.py`: asistente inicial obligatorio sin cuentas; hogar activo (`request.household`, `request.membership`), idioma del usuario y zona horaria del hogar.
+- `apps/core/mixins.py`: `HouseholdRequiredMixin`, `HouseholdAdminRequiredMixin`. Todas las vistas exigen sesión (ADR-015); las públicas llevan `@login_not_required`.
+- `apps/core/services.py`: lógica de hogares, miembros, invitaciones y bloqueo de intentos de login. `backup.py`: copias.
+- `apps/core/`: registro de módulos (`modules.py`), navegación (`context_processors.py`), etiquetas `{% icon %}` y `{% member_color %}` (`templatetags/ui.py`).
+- Plantillas: `base.html` (app con sesión), `base_auth.html` (entrada, asistente, invitación); componentes en `templates/partials/` (`form_fields`, `avatar`, `user_menu`, `messages`…).
 - `assets/css/source.css`: colores semánticos (`bg-surface`, `text-muted`, `bg-accent`…) para claro/oscuro. Usarlos en lugar de colores fijos.
 - `static/icons/`: iconos Lucide 0.460.0. Para añadir uno: descargar `https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/<nombre>.svg`.

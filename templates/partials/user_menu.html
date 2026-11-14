@@ -1,0 +1,41 @@
+{% load i18n ui %}{# Menú de la persona: perfil, hogar, cambio de hogar y salir. Parámetro: placement ("sidebar"|"header") #}
+<div x-data="{ open: false }" class="relative" @keydown.escape.window="open = false" @click.outside="open = false">
+  <button type="button" @click="open = !open" :aria-expanded="open" aria-haspopup="menu"
+          class="flex min-h-11 items-center gap-3 rounded-lg text-left text-sm font-medium hover:bg-surface-2 {% if placement == 'sidebar' %}w-full px-3 py-2{% else %}p-1{% endif %}">
+    {% include "partials/avatar.html" with user=user color=request.membership.color size="sm" %}
+    {% if placement == 'sidebar' %}
+      <span class="min-w-0 flex-1">
+        <span class="block truncate">{{ user.get_short_name }}</span>
+        <span class="block truncate text-xs font-normal text-muted">{{ user.email }}</span>
+      </span>
+    {% else %}
+      <span class="sr-only">{% translate "Menú de usuario" %}</span>
+    {% endif %}
+  </button>
+  <div x-show="open" x-cloak x-transition.opacity role="menu"
+       class="absolute z-40 w-64 rounded-xl border border-border bg-surface p-1.5 shadow-lg {% if placement == 'sidebar' %}bottom-full left-0 mb-2{% else %}right-0 top-full mt-2{% endif %}">
+    <a href="{% url 'core:profile' %}" role="menuitem" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-surface-2">{% icon "user" "size-4" %}{% translate "Mi perfil" %}</a>
+    <a href="{% url 'core:household' %}" role="menuitem" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-surface-2">{% icon "users" "size-4" %}{% translate "Hogar y miembros" %}</a>
+    {% if request.memberships|length > 1 %}
+      <div class="my-1 border-t border-border"></div>
+      <p class="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-muted">{% translate "Cambiar de hogar" %}</p>
+      {% for m in request.memberships %}
+        <form method="post" action="{% url 'core:switch_household' m.household_id %}">
+          {% csrf_token %}
+          <button type="submit" role="menuitem" class="flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-surface-2" {% if m.household_id == request.household.pk %}aria-current="true"{% endif %}>
+            <span class="truncate">{{ m.household.name }}</span>
+            {% if m.household_id == request.household.pk %}{% icon "check" "size-4 text-accent" %}{% endif %}
+          </button>
+        </form>
+      {% endfor %}
+    {% endif %}
+    {% if user.is_staff %}
+      <a href="{% url 'admin:index' %}" role="menuitem" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm hover:bg-surface-2">{% icon "settings" "size-4" %}{% translate "Panel de administración" %}</a>
+    {% endif %}
+    <div class="my-1 border-t border-border"></div>
+    <form method="post" action="{% url 'core:logout' %}">
+      {% csrf_token %}
+      <button type="submit" role="menuitem" class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-surface-2">{% icon "log-out" "size-4" %}{% translate "Cerrar sesión" %}</button>
+    </form>
+  </div>
+</div>

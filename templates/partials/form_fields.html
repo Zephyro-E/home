@@ -1,0 +1,17 @@
+{% load i18n %}{# Pinta todos los campos de un formulario con el estilo común. Parámetro: form #}
+{% if form.non_field_errors %}
+<div class="mb-4 rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">
+  {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+</div>
+{% endif %}
+{% for field in form.hidden_fields %}{{ field }}{% endfor %}
+<div class="space-y-4">
+  {% for field in form.visible_fields %}
+  <div>
+    <label for="{{ field.id_for_label }}" class="mb-1.5 block text-sm font-medium">{{ field.label }}</label>
+    {{ field }}
+    {% if field.help_text %}<p class="mt-1 text-xs text-muted">{{ field.help_text|safe }}</p>{% endif %}
+    {% for error in field.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ error }}</p>{% endfor %}
+  </div>
+  {% endfor %}
+</div>

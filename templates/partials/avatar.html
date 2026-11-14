@@ -1,0 +1,3 @@
+{% load ui %}{# Avatar con iniciales y el color del miembro. Parámetros: user, color, size ("sm"|"md"|"lg") #}
+<span class="inline-grid shrink-0 place-items-center rounded-full font-semibold {% member_color color %} {% if size == 'lg' %}size-12 text-base{% elif size == 'sm' %}size-7 text-[11px]{% else %}size-9 text-sm{% endif %}"
+      title="{{ user }}" aria-hidden="true">{{ user.initials }}</span>

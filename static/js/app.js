@@ -1,8 +1,7 @@
 // Componentes Alpine.js de la aplicación. Se carga antes que Alpine (ambos con defer).
 
 document.addEventListener("alpine:init", () => {
-  // Selector de tema: Sistema → Claro → Oscuro. La preferencia se guarda en este navegador.
-  // (En la Fase 1 se guardará también en el perfil del usuario.)
+  // Selector de tema: Sistema → Claro → Oscuro. Se guarda en el navegador y, con sesión, en el perfil.
   Alpine.data("themeSwitcher", () => ({
     pref: document.documentElement.dataset.themePref || "system",
 
@@ -29,6 +28,24 @@ document.addEventListener("alpine:init", () => {
         /* almacenamiento no disponible: el cambio dura hasta recargar */
       }
       this.apply();
+      this.save();
+    },
+
+    // Con sesión iniciada, guarda la preferencia en el perfil (la URL la pone base.html).
+    save() {
+      const url = document.body.dataset.themeUrl;
+      const token = document.querySelector("[name=csrfmiddlewaretoken]")?.value || this.csrf();
+      if (!url || !token) return;
+      fetch(url, {
+        method: "POST",
+        headers: { "X-CSRFToken": token, "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ theme: this.pref }),
+      }).catch(() => {});
+    },
+
+    csrf() {
+      const m = document.cookie.match(/(?:^|; )csrftoken=([^;]+)/);
+      return m ? decodeURIComponent(m[1]) : "";
     },
 
     apply() {

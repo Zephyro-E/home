@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Mi perfil" %} · Hogar{% endblock %}
+
+{% block content %}
+<div class="mx-auto max-w-xl">
+  <div class="mb-6 flex items-center gap-4">
+    {% include "partials/avatar.html" with user=user color=request.membership.color size="lg" %}
+    <div>
+      <h1 class="text-2xl font-semibold tracking-tight">{% translate "Mi perfil" %}</h1>
+      <p class="text-sm text-muted">{{ user.email }}</p>
+    </div>
+  </div>
+
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include "partials/form_fields.html" %}
+      <button type="submit" class="mt-6 rounded-xl bg-accent px-5 py-2.5 font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar cambios" %}</button>
+    </form>
+  </section>
+
+  <section class="mt-6 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+    <h2 class="font-semibold">{% translate "Seguridad" %}</h2>
+    <a href="{% url 'core:password_change' %}" class="mt-3 inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-surface-2">
+      {% icon "key-round" "size-4" %}{% translate "Cambiar contraseña" %}
+    </a>
+  </section>
+</div>
+{% endblock %}

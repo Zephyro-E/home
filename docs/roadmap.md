@@ -8,7 +8,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | Fase | Contenido | Tamaño | Estado |
 |---|---|---|---|
 | **0. Cimientos** | Proyecto Django con uv, estructura, ajustes, Tailwind/HTMX/Alpine, ruff, pytest, CI en GitHub Actions, plantilla base con tema claro/oscuro, script de arranque | S | ✅ 2026-11-14 |
-| **1. Identidad y hogar** | Usuario propio (login por email), Argon2, sesiones, asistente inicial, hogar, invitaciones, roles, middleware de hogar activo, `visible_to`, pruebas de autorización, perfil (idioma, tema, avatar), i18n es/en, dashboard vacío, manifest PWA, copia de seguridad + restauración | M | ⬜ |
+| **1. Identidad y hogar** | Usuario propio (login por email), Argon2, sesiones, asistente inicial, hogar, invitaciones, roles, middleware de hogar activo, `visible_to`, pruebas de autorización, perfil (idioma, tema, avatar), i18n es/en, dashboard vacío, manifest PWA, copia de seguridad + restauración | M | ✅ 2026-11-14 |
 | **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ⬜ |
 | **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ⬜ |
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
@@ -26,6 +26,12 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Verificado: 14 pruebas automáticas, lint, página de inicio en escritorio y móvil, modo claro/oscuro, español/inglés según el navegador, servidor Waitress sin modo desarrollo (estáticos y página 404 genérica).
 - Ya existe el usuario propio (login por email, Argon2): era obligatorio antes de la primera migración.
 - Pendiente para la Fase 1: compilar traducciones en Windows sin instalar GNU gettext (opción prevista: Babel, en Python puro).
+
+## Notas de la Fase 1
+
+- Verificado: 66 pruebas automáticas (permisos, acceso, invitaciones, miembros, perfil, copias, traducciones) y recorrido completo en el navegador: asistente inicial → crear invitación → alta de un segundo miembro con el enlace → enlace reutilizado rechazado → perfil en inglés y modo oscuro → menú en móvil. Copia y restauración probadas con datos reales.
+- Cambios respecto al plan: el **avatar** es de iniciales con el color del miembro; la subida de fotos se hará con la gestión de archivos (Fase 8) (ADR-014). La **recuperación de contraseña** por email sigue en la Fase 9; mientras, se cambia desde el panel de administración o con `manage.py changepassword`.
+- Pendiente de decidir: HTTPS para instalar la PWA en los móviles (Tailscale u otra opción). El manifest y los iconos ya están listos.
 
 ## Requisitos transversales: cuándo llega cada uno
 

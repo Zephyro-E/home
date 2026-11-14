@@ -1,12 +1,14 @@
 import pytest
 from django.contrib.auth import authenticate, get_user_model
 from django.db import IntegrityError
+from django.test import override_settings
 
 User = get_user_model()
 
 pytestmark = pytest.mark.django_db
 
 
+@override_settings(PASSWORD_HASHERS=["django.contrib.auth.hashers.Argon2PasswordHasher"])
 def test_create_user_normaliza_email_y_usa_argon2():
     user = User.objects.create_user(email="  Ana@Casa.ES ", name="Ana", password="clave-segura-123")
     assert user.email == "ana@casa.es"
@@ -37,3 +39,9 @@ def test_login_con_email_en_mayusculas():
 def test_nombre_corto():
     assert User(email="a@b.es", name="Ana María").get_short_name() == "Ana"
     assert User(email="a@b.es").get_short_name() == "a@b.es"
+
+
+def test_la_configuracion_real_usa_argon2():
+    from config import settings as real_settings
+
+    assert real_settings.PASSWORD_HASHERS[0].endswith("Argon2PasswordHasher")

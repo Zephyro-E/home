@@ -2,7 +2,7 @@
 
 Aplicación web para gestionar la vida cotidiana de un hogar: lista de la compra y deseos, tareas, calendario, finanzas, recetas, sitios que visitar y películas/series. Pensada para usarse desde el móvil y el ordenador, compartida entre los miembros del hogar y con información personal privada.
 
-> **Estado:** Fase 0 (cimientos) terminada. Siguiente: Fase 1 (inicio de sesión y hogar). Ver [docs/roadmap.md](docs/roadmap.md).
+> **Estado:** Fase 1 (cuentas, hogar, invitaciones, copias de seguridad) terminada. Siguiente: Fase 2 (compras). Ver [docs/roadmap.md](docs/roadmap.md).
 
 ## Tecnología
 
@@ -37,6 +37,18 @@ uv descarga automáticamente la versión correcta de Python y las librerías del
 
 La primera vez que se use `servir.bat`, Windows preguntará si permite el acceso en la red: elige **Redes privadas**.
 
+**Primer arranque:** la app abre un asistente para crear tu cuenta y tu hogar. Después, en *Hogar y miembros*, crea un enlace de invitación para cada persona.
+
+## Copias de seguridad
+
+| Para… | Doble clic en |
+|---|---|
+| Hacer una copia ahora | `scripts\copia.bat` |
+| Programar una copia diaria (21:00) | `scripts\programar-copia.bat` (una sola vez) |
+| Restaurar una copia (con la app parada) | `scripts\restaurar.bat` |
+
+`servir.bat` hace además una copia cada vez que arranca. Las copias están en `data\backups\` (se guardan las 30 últimas); conviene copiar esa carpeta de vez en cuando a un disco externo o a la nube.
+
 Los datos se guardan en la carpeta `data/` (base de datos, registros y clave secreta, que se genera sola). La configuración opcional se describe en `.env.example`.
 
 ## Comandos útiles
@@ -44,8 +56,9 @@ Los datos se guardan en la carpeta `data/` (base de datos, registros y clave sec
 ```bash
 uv run pytest                        # pruebas automáticas
 uv run ruff check . && uv run ruff format .   # revisar y formatear el código
-uv run python manage.py createsuperuser       # crear cuenta de administración (temporal, hasta la Fase 1)
+uv run python manage.py changepassword correo@ejemplo.com   # restablecer una contraseña olvidada
 uv run python manage.py tailwind build        # recompilar estilos
+uv run python manage.py translations update   # extraer textos nuevos para traducir
 ```
 
 ## Privacidad
