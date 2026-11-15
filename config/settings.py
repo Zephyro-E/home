@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "django_tailwind_cli",
     "apps.core",
     "apps.shopping",
+    "apps.tasks",
 ]
 
 MIDDLEWARE = [

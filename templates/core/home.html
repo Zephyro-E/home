@@ -22,6 +22,26 @@
 </section>
 {% endif %}
 
+{% if tasks.due_tasks %}
+<section class="mb-4 rounded-2xl border border-border bg-surface p-4 shadow-sm" aria-labelledby="hoy">
+  <div class="mb-2 flex items-center justify-between gap-2">
+    <h2 id="hoy" class="text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Para hoy" %}</h2>
+    <a href="{% url 'tasks:board' %}?de=yo" class="text-sm font-medium text-accent hover:underline">{% translate "Ver tareas" %}</a>
+  </div>
+  <ul class="divide-y divide-border">
+    {% for task in tasks.due_tasks %}
+    <li>
+      <a href="{% url 'tasks:detail' task.pk %}" class="flex items-center gap-3 py-2 hover:text-accent">
+        <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300">{% icon "list-checks" "size-4" %}</span>
+        <span class="min-w-0 flex-1 truncate font-medium">{{ task.title }}</span>
+        <span class="shrink-0 rounded-md px-1.5 py-0.5 text-xs font-semibold {% if task.due_state == 'overdue' %}bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200{% else %}bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-200{% endif %}">{% if task.due_state == 'overdue' %}{% translate "Vencida" %}{% else %}{% translate "Hoy" %}{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 {% if shopping.grocery_count or shopping.wishes_to_vote %}
 <section class="mb-8 grid gap-3 sm:grid-cols-2" aria-label="{% translate 'Resumen' %}">
   {% if shopping.grocery_count %}

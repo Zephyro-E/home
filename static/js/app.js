@@ -57,6 +57,42 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 
+  // --- Tablero de tareas: arrastrar y soltar (SortableJS, solo en la página del tablero) ---
+  // Cada columna es una lista con data-status; cada tarjeta lleva data-task y data-move-url.
+  // Al soltar se envía la columna de destino y su nuevo orden; el servidor devuelve el
+  // tablero actualizado.
+  Alpine.data("taskColumn", () => ({
+    init() {
+      // sortable.min.js puede terminar de cargar después que Alpine: si aún no está, se espera.
+      if (window.Sortable) this.setup();
+      else window.addEventListener("load", () => this.setup(), { once: true });
+    },
+
+    setup() {
+      if (!window.Sortable || window.Sortable.get(this.$el)) return;
+      window.Sortable.create(this.$el, {
+        group: "tasks",
+        draggable: "[data-task]",
+        animation: 150,
+        delay: 200, // en pantallas táctiles, mantener pulsado para arrastrar (deja hacer scroll)
+        delayOnTouchOnly: true,
+        ghostClass: "opacity-40",
+        forceFallback: true, // mismo comportamiento con ratón y táctil en todos los navegadores
+        fallbackOnBody: true,
+        onEnd: (evt) => {
+          if (evt.from === evt.to && evt.oldIndex === evt.newIndex) return;
+          const list = evt.to;
+          const order = [...list.querySelectorAll("[data-task]")].map((el) => el.dataset.task);
+          htmx.ajax("POST", evt.item.dataset.moveUrl + window.location.search, {
+            target: "#board",
+            swap: "innerHTML",
+            values: { status: list.dataset.status, order: order.join(",") },
+          });
+        },
+      });
+    },
+  }));
+
   // --- Borrar con "Deshacer" (ADR-010) -------------------------------------------------
   // El elemento se oculta al momento y aparece un aviso durante unos segundos. Si no se
   // deshace, se envía el borrado definitivo al servidor. Si se sale de la página antes,

@@ -50,6 +50,7 @@ MODULES: list[Module] = [
         "list-checks",
         "bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300",
         phase=3,
+        url_name="tasks:board",
         in_bottom_nav=True,
     ),
     Module(

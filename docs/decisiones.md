@@ -21,6 +21,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 014 | Avatar de iniciales; fotos con la gestión de archivos | Aceptada | 2026-11-14 |
 | 015 | Todas las páginas exigen sesión por defecto | Aceptada | 2026-11-14 |
 | 016 | "Deshacer": confirmación al salir de la página | Aceptada | 2026-11-15 |
+| 017 | Arrastrar y soltar con SortableJS | Aceptada | 2026-11-15 |
 
 ---
 
@@ -165,3 +166,11 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 **Decisión.** El aviso dura 6 segundos (`static/js/app.js`, store `undo`). El borrado pendiente se envía al servidor: al expirar el aviso, al empezar otro borrado, antes de cualquier petición HTMX de la página (para que la respuesta no vuelva a traer el elemento) y al salir de la página (`pagehide`, petición `keepalive`). Si el envío no llega (cierre brusco, sin red), el elemento simplemente sigue existiendo: el fallo sigue siendo seguro.
 
 **Consecuencias.** Los borrados se hacen con un único componente reutilizable (`x-data="deletable"` con `data-delete-url`, `data-ids`, `data-undo-message` y, opcionalmente, `data-after-url`). Las vistas de borrado responden 204 cuando la petición lleva la cabecera `X-Undo-Commit`.
+
+---
+
+## ADR-017 · Arrastrar y soltar con SortableJS
+
+**Decisión.** El tablero de tareas usa SortableJS 1.15.6 (MIT), copiado en `static/js/sortable.min.js` y cargado solo en esa página (sin CDN, como HTMX y Alpine). Se usa su modo propio de arrastre (`forceFallback`), que se comporta igual con ratón y en pantallas táctiles; en táctil hay que mantener pulsado un momento para no interferir con el desplazamiento.
+
+**Funcionamiento.** Al soltar, se envía al servidor la columna de destino y el orden de esa columna; el servidor solo reordena las tareas que la persona puede ver y editar, y devuelve el tablero actualizado (HTMX). Como alternativa accesible y cómoda en el móvil, cada tarjeta tiene un botón para pasar a la columna siguiente (Empezar, Terminar, Reabrir).

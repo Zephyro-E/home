@@ -18,7 +18,7 @@
   </div>
   {% endif %}
 
-  {% include "shopping/partials/field.html" with field=form.name %}
+  {% include "partials/field.html" with field=form.name %}
 
   {% if form.visibility %}
   <fieldset>
@@ -34,15 +34,15 @@
   {% endif %}
 
   <div class="grid gap-4 sm:grid-cols-2">
-    {% include "shopping/partials/field.html" with field=form.price %}
-    {% include "shopping/partials/field.html" with field=form.priority %}
+    {% include "partials/field.html" with field=form.price %}
+    {% include "partials/field.html" with field=form.priority %}
   </div>
 
   <button type="button" x-show="!more" @click="more = true" class="text-sm font-medium text-accent hover:underline">{% translate "Más opciones" %}</button>
   <div x-show="more" x-cloak class="space-y-4">
-    {% include "shopping/partials/field.html" with field=form.description %}
-    {% include "shopping/partials/field.html" with field=form.url %}
-    {% include "shopping/partials/field.html" with field=form.image_url %}
+    {% include "partials/field.html" with field=form.description %}
+    {% include "partials/field.html" with field=form.url %}
+    {% include "partials/field.html" with field=form.image_url %}
   </div>
 
   <div class="flex justify-end gap-2 pt-2">

@@ -8,5 +8,6 @@ urlpatterns = [
     # Cambio de idioma (también disponible sin sesión, p. ej. en la página de entrada).
     path("i18n/setlang/", login_not_required(set_language), name="set_language"),
     path("compras/", include("apps.shopping.urls")),
+    path("tareas/", include("apps.tasks.urls")),
     path("", include("apps.core.urls")),
 ]

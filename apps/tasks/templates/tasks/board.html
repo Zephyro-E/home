@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load i18n ui static %}
+
+{% block title %}{% translate "Tareas" %} · Hogar{% endblock %}
+{% block extra_head %}<script src="{% static 'js/sortable.min.js' %}" defer></script>{% endblock %}
+
+{% block content %}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight">{% translate "Tareas" %}</h1>
+  <div class="flex gap-2">
+    <a href="{% url 'tasks:labels' %}" class="flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "tag" "size-4" %}{% translate "Etiquetas" %}</a>
+    <a href="{% url 'tasks:create' %}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nueva tarea" %}</a>
+  </div>
+</div>
+
+<form method="post" action="{% url 'tasks:quick_add' %}{% if query %}?{{ query }}{% endif %}"
+      hx-post="{% url 'tasks:quick_add' %}{% if query %}?{{ query }}{% endif %}" hx-target="#board" hx-swap="innerHTML"
+      x-data @htmx:after-request="if (event.detail.successful) { $el.reset(); $refs.title.focus() }"
+      class="mb-4 flex gap-2 rounded-2xl border border-border bg-surface p-2 shadow-sm">
+  {% csrf_token %}
+  <label for="quick-title" class="sr-only">{% translate "Nueva tarea" %}</label>
+  <input id="quick-title" type="text" name="title" x-ref="title" maxlength="200" required autocomplete="off"
+         placeholder="{% translate 'Añadir tarea pendiente…' %}"
+         class="min-w-0 flex-1 rounded-xl bg-transparent px-3 py-2.5 placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
+  <button type="submit" class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg hover:opacity-90" aria-label="{% translate 'Añadir' %}">{% icon "plus" "size-5" %}</button>
+</form>
+
+<div class="mb-5 flex flex-wrap items-center gap-2" role="group" aria-label="{% translate 'Filtrar tareas' %}">
+  <a href="?{% if label_filter %}etiqueta={{ label_filter }}{% endif %}" class="rounded-full border px-3 py-1 text-sm {% if not assignee_filter %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted hover:bg-surface-2{% endif %}">{% translate "Todas" %}</a>
+  <a href="?de=yo{% if label_filter %}&amp;etiqueta={{ label_filter }}{% endif %}" class="rounded-full border px-3 py-1 text-sm {% if assignee_filter == 'yo' %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted hover:bg-surface-2{% endif %}">{% translate "Mías" %}</a>
+  <a href="?de=nadie{% if label_filter %}&amp;etiqueta={{ label_filter }}{% endif %}" class="rounded-full border px-3 py-1 text-sm {% if assignee_filter == 'nadie' %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted hover:bg-surface-2{% endif %}">{% translate "Sin responsable" %}</a>
+  {% if labels %}
+  <form method="get" class="ml-auto">
+    {% if assignee_filter %}<input type="hidden" name="de" value="{{ assignee_filter }}">{% endif %}
+    <label for="label-filter" class="sr-only">{% translate "Etiqueta" %}</label>
+    <select id="label-filter" name="etiqueta" onchange="this.form.submit()" class="rounded-lg border border-border bg-surface px-2 py-1.5 text-sm">
+      <option value="">{% translate "Todas las etiquetas" %}</option>
+      {% for label in labels %}<option value="{{ label.pk }}" {% if label.pk == label_filter %}selected{% endif %}>{{ label.name }}</option>{% endfor %}
+    </select>
+  </form>
+  {% endif %}
+</div>
+
+<div id="board" x-data="{ col: 'todo' }">
+  {% include "tasks/partials/board.html" %}
+</div>
+{% endblock %}

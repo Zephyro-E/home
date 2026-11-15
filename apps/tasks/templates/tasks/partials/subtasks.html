@@ -1,0 +1,39 @@
+{% load i18n ui %}{# Lista de subtareas (la sustituye HTMX). Parámetros: task, subtasks, can_edit #}
+<div id="subtasks-{{ task.pk }}">
+  {% if subtasks %}
+  <ul class="mt-3 divide-y divide-border">
+    {% for sub in subtasks %}
+    <li x-data="deletable" x-show="!gone" class="flex items-center gap-1"
+        data-delete-url="{% url 'tasks:subtask_delete' sub.pk %}"
+        data-undo-message="{% blocktranslate trimmed with name=sub.title %}«{{ name }}» borrada{% endblocktranslate %}">
+      {% if can_edit %}
+      <form method="post" action="{% url 'tasks:subtask_toggle' sub.pk %}" class="min-w-0 flex-1"
+            hx-post="{% url 'tasks:subtask_toggle' sub.pk %}" hx-target="#subtasks-{{ task.pk }}" hx-swap="outerHTML">
+        {% csrf_token %}
+        <button type="submit" class="flex w-full items-center gap-3 py-2 text-left" aria-pressed="{% if sub.is_done %}true{% else %}false{% endif %}">
+          <span class="grid size-5 shrink-0 place-items-center rounded border-2 {% if sub.is_done %}border-accent bg-accent text-accent-fg{% else %}border-border{% endif %}">{% if sub.is_done %}{% icon "check" "size-3.5" %}{% endif %}</span>
+          <span class="min-w-0 flex-1 break-words text-sm {% if sub.is_done %}text-muted line-through{% endif %}">{{ sub.title }}</span>
+        </button>
+      </form>
+      <button type="button" @click="remove()" class="grid size-8 shrink-0 place-items-center rounded-lg text-muted hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300"
+              aria-label="{% blocktranslate trimmed with name=sub.title %}Borrar {{ name }}{% endblocktranslate %}">{% icon "x" "size-4" %}</button>
+      {% else %}
+      <span class="py-2 text-sm {% if sub.is_done %}text-muted line-through{% endif %}">{{ sub.title }}</span>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="mt-2 text-sm text-muted">{% translate "Sin subtareas." %}</p>
+  {% endif %}
+  {% if can_edit %}
+  <form method="post" action="{% url 'tasks:subtask_add' task.pk %}" class="mt-3 flex gap-2"
+        hx-post="{% url 'tasks:subtask_add' task.pk %}" hx-target="#subtasks-{{ task.pk }}" hx-swap="outerHTML">
+    {% csrf_token %}
+    <label for="subtask-title-{{ task.pk }}" class="sr-only">{% translate "Nueva subtarea" %}</label>
+    <input id="subtask-title-{{ task.pk }}" type="text" name="title" maxlength="200" required autocomplete="off" {% if refocus %}autofocus{% endif %} placeholder="{% translate 'Añadir subtarea…' %}"
+           class="min-w-0 flex-1 rounded-xl border border-border bg-surface px-3.5 py-2 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30">
+    <button type="submit" class="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg hover:opacity-90" aria-label="{% translate 'Añadir' %}">{% icon "plus" "size-5" %}</button>
+  </form>
+  {% endif %}
+</div>

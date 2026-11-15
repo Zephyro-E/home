@@ -13,7 +13,7 @@ Navegador (móvil / PC)
 Waitress (servidor WSGI) ──► Django
                                ├─ core        usuarios, hogares, permisos, invitaciones, archivos
                                ├─ shopping    lista de la compra + deseos (votos, comentarios)
-                               ├─ tasks       tablero de tareas
+                               ├─ tasks       tablero de tareas (SortableJS para arrastrar)
                                ├─ calendar    eventos + proyección de tareas      (fase 4)
                                ├─ media_lib   películas y series                   (fase 5)
                                ├─ places      sitios que visitar                   (fase 5)

@@ -1,0 +1,28 @@
+{% load i18n ui %}{# Contenido del tablero (lo sustituye HTMX). Va dentro de <div id="board" x-data="{ col }"> #}
+<div class="mb-3 grid grid-cols-3 rounded-xl bg-surface-2 p-1 text-sm font-medium lg:hidden" role="tablist" aria-label="{% translate 'Columnas' %}">
+  {% for key, label, tasks, total in columns %}
+  <button type="button" role="tab" @click="col = '{{ key }}'" :aria-selected="col === '{{ key }}'"
+          :class="col === '{{ key }}' ? 'bg-surface text-fg shadow-sm' : 'text-muted'"
+          class="rounded-lg px-2 py-1.5">{{ label }} <span class="text-xs">({{ total }})</span></button>
+  {% endfor %}
+</div>
+
+<div class="grid gap-4 lg:grid-cols-3">
+  {% for key, label, tasks, total in columns %}
+  <section :class="col === '{{ key }}' ? '' : 'hidden lg:block'" class="rounded-2xl bg-surface-2/60 p-2 lg:p-3" aria-labelledby="col-{{ key }}">
+    <h2 id="col-{{ key }}" class="mb-2 hidden items-center gap-2 px-1 text-sm font-semibold uppercase tracking-wide text-muted lg:flex">
+      {{ label }} <span class="rounded-full bg-surface px-2 text-xs font-medium">{{ total }}</span>
+    </h2>
+    <ul x-data="taskColumn" data-status="{{ key }}" class="min-h-24 space-y-2">
+      {% for task in tasks %}{% include "tasks/partials/task_card.html" %}{% empty %}
+      <li class="rounded-xl border border-dashed border-border px-3 py-6 text-center text-sm text-muted">
+        {% if key == "todo" %}{% translate "Nada pendiente" %}{% elif key == "doing" %}{% translate "Nada en curso" %}{% else %}{% translate "Aún no hay tareas terminadas" %}{% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    {% if key == "done" and done_hidden %}
+    <p class="mt-2 px-1 text-xs text-muted">{% blocktranslate trimmed with n=done_hidden %}Y {{ n }} terminadas más antiguas.{% endblocktranslate %}</p>
+    {% endif %}
+  </section>
+  {% endfor %}
+</div>

@@ -137,9 +137,12 @@ class HomeView(HouseholdRequiredMixin, TemplateView):
         context["member_count"] = self.request.household.memberships.count()
         context["today"] = timezone.localdate()
         # Widgets de los módulos (cada uno decide si tiene algo que mostrar).
-        from apps.shopping.services import dashboard_summary
+        from apps.shopping.services import dashboard_summary as shopping_summary
+        from apps.tasks.services import dashboard_summary as tasks_summary
 
-        context["shopping"] = dashboard_summary(self.request.user, self.request.household)
+        user, household = self.request.user, self.request.household
+        context["shopping"] = shopping_summary(user, household)
+        context["tasks"] = tasks_summary(user, household)
         return context
 
 

@@ -68,7 +68,7 @@ WishComment
   item → WishItem, author, body, created_at, edited_at?
 ```
 
-## Tareas (Fase 3)
+## Tareas (Fase 3, implementado en `apps/tasks/models.py`)
 
 ```
 Task                 (HouseholdOwnedModel)
@@ -76,10 +76,12 @@ Task                 (HouseholdOwnedModel)
   position (orden dentro de la columna), due_date (date)?, priority,
   completed_at?, recurrence_rule (RRULE)? (fase 4)
 
-TaskLabel            household, name, color          (único por hogar + nombre)
+TaskLabel            (HouseholdOwnedModel, siempre shared) name, color (único por hogar + nombre)
 Task ⟷ TaskLabel     muchos a muchos
 Subtask              task, title, is_done, position
 TaskComment          task, author, body, created_at
+
+Reglas: assignee debe ser miembro del hogar; si la tarea es private, solo su dueño.
 ```
 
 ## Módulos posteriores (esbozo)

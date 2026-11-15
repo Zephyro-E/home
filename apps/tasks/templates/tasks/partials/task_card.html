@@ -1,0 +1,46 @@
+{% load i18n ui %}{# Tarjeta del tablero. Parámetros: task (con with_counts), colors, query #}
+<li data-task="{{ task.pk }}" data-move-url="{% url 'tasks:move' task.pk %}"
+    class="cursor-grab rounded-xl border border-border bg-surface p-3 shadow-sm active:cursor-grabbing">
+  <div class="flex items-start gap-2">
+    <a href="{% url 'tasks:detail' task.pk %}" class="min-w-0 flex-1 font-medium leading-snug break-words hover:underline {% if task.is_done %}text-muted line-through{% endif %}">
+      {% if task.priority == "high" and not task.is_done %}<span class="text-rose-600 dark:text-rose-400" title="{% translate 'Prioridad alta' %}">{% icon "flag" "inline size-3.5 -mt-0.5" %}<span class="sr-only">{% translate "Prioridad alta" %}</span></span>{% endif %}
+      {{ task.title }}
+    </a>
+    {% if task.assignee %}{% include "partials/avatar.html" with user=task.assignee color=colors|get_item:task.assignee_id size="sm" %}{% endif %}
+  </div>
+
+  {% if task.labels.all %}
+  <ul class="mt-2 flex flex-wrap gap-1">
+    {% for label in task.labels.all %}<li class="rounded-full px-2 py-0.5 text-[11px] font-medium {% member_color label.color %}">{{ label.name }}</li>{% endfor %}
+  </ul>
+  {% endif %}
+
+  <div class="mt-2 flex items-center gap-3 text-xs text-muted">
+    {% if task.visibility == "private" %}<span title="{% translate 'Personal' %}">{% icon "lock" "size-3.5" %}<span class="sr-only">{% translate "Personal" %}</span></span>{% endif %}
+    {% if task.due_date %}
+    <span class="flex items-center gap-1 rounded-md px-1.5 py-0.5
+      {% if task.due_state == 'overdue' %}bg-red-100 font-semibold text-red-800 dark:bg-red-950 dark:text-red-200
+      {% elif task.due_state == 'today' %}bg-amber-100 font-semibold text-amber-800 dark:bg-amber-950 dark:text-amber-200{% endif %}">
+      {% icon "calendar-clock" "size-3.5" %}
+      {% if task.due_state == 'overdue' %}{% translate "Vencida" %} · {% elif task.due_state == 'today' %}{% translate "Hoy" %}{% endif %}{% if task.due_state != 'today' %}{{ task.due_date|date:"j M" }}{% endif %}
+    </span>
+    {% endif %}
+    {% if task.subtask_count %}<span class="flex items-center gap-1">{% icon "square-check-big" "size-3.5" %}{{ task.subtask_done }}/{{ task.subtask_count }}</span>{% endif %}
+    {% if task.comment_count %}<span class="flex items-center gap-1">{% icon "message-circle" "size-3.5" %}{{ task.comment_count }}</span>{% endif %}
+
+    <form method="post" action="{% url 'tasks:status' task.pk %}{% if query %}?{{ query }}{% endif %}" class="ml-auto"
+          hx-post="{% url 'tasks:status' task.pk %}{% if query %}?{{ query }}{% endif %}" hx-target="#board" hx-swap="innerHTML">
+      {% csrf_token %}
+      {% if task.status == "todo" %}
+        <input type="hidden" name="status" value="doing">
+        <button type="submit" class="flex items-center gap-1 rounded-lg px-2 py-1 font-medium text-fg hover:bg-surface-2">{% icon "play" "size-3.5" %}{% translate "Empezar" %}</button>
+      {% elif task.status == "doing" %}
+        <input type="hidden" name="status" value="done">
+        <button type="submit" class="flex items-center gap-1 rounded-lg px-2 py-1 font-medium text-fg hover:bg-surface-2">{% icon "check" "size-3.5" %}{% translate "Terminar" %}</button>
+      {% else %}
+        <input type="hidden" name="status" value="todo">
+        <button type="submit" class="flex items-center gap-1 rounded-lg px-2 py-1 font-medium hover:bg-surface-2">{% icon "rotate-ccw" "size-3.5" %}{% translate "Reabrir" %}</button>
+      {% endif %}
+    </form>
+  </div>
+</li>

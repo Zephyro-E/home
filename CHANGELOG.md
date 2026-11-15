@@ -2,6 +2,21 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.4.0] - 2026-11-15 · Fase 3: tareas
+
+### Añadido
+- Tablero de tareas Pendiente / En curso / Terminada con arrastrar y soltar (SortableJS, ADR-017) y botones Empezar / Terminar / Reabrir.
+- Alta rápida desde el tablero; formulario completo con responsable, fecha límite, prioridad, estado, descripción y etiquetas.
+- Tareas del hogar o personales (pasar de personal a compartida).
+- Subtareas con progreso, comentarios y etiquetas de colores comunes al hogar.
+- Filtros: todas, mías, sin responsable y por etiqueta.
+- Avisos de fecha: vencida, hoy; widget "Para hoy" en el inicio.
+- En el móvil y tablets, una columna cada vez con pestañas.
+- 212 pruebas automáticas.
+
+### Cambiado
+- `templates/partials/field.html` pasa a ser un componente común de formularios.
+
 ## [0.3.0] - 2026-11-15 · Fase 2: compras
 
 ### Añadido

@@ -10,7 +10,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **0. Cimientos** | Proyecto Django con uv, estructura, ajustes, Tailwind/HTMX/Alpine, ruff, pytest, CI en GitHub Actions, plantilla base con tema claro/oscuro, script de arranque | S | ✅ 2026-11-14 |
 | **1. Identidad y hogar** | Usuario propio (login por email), Argon2, sesiones, asistente inicial, hogar, invitaciones, roles, middleware de hogar activo, `visible_to`, pruebas de autorización, perfil (idioma, tema, avatar), i18n es/en, dashboard vacío, manifest PWA, copia de seguridad + restauración | M | ✅ 2026-11-14 |
 | **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ✅ 2026-11-15 |
-| **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ⬜ |
+| **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ✅ 2026-11-15 |
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
 | **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ⬜ |
 | **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ⬜ |
@@ -39,6 +39,14 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Decisiones: la lista de la compra no duplica productos (si se vuelve a añadir uno comprado, vuelve a "Por comprar"); un deseo personal puede pasar a común pero no al revés (ya puede tener votos y comentarios); solo se vota y comenta en propuestas comunes; el borrado pendiente se confirma al salir de la página (ADR-016).
 - Imágenes de deseos: solo mediante enlace (se cargan sin enviar la dirección de origen). La subida de fotos llega en la Fase 8.
 - Pendiente para más adelante: la lista no se actualiza sola si otra persona la cambia a la vez (hay que recargar); botón "+" global para añadir desde cualquier pantalla.
+
+## Notas de la Fase 3
+
+- Verificado: 212 pruebas automáticas (reglas de tareas y autorización de cada vista: otro miembro, otro hogar, anónimo) y recorrido en el navegador sobre una copia aparte: arrastrar entre columnas y reordenar (guardado tras recargar), alta rápida, botones Empezar / Terminar / Reabrir, subtareas, aviso "Para hoy" en el inicio, móvil y modo oscuro.
+- Diseño: en el móvil y en tablets se ve una columna cada vez, con pestañas; para cambiar de columna basta el botón de la tarjeta (arrastrar también funciona manteniendo pulsado). La columna "Terminada" muestra las 20 más recientes.
+- Decisiones: una tarea personal solo puede asignarse a su dueño (nadie más la vería); el responsable debe ser miembro del hogar; las etiquetas son comunes y cualquier miembro puede crearlas o borrarlas (borrar una etiqueta no borra tareas); se pueden comentar también las tareas personales (como notas propias).
+- Fallos encontrados y corregidos en la verificación: SortableJS se cargaba después de Alpine y el arrastre no se activaba; las columnas perdían el orden al contar subtareas (Django ignora el orden por defecto en consultas agrupadas).
+- Pendiente para la Fase 4: tareas recurrentes (RRULE) y su proyección en el calendario.
 
 ## Requisitos transversales: cuándo llega cada uno
 

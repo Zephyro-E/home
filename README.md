@@ -2,7 +2,7 @@
 
 Aplicación web para gestionar la vida cotidiana de un hogar: lista de la compra y deseos, tareas, calendario, finanzas, recetas, sitios que visitar y películas/series. Pensada para usarse desde el móvil y el ordenador, compartida entre los miembros del hogar y con información personal privada.
 
-> **Estado:** Fase 2 (lista de la compra y deseos) terminada. Siguiente: Fase 3 (tareas). Ver [docs/roadmap.md](docs/roadmap.md).
+> **Estado:** Fases 2 y 3 (compras y tareas) terminadas: el MVP está completo. Siguiente: uso real en casa y Fase 4 (calendario). Ver [docs/roadmap.md](docs/roadmap.md).
 
 ## Tecnología
 
