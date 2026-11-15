@@ -26,6 +26,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 019 | Privacidad en finanzas: la cuenta manda | Aceptada | 2026-11-15 |
 | 020 | Gráficos generados en el servidor (sin Chart.js) | Aceptada | 2026-11-15 |
 | 021 | Fotos: reprocesadas sin metadatos y servidas con permisos | Aceptada | 2026-11-15 |
+| 022 | Acceso desde fuera de casa con Tailscale | Aceptada | 2026-11-16 |
 
 ---
 
@@ -223,3 +224,18 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 ## ADR-021 · Fotos: reprocesadas sin metadatos y servidas con permisos
 
 **Decisión.** Las imágenes subidas (recetas, foto de perfil) pasan por `apps/core/images.py`: solo JPG/PNG/WEBP hasta 10 MB, se abren con Pillow (se rechaza lo que no sea una imagen real), se giran según el EXIF, se reducen (1600 px; 400 px y en cuadrado para el perfil) y se guardan como WEBP sin metadatos (se eliminan EXIF y GPS). Viven en `data/media` con nombres aleatorios y nunca se sirven directamente: cada módulo las entrega con una vista que comprueba permisos (`Cache-Control: private`). Se leen enteras al servirlas para no dejar archivos abiertos (en Windows impedirían borrarlos).
+
+---
+
+## ADR-022 · Acceso desde fuera de casa con Tailscale
+
+**Contexto.** El propietario quiere usar Hogar fuera de casa. La app vive en el PC de casa. Opciones valoradas: abrir puertos del router (descartado: expone el PC), Cloudflare Tunnel (dirección pública, sin instalar nada en los móviles, pero la página de entrada queda expuesta a internet y requiere dominio) y Tailscale (red privada).
+
+**Decisión.** Tailscale. Cada dispositivo se une a la red privada del propietario (o se le comparte el PC). `tailscale serve` publica la app solo dentro de esa red con HTTPS y certificado válido (`https://<pc>.<red>.ts.net`) y reenvía a Waitress en `http://127.0.0.1:8000`.
+
+**Implementación.**
+- `manage.py tailscale configurar` (y `scripts/configurar-tailscale.bat`): lee el nombre del PC con `tailscale status --json`, escribe en `.env` `HOGAR_CSRF_TRUSTED_ORIGINS=https://<pc>.ts.net` (origen exacto, nunca un comodín `*.ts.net`) y `HOGAR_HTTPS=1` (cookies solo seguras), y ejecuta `tailscale serve --bg`.
+- App instalable: service worker mínimo en `/sw.js` que no guarda datos; solo muestra `/sin-conexion/` (página autónoma) si el PC no responde.
+- `scripts/arrancar-al-iniciar.bat`: tarea programada que abre `servir.bat` al iniciar sesión.
+
+**Consecuencias.** Nadie fuera de la red privada llega a la app. Con las cookies seguras, el acceso por la IP local (`http://192.168…`) deja de servir para entrar; se usa la dirección de Tailscale también en casa (en el propio PC sigue funcionando `http://localhost:8000`). El PC debe estar encendido. Guía: `docs/acceso-remoto.md`.

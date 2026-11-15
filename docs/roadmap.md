@@ -31,7 +31,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 
 - Verificado: 66 pruebas automáticas (permisos, acceso, invitaciones, miembros, perfil, copias, traducciones) y recorrido completo en el navegador: asistente inicial → crear invitación → alta de un segundo miembro con el enlace → enlace reutilizado rechazado → perfil en inglés y modo oscuro → menú en móvil. Copia y restauración probadas con datos reales.
 - Cambios respecto al plan: el **avatar** es de iniciales con el color del miembro; la subida de fotos se hará con la gestión de archivos (Fase 8) (ADR-014). La **recuperación de contraseña** por email sigue en la Fase 9; mientras, se cambia desde el panel de administración o con `manage.py changepassword`.
-- Pendiente de decidir: HTTPS para instalar la PWA en los móviles (Tailscale u otra opción). El manifest y los iconos ya están listos.
+- HTTPS para la PWA: resuelto con Tailscale (ADR-022, 2026-11-16).
 
 ## Notas de la Fase 2
 
@@ -86,6 +86,12 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Fotos (ADR-021): JPG/PNG/WEBP hasta 10 MB, se reprocesan con Pillow sin metadatos y se sirven por vistas que comprueban permisos. Foto de perfil visible solo para quien comparte hogar.
 - Pendiente de comprobar a mano en el navegador: subir la foto de perfil (cubierta por pruebas automáticas).
 
+## Acceso desde fuera de casa (2026-11-16)
+
+- Tailscale (ADR-022): script de configuración de un clic, HTTPS con certificado válido, cookies seguras, app instalable con aviso "sin conexión" y arranque automático opcional. Guía: [acceso-remoto.md](acceso-remoto.md).
+- Verificado: 480 pruebas automáticas (configuración de Tailscale simulada, service worker y página sin conexión públicos). Página sin conexión revisada en móvil y modo oscuro.
+- Pendiente de comprobar en un móvil real: instalación de la app y aviso sin conexión (el navegador integrado del entorno de desarrollo no admite service workers).
+
 ## Requisitos transversales: cuándo llega cada uno
 
 | Requisito | Fase |
@@ -97,6 +103,6 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | Registro de errores | 0 (logging a archivo) |
 | Copias de seguridad y restauración | 1 |
 | Pruebas automatizadas | 0 en adelante |
-| PWA instalable | 1 (manifest) · HTTPS en fase 1 o 10 |
+| PWA instalable | 1 (manifest) · HTTPS con Tailscale (ADR-022) |
 | Gestión de archivos e imágenes | 2 (URL) · 8 (subida) |
 | Notificaciones internas, buscador global, exportación | 9 |

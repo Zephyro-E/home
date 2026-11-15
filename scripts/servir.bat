@@ -12,4 +12,5 @@ uv run python manage.py tailwind build
 uv run python manage.py collectstatic --noinput
 echo.
 echo Hogar disponible en http://localhost:8000 (Ctrl+C para parar)
+if exist .env for /f "tokens=2 delims==" %%u in ('findstr /b "HOGAR_CSRF_TRUSTED_ORIGINS=" .env') do echo Desde fuera de casa (Tailscale): %%u
 uv run waitress-serve --listen=*:8000 config.wsgi:application

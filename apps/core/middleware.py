@@ -27,7 +27,14 @@ class SetupRequiredMiddleware:
                 SetupRequiredMiddleware._setup_done = True
             else:
                 setup_url = reverse("core:setup")
-                allowed = (setup_url, "/static/", "/i18n/", "/manifest.webmanifest")
+                allowed = (
+                    setup_url,
+                    "/static/",
+                    "/i18n/",
+                    "/manifest.webmanifest",
+                    "/sw.js",
+                    "/sin-conexion/",
+                )
                 if not request.path.startswith(allowed):
                     return redirect(setup_url)
         return self.get_response(request)

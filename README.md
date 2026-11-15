@@ -39,6 +39,10 @@ La primera vez que se use `servir.bat`, Windows preguntará si permite el acceso
 
 **Primer arranque:** la app abre un asistente para crear tu cuenta y tu hogar. Después, en *Hogar y miembros*, crea un enlace de invitación para cada persona.
 
+## Desde fuera de casa
+
+Con **Tailscale** (red privada, HTTPS y app instalable en el móvil): instala Tailscale en el PC, ejecuta `scripts\configurar-tailscale.bat` y sigue la guía [docs/acceso-remoto.md](docs/acceso-remoto.md). Para que Hogar arranque solo al encender el PC: `scriptsrrancar-al-iniciar.bat`.
+
 ## Copias de seguridad
 
 | Para… | Doble clic en |

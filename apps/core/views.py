@@ -302,6 +302,48 @@ def save_theme(request):
     return HttpResponse(status=204)
 
 
+# --- App instalable (PWA) ----------------------------------------------------------------
+
+SERVICE_WORKER = """// Hogar: service worker mínimo (ADR-022).
+// No guarda datos: solo muestra un aviso si el PC de casa no responde.
+const OFFLINE_URL = "/sin-conexion/";
+const CACHE = "hogar-offline-v1";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.add(OFFLINE_URL)));
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener("fetch", (event) => {
+  if (event.request.mode !== "navigate") return;
+  event.respondWith(fetch(event.request).catch(() => caches.match(OFFLINE_URL)));
+});
+"""
+
+
+@login_not_required
+def service_worker(request):
+    """Se sirve en la raíz para poder controlar toda la app."""
+    response = HttpResponse(SERVICE_WORKER, content_type="text/javascript; charset=utf-8")
+    response["Cache-Control"] = "no-cache"
+    return response
+
+
+@login_not_required
+def offline(request):
+    """Página que se muestra (guardada en el móvil) cuando no se llega al PC de casa."""
+    return render(request, "core/offline.html")
+
+
 # --- Foto de perfil (ADR-021) ---------------------------------------------------------------
 
 

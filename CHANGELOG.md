@@ -2,6 +2,14 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.10.0] - 2026-11-16 · Acceso desde fuera de casa
+
+### Añadido
+- Acceso desde fuera de casa con Tailscale (ADR-022): `scripts/configurar-tailscale.bat` (`manage.py tailscale configurar|estado|quitar`) detecta la dirección del PC, activa HTTPS y ajusta la app.
+- App instalable en el móvil: service worker mínimo y página "No se puede conectar con Hogar" cuando el PC no responde.
+- `scripts/arrancar-al-iniciar.bat`: Hogar arranca solo al iniciar sesión en Windows.
+- Guía paso a paso: `docs/acceso-remoto.md`.
+
 ## [0.9.0] - 2026-11-15 · Fase 8: recetas e imágenes
 
 ### Añadido

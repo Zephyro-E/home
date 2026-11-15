@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hogar VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 14:25+0100\n"
+"POT-Creation-Date: 2026-11-15 18:33+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -1156,7 +1156,7 @@ msgstr "Unsupported format. Use JPG, PNG or WEBP."
 msgid "Foto"
 msgstr "Photo"
 
-#: apps/core/views.py:322
+#: apps/core/views.py:364
 msgid "Foto actualizada."
 msgstr "Photo updated."
 
@@ -1164,7 +1164,7 @@ msgstr "Photo updated."
 msgid "Foto de perfil"
 msgstr "Profile photo"
 
-#: apps/core/views.py:313
+#: apps/core/views.py:355
 msgid "Foto quitada."
 msgstr "Photo removed."
 
@@ -1372,6 +1372,10 @@ msgid ""
 msgstr ""
 "JPG, PNG or WEBP, up to 10 MB. It is cropped square and hidden data (such as location) is "
 "removed. Only members of your households can see it."
+
+#: templates/core/offline.html:29
+msgid "La app vive en el PC de casa y ahora no responde. Comprueba que:"
+msgstr "The app lives on the home PC and it is not responding right now. Check that:"
 
 #: apps/finance/services.py:164
 msgid "La categoría no corresponde a este tipo de movimiento."
@@ -1660,6 +1664,10 @@ msgstr "You cannot use that account."
 #: apps/finance/templates/finance/account_form.html:22
 msgid "No se puede cambiar después, para que los saldos cuadren siempre."
 msgstr "It cannot be changed later, so balances always add up."
+
+#: templates/core/offline.html:28
+msgid "No se puede conectar con Hogar"
+msgstr "Cannot connect to Hogar"
 
 #: apps/core/recurrence.py:18
 msgid "No se repite"
@@ -2093,6 +2101,10 @@ msgstr "Record payment"
 msgid "Registrar un pago entre miembros"
 msgstr "Record a payment between members"
 
+#: templates/core/offline.html:34
+msgid "Reintentar"
+msgstr "Try again"
+
 #: apps/finance/templates/finance/shared.html:58
 msgid "Reparto por defecto"
 msgstr "Default split"
@@ -2234,6 +2246,10 @@ msgstr "Follows the balance of “%(name)s”"
 #: apps/finance/forms.py:96 apps/finance/forms.py:102 apps/finance/services.py:245
 msgid "Sin categoría"
 msgstr "Uncategorised"
+
+#: templates/core/offline.html:8
+msgid "Sin conexión"
+msgstr "Offline"
 
 #: apps/tasks/templates/tasks/task_detail.html:32
 msgid "Sin fecha"
@@ -2750,6 +2766,10 @@ msgstr "address or area"
 msgid "dónde verla"
 msgstr "where to watch"
 
+#: templates/core/offline.html:32
+msgid "el PC de casa está encendido y con Hogar en marcha."
+msgstr "the home PC is on and Hogar is running."
+
 #: apps/media/models.py:29 apps/places/models.py:31 apps/shopping/models.py:71
 msgid "enlace"
 msgstr "link"
@@ -2761,6 +2781,10 @@ msgstr "episode"
 #: apps/media/models.py:30 apps/places/models.py:33 apps/shopping/models.py:76 apps/tasks/models.py:76
 msgid "estado"
 msgstr "status"
+
+#: templates/core/offline.html:31
+msgid "este dispositivo tiene internet y Tailscale está conectado;"
+msgstr "this device has internet and Tailscale is connected;"
 
 #: apps/core/social.py:18
 msgid "estrellas"

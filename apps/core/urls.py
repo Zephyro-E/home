@@ -7,6 +7,8 @@ app_name = "core"
 
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
+    path("sw.js", views.service_worker, name="service_worker"),
+    path("sin-conexion/", views.offline, name="offline"),
     # Acceso
     path("entrar/", views.LoginView.as_view(), name="login"),
     path("salir/", auth_views.LogoutView.as_view(), name="logout"),

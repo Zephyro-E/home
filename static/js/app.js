@@ -182,3 +182,9 @@ document.addEventListener("htmx:confirm", (event) => {
   store.flush().finally(() => event.detail.issueRequest(true));
 });
 
+// App instalable (ADR-022): el service worker solo funciona con HTTPS (o en localhost).
+if ("serviceWorker" in navigator && window.isSecureContext) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  });
+}
