@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "apps.media",
     "apps.places",
     "apps.finance",
+    "apps.recipes",
 ]
 
 MIDDLEWARE = [

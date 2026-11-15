@@ -1,3 +1,8 @@
-{% load ui %}{# Avatar con iniciales y el color del miembro. Parámetros: user, color, size ("sm"|"md"|"lg") #}
+{% load ui %}{# Avatar: foto si la hay; si no, iniciales con el color del miembro. Parámetros: user, color, size ("sm"|"md"|"lg") #}
+{% if user.avatar %}
+<img src="{% url 'core:avatar' user.pk %}?v={{ user.avatar.name|slice:'-12:-5' }}" alt="" title="{{ user }}" loading="lazy"
+     class="inline-block shrink-0 rounded-full bg-surface-2 object-cover {% if size == 'lg' %}size-12{% elif size == 'sm' %}size-7{% else %}size-9{% endif %}" aria-hidden="true">
+{% else %}
 <span class="inline-grid shrink-0 place-items-center rounded-full font-semibold {% member_color color %} {% if size == 'lg' %}size-12 text-base{% elif size == 'sm' %}size-7 text-[11px]{% else %}size-9 text-sm{% endif %}"
       title="{{ user }}" aria-hidden="true">{{ user.initials }}</span>
+{% endif %}

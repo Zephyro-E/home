@@ -13,7 +13,7 @@ from django.views import View
 from django.views.decorators.http import require_POST
 from django.views.generic import FormView, TemplateView, UpdateView
 
-from . import services
+from . import images, services
 from .forms import (
     HouseholdForm,
     LoginForm,
@@ -300,3 +300,35 @@ def save_theme(request):
     request.user.theme = theme
     request.user.save(update_fields=["theme"])
     return HttpResponse(status=204)
+
+
+# --- Foto de perfil (ADR-021) ---------------------------------------------------------------
+
+
+@require_POST
+def avatar_upload(request):
+    """Sube o quita la foto de perfil."""
+    if request.POST.get("remove") == "1":
+        images.remove_image(request.user, "avatar")
+        messages.success(request, _("Foto quitada."))
+        return redirect("core:profile")
+    try:
+        images.replace_image(
+            request.user, "avatar", request.FILES.get("photo"), max_side=400, square=True
+        )
+    except ValidationError as error:
+        messages.error(request, _error_text(error))
+    else:
+        messages.success(request, _("Foto actualizada."))
+    return redirect("core:profile")
+
+
+def avatar_image(request, user_id):
+    """Entrega la foto de una persona solo a ella misma o a quien comparte hogar con ella."""
+    shares_household = Membership.objects.filter(
+        user_id=user_id, household__memberships__user=request.user
+    ).exists()
+    if str(request.user.pk) != str(user_id) and not shares_household:
+        raise Http404
+    person = get_object_or_404(User, pk=user_id)
+    return images.serve(person.avatar)

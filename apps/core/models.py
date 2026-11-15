@@ -43,6 +43,10 @@ class UserManager(BaseUserManager):
         return self.get(email__iexact=username)
 
 
+def avatar_path(instance, filename):
+    return f"avatars/{uuid.uuid4().hex}.webp"
+
+
 class User(AbstractBaseUser, PermissionsMixin):
     """Usuario de la aplicación. Inicia sesión con su correo electrónico."""
 
@@ -83,6 +87,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.name.split(" ")[0] if self.name else self.email
+
+    avatar = models.ImageField(_("foto"), upload_to=avatar_path, blank=True)
 
     @property
     def initials(self) -> str:

@@ -2,6 +2,14 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.9.0] - 2026-11-15 · Fase 8: recetas e imágenes
+
+### Añadido
+- Recetario: tipo de plato, raciones, tiempos, ingredientes (una línea cada uno, se entienden cantidades y unidades), pasos, etiquetas, enlace, valoraciones y comentarios; búsqueda por receta o ingrediente.
+- Ajustar raciones y pasar los ingredientes elegidos a la lista de la compra con la cantidad ajustada.
+- Subida segura de fotos (ADR-021) para recetas y foto de perfil.
+- 470 pruebas automáticas.
+
 ## [0.8.0] - 2026-11-15 · Fase 7: finanzas II
 
 ### Añadido

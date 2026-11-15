@@ -25,6 +25,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 018 | Calendario generado en el servidor (sin FullCalendar) | Aceptada | 2026-11-15 |
 | 019 | Privacidad en finanzas: la cuenta manda | Aceptada | 2026-11-15 |
 | 020 | Gráficos generados en el servidor (sin Chart.js) | Aceptada | 2026-11-15 |
+| 021 | Fotos: reprocesadas sin metadatos y servidas con permisos | Aceptada | 2026-11-15 |
 
 ---
 
@@ -216,3 +217,9 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 **Decisión.** Los gráficos que se necesitan (ingresos y gastos de los últimos 12 meses, barras por categoría y de presupuesto) se dibujan con HTML y CSS desde la plantilla, con los datos ya calculados en `apps/finance/planning.py`. Cada barra tiene su texto accesible y enlaza a su mes.
 
 **Consecuencias.** Sin librería ni JavaScript extra, se ven bien en claro y oscuro y funcionan aunque falle el JavaScript. Si en el futuro hicieran falta gráficos más complejos (líneas, interacción), se valoraría añadir Chart.js con un ADR nuevo.
+
+---
+
+## ADR-021 · Fotos: reprocesadas sin metadatos y servidas con permisos
+
+**Decisión.** Las imágenes subidas (recetas, foto de perfil) pasan por `apps/core/images.py`: solo JPG/PNG/WEBP hasta 10 MB, se abren con Pillow (se rechaza lo que no sea una imagen real), se giran según el EXIF, se reducen (1600 px; 400 px y en cuadrado para el perfil) y se guardan como WEBP sin metadatos (se eliminan EXIF y GPS). Viven en `data/media` con nombres aleatorios y nunca se sirven directamente: cada módulo las entrega con una vista que comprueba permisos (`Cache-Control: private`). Se leen enteras al servirlas para no dejar archivos abiertos (en Windows impedirían borrarlos).

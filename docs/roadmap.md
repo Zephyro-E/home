@@ -16,7 +16,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ✅ 2026-11-15 |
 | **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ✅ 2026-11-15 |
 | **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ✅ 2026-11-15 |
-| **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ⬜ |
+| **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ✅ 2026-11-15 |
 | **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ⬜ |
 | **10. Servidor** | Dockerfile + Docker Compose, HTTPS, posible paso a PostgreSQL, migración de datos desde el PC | M | ⬜ |
 | **Futuro** | Planificador de comidas, mapa de sitios, TMDB, votación de películas, mantenimiento, inventario, documentos, estadísticas | — | ⬜ |
@@ -79,6 +79,12 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Gráficos generados en el servidor, sin Chart.js (ADR-020).
 - Fallos encontrados y corregidos en la verificación: el enlace "Registrar pago" no rellenaba el formulario (los identificadores llevan guiones); en el móvil, la pestaña activa de finanzas quedaba fuera de la vista.
 - Nota de verificación: con el panel del navegador oculto, la página no dibuja y Alpine retrasa mostrar u ocultar elementos; no es un fallo de la app (se comprobó forzando el dibujado).
+
+## Notas de la Fase 8
+
+- Verificado: 470 pruebas automáticas (lector de ingredientes, raciones, lista de la compra, imágenes con eliminación de EXIF/GPS, permisos de fotos) y recorrido en el navegador sobre una copia aparte: raciones ajustadas, ingredientes a la lista de la compra, subida real de una foto (reducida a 1600 px, WEBP, entregada solo con permiso).
+- Fotos (ADR-021): JPG/PNG/WEBP hasta 10 MB, se reprocesan con Pillow sin metadatos y se sirven por vistas que comprueban permisos. Foto de perfil visible solo para quien comparte hogar.
+- Pendiente de comprobar a mano en el navegador: subir la foto de perfil (cubierta por pruebas automáticas).
 
 ## Requisitos transversales: cuándo llega cada uno
 

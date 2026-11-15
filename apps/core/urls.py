@@ -30,4 +30,6 @@ urlpatterns = [
     path("perfil/", views.ProfileView.as_view(), name="profile"),
     path("perfil/contrasena/", views.PasswordChangeView.as_view(), name="password_change"),
     path("perfil/tema/", views.save_theme, name="save_theme"),
+    path("perfil/foto/", views.avatar_upload, name="avatar_upload"),
+    path("perfil/foto/<uuid:user_id>/", views.avatar_image, name="avatar"),
 ]

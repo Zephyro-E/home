@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% if recipe %}{% translate "Editar receta" %}{% else %}{% translate "Nueva receta" %}{% endif %} · Hogar{% endblock %}
+
+{% block content %}
+<a href="{% if recipe %}{% url 'recipes:detail' recipe.pk %}{% else %}{% url 'recipes:list' %}{% endif %}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">{% icon "arrow-left" "size-4" %}{% translate "Volver" %}</a>
+<h1 class="mb-6 text-2xl font-semibold tracking-tight">{% if recipe %}{% translate "Editar receta" %}{% else %}{% translate "Nueva receta" %}{% endif %}</h1>
+
+<form method="post" enctype="multipart/form-data" class="max-w-2xl space-y-4 rounded-2xl border border-border bg-surface p-5 shadow-sm" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+
+  <div class="grid gap-4 sm:grid-cols-[1fr_auto]">
+    {% include "partials/field.html" with field=form.title %}
+    {% include "partials/field.html" with field=form.course %}
+  </div>
+  {% if form.visibility %}
+  <fieldset>
+    <legend class="mb-1.5 text-sm font-medium">{{ form.visibility.label }}</legend>
+    <div class="grid gap-2 sm:grid-cols-2">
+      {% for radio in form.visibility %}<label class="flex cursor-pointer items-start gap-2 rounded-xl border border-border p-3 text-sm has-checked:border-accent has-checked:bg-accent-soft">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+    </div>
+  </fieldset>
+  {% endif %}
+  <div class="grid grid-cols-3 gap-4">
+    {% include "partials/field.html" with field=form.servings %}
+    {% include "partials/field.html" with field=form.prep_minutes %}
+    {% include "partials/field.html" with field=form.cook_minutes %}
+  </div>
+  {% include "partials/field.html" with field=form.ingredients_text %}
+  {% include "partials/field.html" with field=form.instructions %}
+
+  <div class="space-y-2">
+    {% if recipe.image %}
+    <div class="flex items-center gap-3">
+      <img src="{% url 'recipes:image' recipe.pk %}" alt="" class="size-16 rounded-xl object-cover">
+      <label class="flex items-center gap-2 text-sm">{{ form.remove_photo }}{{ form.remove_photo.label }}</label>
+    </div>
+    {% endif %}
+    {% include "partials/field.html" with field=form.photo %}
+  </div>
+
+  {% include "partials/field.html" with field=form.description %}
+  {% include "partials/field.html" with field=form.tags %}
+  {% include "partials/field.html" with field=form.source_url %}
+
+  <div class="flex justify-end pt-2"><button type="submit" class="rounded-xl bg-accent px-5 py-2.5 font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar" %}</button></div>
+</form>
+{% endblock %}

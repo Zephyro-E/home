@@ -97,5 +97,6 @@ MODULES: list[Module] = [
         "chef-hat",
         "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300",
         phase=8,
+        url_name="recipes:list",
     ),
 ]

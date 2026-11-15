@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Recetas" %} · Hogar{% endblock %}
+
+{% block content %}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight">{% translate "Recetas" %}</h1>
+  <a href="{% url 'recipes:create' %}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nueva receta" %}</a>
+</div>
+
+<form method="get" class="mb-5 flex flex-wrap items-center gap-2">
+  <label for="recipe-q" class="sr-only">{% translate "Buscar" %}</label>
+  <input id="recipe-q" type="search" name="q" value="{{ query }}" placeholder="{% translate 'Buscar receta o ingrediente…' %}"
+         class="min-w-0 flex-1 rounded-full border border-border bg-surface px-4 py-1.5 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 sm:max-w-xs">
+  <label for="recipe-tipo" class="sr-only">{% translate "Tipo de plato" %}</label>
+  <select id="recipe-tipo" name="tipo" onchange="this.form.submit()" class="rounded-full border border-border bg-surface px-3 py-1.5 text-sm">
+    <option value="">{% translate "Todos los platos" %}</option>
+    {% for value, label in courses %}<option value="{{ value }}" {% if value == course %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+  {% if tag %}<input type="hidden" name="etiqueta" value="{{ tag }}">{% endif %}
+</form>
+
+{% if tags %}
+<div class="mb-5 flex flex-wrap gap-1.5" role="group" aria-label="{% translate 'Etiquetas' %}">
+  <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}{% if course %}tipo={{ course }}{% endif %}" class="rounded-full border px-3 py-1 text-xs {% if not tag %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted hover:bg-surface-2{% endif %}">{% translate "Todas" %}</a>
+  {% for t in tags %}
+  <a href="?etiqueta={{ t|urlencode }}{% if course %}&amp;tipo={{ course }}{% endif %}" class="rounded-full border px-3 py-1 text-xs {% if tag == t %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted hover:bg-surface-2{% endif %}">{{ t }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if items %}
+<ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  {% for recipe in items %}
+  <li>
+    <a href="{% url 'recipes:detail' recipe.pk %}" class="flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-surface shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+      {% if recipe.image %}
+      <img src="{% url 'recipes:image' recipe.pk %}" alt="" loading="lazy" class="aspect-[4/3] w-full bg-surface-2 object-cover">
+      {% else %}
+      <span class="grid aspect-[4/3] w-full place-items-center bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">{% icon "chef-hat" "size-10" %}</span>
+      {% endif %}
+      <span class="flex flex-1 flex-col gap-1 p-4">
+        <span class="font-semibold leading-snug break-words">{{ recipe.title }}</span>
+        <span class="text-xs text-muted">{{ recipe.get_course_display }}{% if recipe.total_minutes %} · {% blocktranslate trimmed with n=recipe.total_minutes %}{{ n }} min{% endblocktranslate %}{% endif %} · {% blocktranslate trimmed with n=recipe.servings %}{{ n }} raciones{% endblocktranslate %}</span>
+        <span class="mt-auto flex items-center gap-3 pt-1 text-xs text-muted">
+          {% if recipe.avg_stars %}<span class="font-medium text-amber-600 dark:text-amber-400">★ {{ recipe.avg_stars|floatformat:1 }}</span>{% endif %}
+          {% if recipe.visibility == "private" %}<span>{% icon "lock" "size-3.5" %}<span class="sr-only">{% translate "Personal" %}</span></span>{% endif %}
+          {% for t in recipe.tag_list|slice:":3" %}<span class="rounded-full bg-surface-2 px-2 py-0.5">{{ t }}</span>{% endfor %}
+        </span>
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+  <span class="mx-auto grid size-12 place-items-center rounded-2xl bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300">{% icon "chef-hat" "size-6" %}</span>
+  {% if query or course or tag %}<p class="mt-3 font-medium">{% translate "No hay resultados" %}</p>
+  {% else %}
+  <p class="mt-3 font-medium">{% translate "El recetario está vacío" %}</p>
+  <p class="mt-1 text-sm text-muted">{% translate "Guarda las recetas de casa: con sus ingredientes, podrás pasarlos a la lista de la compra." %}</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
