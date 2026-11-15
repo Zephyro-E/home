@@ -41,7 +41,7 @@ La primera vez que se use `servir.bat`, Windows preguntará si permite el acceso
 
 ## Desde fuera de casa
 
-Con **Tailscale** (red privada, HTTPS y app instalable en el móvil): instala Tailscale en el PC, ejecuta `scripts\configurar-tailscale.bat` y sigue la guía [docs/acceso-remoto.md](docs/acceso-remoto.md). Para que Hogar arranque solo al encender el PC: `scriptsrrancar-al-iniciar.bat`.
+Con **Tailscale** (red privada, HTTPS y app instalable en el móvil): instala Tailscale en el PC, ejecuta `scripts\configurar-tailscale.bat` y sigue la guía [docs/acceso-remoto.md](docs/acceso-remoto.md). Para que Hogar arranque solo al encender el PC: `scripts\arrancar-al-iniciar.bat`.
 
 ## Copias de seguridad
 
