@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.10.1] - 2026-11-16
+
+### Corregido
+- Detrás de Tailscale, el bloqueo por intentos fallidos usa la IP real de cada dispositivo (cabecera `X-Forwarded-For`, solo si la conexión llega del propio PC), en lugar de contar a todo el hogar como una sola IP.
+
 ## [0.10.0] - 2026-11-16 · Acceso desde fuera de casa
 
 ### Añadido

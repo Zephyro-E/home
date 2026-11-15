@@ -115,3 +115,24 @@ def test_pagina_sin_conexion_publica(client, make_user):
 def test_antes_del_asistente_no_redirige_el_service_worker(client):
     assert client.get("/sw.js").status_code == 200
     assert client.get("/sin-conexion/").status_code == 200
+
+
+# --- IP real detrás de Tailscale -------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("remote", "forwarded", "expected"),
+    [
+        ("127.0.0.1", "100.101.102.103", "100.101.102.103"),  # vía tailscale serve
+        ("127.0.0.1", "1.2.3.4, 100.64.0.7", "100.64.0.7"),  # se usa el último salto
+        ("127.0.0.1", "", "127.0.0.1"),
+        ("192.168.1.20", "9.9.9.9", "192.168.1.20"),  # de la red local: no se confía
+    ],
+)
+def test_ip_real_detras_del_proxy(rf, remote, forwarded, expected):
+    from apps.core.forms import client_ip
+
+    extra = {"REMOTE_ADDR": remote}
+    if forwarded:
+        extra["HTTP_X_FORWARDED_FOR"] = forwarded
+    assert client_ip(rf.get("/", **extra)) == expected

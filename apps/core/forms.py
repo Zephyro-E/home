@@ -29,8 +29,23 @@ class StyledFormMixin:
                 widget.attrs.setdefault("class", INPUT_CSS)
 
 
+LOOPBACK = {"127.0.0.1", "::1"}
+
+
 def client_ip(request) -> str:
-    return request.META.get("REMOTE_ADDR", "") if request else ""
+    """IP de quien visita, para el bloqueo de intentos de entrada.
+
+    Con Tailscale (ADR-022) las visitas llegan a través del propio PC (127.0.0.1) y el
+    proxy añade la IP real en X-Forwarded-For. Solo se confía en esa cabecera si la
+    conexión viene del propio PC; se toma el último valor, el que añadió ese proxy.
+    """
+    if not request:
+        return ""
+    ip = request.META.get("REMOTE_ADDR", "")
+    forwarded = request.META.get("HTTP_X_FORWARDED_FOR", "")
+    if ip in LOOPBACK and forwarded:
+        ip = forwarded.split(",")[-1].strip() or ip
+    return ip
 
 
 class LoginForm(StyledFormMixin, AuthenticationForm):
