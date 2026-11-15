@@ -10,5 +10,7 @@ urlpatterns = [
     path("compras/", include("apps.shopping.urls")),
     path("tareas/", include("apps.tasks.urls")),
     path("calendario/", include("apps.events.urls")),
+    path("peliculas/", include("apps.media.urls")),
+    path("sitios/", include("apps.places.urls")),
     path("", include("apps.core.urls")),
 ]

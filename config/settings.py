@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     "apps.shopping",
     "apps.tasks",
     "apps.events",
+    "apps.media",
+    "apps.places",
 ]
 
 MIDDLEWARE = [

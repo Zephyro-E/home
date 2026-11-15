@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "¿Dónde vamos?" %} · Hogar{% endblock %}
+
+{% block content %}
+<a href="{% url 'places:list' %}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">{% icon "arrow-left" "size-4" %}{% translate "Sitios" %}</a>
+<h1 class="mb-3 text-2xl font-semibold tracking-tight">{% translate "¿Dónde vamos?" %}</h1>
+<form method="get" class="mb-5">
+  <label for="random-cat" class="sr-only">{% translate "Categoría" %}</label>
+  <select id="random-cat" name="categoria" onchange="this.form.submit()" class="rounded-full border border-border bg-surface px-3 py-1.5 text-sm">
+    <option value="">{% translate "Cualquier categoría" %}</option>
+    {% for value, label in categories %}<option value="{{ value }}" {% if value == category %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+</form>
+<div class="max-w-xl">{% include "places/partials/random.html" %}</div>
+{% endblock %}

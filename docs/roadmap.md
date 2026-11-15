@@ -13,7 +13,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ✅ 2026-11-15 |
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
 | **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ✅ 2026-11-15 |
-| **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ⬜ |
+| **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ✅ 2026-11-15 |
 | **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ⬜ |
 | **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ⬜ |
 | **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ⬜ |
@@ -54,6 +54,14 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Diseño: vistas generadas en el servidor, sin FullCalendar (ADR-018). En el móvil el mes muestra puntos de color y la lista del día elegido debajo.
 - Decisiones: editar o borrar un evento repetido afecta a toda la serie (no se editan repeticiones sueltas); una tarea recurrente necesita fecha límite y, al terminarla, se crea la siguiente con la primera fecha posterior a hoy; en un evento personal solo participa su dueño. Repetición "cada mes" el día 31 se salta los meses sin día 31.
 - Pendiente para más adelante: excepciones en una serie (cambiar o quitar un único día), recordatorios/notificaciones (Fase 9).
+
+## Notas de la Fase 5
+
+- Verificado: 341 pruebas automáticas (reglas y autorización de cada vista en ambos módulos) y recorrido en el navegador sobre una copia aparte: listados con filtros y búsqueda, valorar con estrellas, progreso de series ("visto un episodio más"), "¿Qué vemos?" y "¿Dónde vamos?" al azar sin repetir el anterior, marcar un sitio como visitado; móvil y modo oscuro.
+- Piezas comunes nuevas: valoraciones y comentarios (`apps/core/social.py`, `partials/rating.html`, `partials/comments.html`), reutilizables en recetas y siguientes módulos.
+- Decisiones: el progreso de una serie es de cada persona; apuntar progreso pasa una serie "por ver" a "viendo"; "¿Qué vemos?" también se añadió para películas y series (el plan solo lo pedía para sitios); "Ver en el mapa" abre una búsqueda en OpenStreetMap (no se usa ninguna API ni se envía nada hasta que se pulsa).
+- Mejora de navegación: en el móvil, "Más" muestra arriba los módulos que no caben en la barra inferior.
+- Pendiente (futuro): mapa con los sitios, datos automáticos de películas (TMDB), votación de qué ver.
 
 ## Requisitos transversales: cuándo llega cada uno
 

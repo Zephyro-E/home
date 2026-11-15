@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Sitios" %} · Hogar{% endblock %}
+
+{% block content %}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight">{% translate "Sitios" %}</h1>
+  <div class="flex gap-2">
+    <a href="{% url 'places:random' %}{% if category %}?categoria={{ category }}{% endif %}" class="flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "dices" "size-4" %}{% translate "¿Dónde vamos?" %}</a>
+    <a href="{% url 'places:create' %}{% if category %}?categoria={{ category }}{% endif %}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Añadir" %}</a>
+  </div>
+</div>
+
+<nav class="mb-4 flex gap-1 border-b border-border text-sm font-medium" aria-label="{% translate 'Filtrar por estado' %}">
+  <a href="?estado=pendientes{% if category %}&amp;categoria={{ category }}{% endif %}" class="-mb-px border-b-2 px-3 py-2 {% if status == 'pendientes' %}border-accent text-fg{% else %}border-transparent text-muted hover:text-fg{% endif %}">{% translate "Pendientes" %}</a>
+  <a href="?estado=visitados{% if category %}&amp;categoria={{ category }}{% endif %}" class="-mb-px border-b-2 px-3 py-2 {% if status == 'visitados' %}border-accent text-fg{% else %}border-transparent text-muted hover:text-fg{% endif %}">{% translate "Visitados" %}</a>
+</nav>
+
+<form method="get" class="mb-5 flex flex-wrap items-center gap-2">
+  <input type="hidden" name="estado" value="{{ status }}">
+  <label for="place-cat" class="sr-only">{% translate "Categoría" %}</label>
+  <select id="place-cat" name="categoria" onchange="this.form.submit()" class="rounded-full border border-border bg-surface px-3 py-1.5 text-sm">
+    <option value="">{% translate "Todas las categorías" %}</option>
+    {% for value, label in categories %}<option value="{{ value }}" {% if value == category %}selected{% endif %}>{{ label }}</option>{% endfor %}
+  </select>
+  <label for="place-q" class="sr-only">{% translate "Buscar" %}</label>
+  <input id="place-q" type="search" name="q" value="{{ query }}" placeholder="{% translate 'Buscar nombre, zona…' %}"
+         class="min-w-0 flex-1 rounded-full border border-border bg-surface px-4 py-1.5 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 sm:max-w-xs">
+</form>
+
+{% if items %}
+<ul class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+  {% for place in items %}
+  <li>
+    <a href="{% url 'places:detail' place.pk %}" class="flex h-full gap-3 rounded-2xl border border-border bg-surface p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+      {% if place.image_url %}
+      <img src="{{ place.image_url }}" alt="" loading="lazy" referrerpolicy="no-referrer" class="size-16 shrink-0 rounded-lg bg-surface-2 object-cover">
+      {% else %}
+      <span class="grid size-16 shrink-0 place-items-center rounded-lg bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">{% icon icons|get_item:place.category "size-6" %}</span>
+      {% endif %}
+      <span class="min-w-0 flex-1">
+        <span class="block font-semibold leading-snug break-words">{{ place.name }}</span>
+        <span class="mt-0.5 block text-xs text-muted">{{ place.get_category_display }}{% if place.location %} · {{ place.location }}{% endif %}</span>
+        <span class="mt-1 flex items-center gap-3 text-xs text-muted">
+          {% if place.avg_stars %}<span class="font-medium text-amber-600 dark:text-amber-400">★ {{ place.avg_stars|floatformat:1 }}</span>{% endif %}
+          {% if place.visited_on %}<span>{{ place.visited_on|date:"j M Y" }}</span>{% endif %}
+          {% if place.comment_count %}<span class="flex items-center gap-1">{% icon "message-circle" "size-3.5" %}{{ place.comment_count }}</span>{% endif %}
+          {% if place.visibility == "private" %}<span>{% icon "lock" "size-3.5" %}<span class="sr-only">{% translate "Personal" %}</span></span>{% endif %}
+        </span>
+      </span>
+    </a>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+  <span class="mx-auto grid size-12 place-items-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">{% icon "map-pin" "size-6" %}</span>
+  {% if query %}<p class="mt-3 font-medium">{% translate "No hay resultados" %}</p>
+  {% else %}
+  <p class="mt-3 font-medium">{% translate "Nada por aquí todavía" %}</p>
+  <p class="mt-1 text-sm text-muted">{% translate "Apunta restaurantes, excursiones o viajes que os apetezcan." %}</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

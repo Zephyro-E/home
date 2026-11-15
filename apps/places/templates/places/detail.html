@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{{ place.name }} · Hogar{% endblock %}
+
+{% block content %}
+{% url 'places:list' as list_url %}
+<div x-data="deletable" {% if can_delete %}data-delete-url="{% url 'places:delete' place.pk %}"{% endif %} data-after-url="{{ list_url }}"
+     data-undo-message="{% blocktranslate trimmed with name=place.name %}«{{ name }}» borrado{% endblocktranslate %}">
+<a href="{{ list_url }}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">{% icon "arrow-left" "size-4" %}{% translate "Sitios" %}</a>
+<div x-show="gone" x-cloak class="rounded-2xl border border-dashed border-border px-6 py-12 text-center text-muted">{% translate "Borrando…" %}</div>
+
+<div x-show="!gone" class="space-y-6">
+  <article class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+    <div class="flex flex-col gap-5 sm:flex-row">
+      {% if place.image_url %}<img src="{{ place.image_url }}" alt="" referrerpolicy="no-referrer" class="aspect-square w-full shrink-0 self-start rounded-xl bg-surface-2 object-cover sm:w-40">{% endif %}
+      <div class="min-w-0 flex-1">
+        <div class="flex flex-wrap items-center gap-2 text-xs font-medium">
+          <span class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-amber-800 dark:bg-amber-950 dark:text-amber-200">{% icon icon_name "size-3.5" %}{{ place.get_category_display }}</span>
+          <span class="rounded-full px-2 py-0.5 {% if place.status == 'visited' %}bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200{% else %}bg-surface-2 text-muted{% endif %}">{{ place.get_status_display }}{% if place.visited_on %} · {{ place.visited_on|date:"j M Y" }}{% endif %}</span>
+          {% if place.visibility == "private" %}<span class="inline-flex items-center gap-1 rounded-full bg-surface-2 px-2 py-0.5 text-muted">{% icon "lock" "size-3.5" %}{% translate "Personal" %}</span>{% endif %}
+        </div>
+        <h1 class="mt-2 break-words text-2xl font-semibold tracking-tight">{{ place.name }}</h1>
+        {% if place.location %}<p class="mt-1 break-words text-sm text-muted">{{ place.location }}</p>{% endif %}
+        {% if place.description %}<p class="mt-4 whitespace-pre-line break-words">{{ place.description }}</p>{% endif %}
+        <div class="mt-4 flex flex-wrap gap-4 text-sm font-medium">
+          <a href="{{ map_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-accent hover:underline">{% icon "map" "size-4" %}{% translate "Ver en el mapa" %}</a>
+          {% if place.url %}<a href="{{ place.url }}" target="_blank" rel="noopener noreferrer nofollow" class="inline-flex items-center gap-1.5 text-accent hover:underline">{% icon "external-link" "size-4" %}{% translate "Abrir enlace" %}</a>{% endif %}
+        </div>
+        <p class="mt-4 text-xs text-muted">{% blocktranslate trimmed with name=place.owner %}Añadido por {{ name }}{% endblocktranslate %}</p>
+      </div>
+    </div>
+    <div class="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">
+      {% if can_edit %}
+      <form method="post" action="{% url 'places:visited' place.pk %}">
+        {% csrf_token %}
+        {% if place.status == "pending" %}
+        <input type="hidden" name="visited" value="1">
+        <button type="submit" class="flex items-center gap-1.5 rounded-lg bg-accent px-3 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "check" "size-4" %}{% translate "Ya hemos ido" %}</button>
+        {% else %}
+        <input type="hidden" name="visited" value="0">
+        <button type="submit" class="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "rotate-ccw" "size-4" %}{% translate "Volver a pendientes" %}</button>
+        {% endif %}
+      </form>
+      <a href="{% url 'places:edit' place.pk %}" class="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "pencil" "size-4" %}{% translate "Editar" %}</a>
+      {% endif %}
+      {% if place.visibility == "private" and place.owner == user %}
+      <form method="post" action="{% url 'places:share' place.pk %}">{% csrf_token %}<button type="submit" class="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "users-round" "size-4" %}{% translate "Compartir con el hogar" %}</button></form>
+      {% endif %}
+      {% if can_delete %}<button type="button" @click="remove()" class="flex items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950">{% icon "trash-2" "size-4" %}{% translate "Borrar" %}</button>{% endif %}
+    </div>
+  </article>
+
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="valoracion">
+    <h2 id="valoracion" class="mb-2 font-semibold">{% translate "Valoración" %}</h2>
+    {% include "partials/rating.html" %}
+  </section>
+
+  {% url 'places:comment_add' place.pk as add_url %}
+  {% include "partials/comments.html" with delete_url_name="places:comment_delete" %}
+</div>
+</div>
+{% endblock %}

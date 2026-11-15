@@ -4,6 +4,21 @@
 {% block title %}{% translate "Hogar y miembros" %} · Hogar{% endblock %}
 
 {% block content %}
+{# En el móvil, "Más" lleva aquí: primero, los módulos que no caben en la barra inferior. #}
+<section class="mb-6 md:hidden" aria-labelledby="mas-modulos">
+  <h2 id="mas-modulos" class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Más módulos" %}</h2>
+  <ul class="grid grid-cols-2 gap-3">
+    {% for m in modules %}{% if not m.in_bottom_nav %}
+    <li>
+      {% if m.enabled %}<a href="{{ m.url }}"{% else %}<div aria-disabled="true"{% endif %} class="flex items-center gap-3 rounded-2xl border border-border bg-surface p-3 shadow-sm">
+        <span class="grid size-9 shrink-0 place-items-center rounded-xl {{ m.color }}">{% icon m.icon "size-5" %}</span>
+        <span class="min-w-0"><span class="block truncate text-sm font-semibold">{{ m.label }}</span>{% if not m.enabled %}<span class="block text-xs text-muted">{% translate "Pronto" %}</span>{% endif %}</span>
+      {% if m.enabled %}</a>{% else %}</div>{% endif %}
+    </li>
+    {% endif %}{% endfor %}
+  </ul>
+</section>
+
 <h1 class="mb-6 text-2xl font-semibold tracking-tight">{% translate "Hogar y miembros" %}</h1>
 
 <div class="space-y-6">

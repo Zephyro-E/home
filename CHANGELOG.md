@@ -2,6 +2,17 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.6.0] - 2026-11-15 · Fase 5: películas, series y sitios
+
+### Añadido
+- Películas y series: por ver / viendo / vistas / abandonadas, plataforma, año, género, sinopsis, cartel por enlace; búsqueda y filtros.
+- Progreso de cada persona en las series ("visto un episodio más").
+- Sitios: categoría, zona, notas, enlace e imagen; pendientes y visitados (con fecha); "Ver en el mapa" (OpenStreetMap).
+- Valoraciones de 1 a 5 estrellas por persona y comentarios en ambos módulos (piezas comunes reutilizables).
+- "¿Qué vemos?" y "¿Dónde vamos?": elección al azar entre lo pendiente, con filtro y "otra".
+- En el móvil, "Más" muestra los módulos que no caben en la barra inferior.
+- 341 pruebas automáticas.
+
 ## [0.5.0] - 2026-11-15 · Fase 4: calendario
 
 ### Añadido

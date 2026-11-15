@@ -1,0 +1,19 @@
+{% load i18n ui %}{# Resultado de "¿Dónde vamos?". Parámetros: place (o None), category, map_url #}
+<div id="random-pick" class="rounded-2xl border border-border bg-surface p-6 text-center shadow-sm">
+  {% if place %}
+    {% if place.image_url %}<img src="{{ place.image_url }}" alt="" referrerpolicy="no-referrer" class="mx-auto mb-4 h-40 rounded-xl bg-surface-2 object-cover">{% endif %}
+    <p class="text-sm text-muted">{{ place.get_category_display }}{% if place.location %} · {{ place.location }}{% endif %}</p>
+    <h2 class="mt-1 text-2xl font-semibold">{{ place.name }}</h2>
+    {% if place.description %}<p class="mx-auto mt-3 max-w-md text-sm text-muted">{{ place.description|truncatewords:40 }}</p>{% endif %}
+    <div class="mt-5 flex flex-wrap justify-center gap-2">
+      <a href="{% url 'places:detail' place.pk %}" class="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% translate "Ver ficha" %}</a>
+      <a href="{{ map_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-surface-2">{% icon "map" "size-4" %}{% translate "Mapa" %}</a>
+      <a href="{% url 'places:random' %}?anterior={{ place.pk }}{% if category %}&amp;categoria={{ category }}{% endif %}"
+         hx-get="{% url 'places:random' %}?anterior={{ place.pk }}{% if category %}&amp;categoria={{ category }}{% endif %}" hx-target="#random-pick" hx-swap="outerHTML"
+         class="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-surface-2">{% icon "shuffle" "size-4" %}{% translate "Otro" %}</a>
+    </div>
+  {% else %}
+    <p class="font-medium">{% translate "No hay sitios pendientes." %}</p>
+    <p class="mt-1 text-sm text-muted">{% translate "Añade sitios a la lista de pendientes." %}</p>
+  {% endif %}
+</div>

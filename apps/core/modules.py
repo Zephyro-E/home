@@ -70,6 +70,7 @@ MODULES: list[Module] = [
         "clapperboard",
         "bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300",
         phase=5,
+        url_name="media:list",
     ),
     Module(
         "places",
@@ -78,6 +79,7 @@ MODULES: list[Module] = [
         "map-pin",
         "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
         phase=5,
+        url_name="places:list",
     ),
     Module(
         "finance",

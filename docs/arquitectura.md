@@ -15,8 +15,8 @@ Waitress (servidor WSGI) ──► Django
                                ├─ shopping    lista de la compra + deseos (votos, comentarios)
                                ├─ tasks       tablero de tareas (SortableJS para arrastrar)
                                ├─ events      calendario: eventos, repeticiones, tareas proyectadas
-                               ├─ media_lib   películas y series                   (fase 5)
-                               ├─ places      sitios que visitar                   (fase 5)
+                               ├─ media       películas y series
+                               ├─ places      sitios que visitar
                                ├─ finance     cuentas, movimientos, repartos       (fases 6–7)
                                └─ recipes     recetario                            (fase 8)
                                ▼

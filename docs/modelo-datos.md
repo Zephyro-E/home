@@ -99,10 +99,26 @@ Task (ampliado)      recurrence_rule, recurrence_spawned (ya se creó la siguien
 
 Las tareas con `due_date` se proyectan en el calendario al consultar, sin copiarse.
 
+## Películas, series y sitios (Fase 5, `apps/media` y `apps/places`)
+
+```
+Title                (HouseholdOwnedModel) title, kind ('movie'|'series'), year?, genre,
+                     platform, synopsis, image_url, url,
+                     status ('pending'|'watching'|'watched'|'dropped')
+TitleRating          title, user, stars 1–5   (único por persona)
+TitleComment         title, author, body
+SeriesProgress       title, user, season, episode   (único por persona)
+
+Place                (HouseholdOwnedModel) name, category, location, description, url,
+                     image_url, status ('pending'|'visited'), visited_on?
+PlaceRating          place, user, stars 1–5   (único por persona)
+PlaceComment         place, author, body
+```
+
+Valoraciones y comentarios heredan de `AbstractRating` / `AbstractComment` (`apps/core/social.py`).
+
 ## Módulos posteriores (esbozo)
 
-- **Películas y series (F5)**: `Title` (tipo, género, año, sinopsis, imagen, plataforma, estado), `TitleRating` (por persona), `SeriesProgress` (temporada, episodio).
-- **Sitios (F5)**: `Place` (categoría, ubicación, lat/lon opcionales, url, estado, imágenes), `PlaceRating`, `PlaceComment`.
 - **Finanzas (F6–F7)**: `Account` (personal o común), `Category`, `Transaction` (tipo ingreso / gasto / transferencia, importe en céntimos, fecha, cuenta, visibilidad), `TransactionSplit` (persona, parte en céntimos), `Budget` (mes, categoría, importe), `SavingsGoal`, `Settlement` (liquidación de saldos entre miembros).
 - **Recetas (F8)**: `Recipe`, `RecipeIngredient` (cantidad, unidad, nombre), etiquetas, valoraciones; acción "añadir a la lista de la compra" → `GroceryItem`.
 
