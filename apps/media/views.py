@@ -32,7 +32,9 @@ def _colors(household) -> dict:
 
 class MediaMixin(HouseholdRequiredMixin):
     def get_item(self, pk):
-        return get_object_or_404(services.titles_for(self.request.user, self.request.household), pk=pk)
+        return get_object_or_404(
+            services.titles_for(self.request.user, self.request.household), pk=pk
+        )
 
     def get_editable(self, pk):
         item = self.get_item(pk)
@@ -63,7 +65,7 @@ class TitleListView(MediaMixin, TemplateView):
 
 
 class RandomView(MediaMixin, View):
-    """"¿Qué vemos?": algo por ver al azar (HTMX devuelve solo la tarjeta)."""
+    """ "¿Qué vemos?": algo por ver al azar (HTMX devuelve solo la tarjeta)."""
 
     def get(self, request):
         kind = request.GET.get("tipo", "")
@@ -223,4 +225,3 @@ class CommentDeleteView(MediaMixin, View):
         if request.headers.get("X-Undo-Commit"):
             return HttpResponse(status=204)
         return redirect(reverse("media:detail", args=[comment.title_id]) + "#comentarios")
-

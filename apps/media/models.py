@@ -48,7 +48,9 @@ class TitleRating(AbstractRating):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["title", "user"], name="media_one_rating_per_user"),
-            models.CheckConstraint(condition=models.Q(stars__gte=1, stars__lte=5), name="media_stars_1_5"),
+            models.CheckConstraint(
+                condition=models.Q(stars__gte=1, stars__lte=5), name="media_stars_1_5"
+            ),
         ]
 
 

@@ -22,7 +22,9 @@ def data(home, other_home):
         "ana": ana,
         "luis": luis,
         "eva": eva,
-        "movie": services.create_title(household, ana, title="Amélie", kind="movie", genre="Comedia"),
+        "movie": services.create_title(
+            household, ana, title="Amélie", kind="movie", genre="Comedia"
+        ),
         "series": services.create_title(household, ana, title="Dark", kind="series"),
         "private": services.create_title(household, ana, title="Secreta", visibility="private"),
         "foreign": services.create_title(other, eva, title="Ajena"),
@@ -158,14 +160,26 @@ def test_crear_y_editar(login_as, data):
     client = login_as(data["luis"])
     response = client.post(
         reverse("media:create"),
-        {"title": "Severance", "kind": "series", "visibility": "shared", "status": "pending",
-         "platform": "Apple TV", "year": "2022"},
+        {
+            "title": "Severance",
+            "kind": "series",
+            "visibility": "shared",
+            "status": "pending",
+            "platform": "Apple TV",
+            "year": "2022",
+        },
     )
     item = Title.objects.get(title="Severance")
     assert response.status_code == 302 and item.owner == data["luis"] and item.year == 2022
     bad = client.post(
         reverse("media:create"),
-        {"title": "X", "kind": "movie", "visibility": "shared", "status": "pending", "year": "3000"},
+        {
+            "title": "X",
+            "kind": "movie",
+            "visibility": "shared",
+            "status": "pending",
+            "year": "3000",
+        },
     )
     assert bad.status_code == 400
     client.post(
@@ -178,18 +192,24 @@ def test_crear_y_editar(login_as, data):
 
 def test_valorar_con_htmx(login_as, data):
     movie = data["movie"]
-    response = login_as(data["luis"]).post(reverse("media:rate", args=[movie.pk]), {"stars": "4"}, **HTMX)
+    response = login_as(data["luis"]).post(
+        reverse("media:rate", args=[movie.pk]), {"stars": "4"}, **HTMX
+    )
     assert response.status_code == 200
     assert f'id="rating-{movie.pk}"' in response.content.decode()
     assert TitleRating.objects.get(title=movie, user=data["luis"]).stars == 4
-    bad = login_as(data["luis"]).post(reverse("media:rate", args=[movie.pk]), {"stars": "9"}, **HTMX)
+    bad = login_as(data["luis"]).post(
+        reverse("media:rate", args=[movie.pk]), {"stars": "9"}, **HTMX
+    )
     assert bad.status_code == 400
 
 
 def test_detalle_de_serie_con_progreso(login_as, data):
     services.set_progress(data["series"], data["ana"], 3, 4)
     client = login_as(data["luis"])
-    client.post(reverse("media:progress", args=[data["series"].pk]), {"season": "1", "episode": "5"})
+    client.post(
+        reverse("media:progress", args=[data["series"].pk]), {"season": "1", "episode": "5"}
+    )
     html = client.get(reverse("media:detail", args=[data["series"].pk])).content.decode()
     assert "T3 E4" in html  # el progreso de Ana
     assert 'value="5"' in html  # el suyo, en el formulario

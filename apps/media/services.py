@@ -28,7 +28,9 @@ def listing(user, household, status="por-ver", kind="", query=""):
     if kind in Title.Kind.values:
         qs = qs.filter(kind=kind)
     if query:
-        qs = qs.filter(Q(title__icontains=query) | Q(genre__icontains=query) | Q(platform__icontains=query))
+        qs = qs.filter(
+            Q(title__icontains=query) | Q(genre__icontains=query) | Q(platform__icontains=query)
+        )
     qs = social.with_rating(qs, TitleRating, "title").annotate(
         comment_count=Count("comments", distinct=True)
     )
