@@ -47,6 +47,36 @@
     <div x-show="kind === 'expense'">{% include "partials/field.html" with field=form.expense_category %}</div>
     <div x-show="kind === 'income'" x-cloak>{% include "partials/field.html" with field=form.income_category %}</div>
   </div>
+  <div x-show="kind === 'expense'">
+  <div x-data="{ split: {% if form.is_split.value %}true{% else %}false{% endif %} }"
+       class="rounded-xl border border-border p-3">
+    <label class="flex items-center gap-2 text-sm font-medium">
+      <input type="checkbox" name="{{ form.is_split.html_name }}" id="{{ form.is_split.id_for_label }}" x-model="split" class="size-5 rounded border-border accent-accent" {% if form.is_split.value %}checked{% endif %}>
+      {% icon "handshake" "size-4 text-muted" %}{{ form.is_split.label }}
+    </label>
+    <p class="mt-1 text-xs text-muted">{% translate "Para gastos de casa pagados con tu dinero personal. Lo verá todo el hogar y cada persona deberá su parte." %}</p>
+    <div x-show="split" x-cloak>
+    <div class="mt-3 space-y-2"
+         x-data="{ t: 0, calc() { this.t = [...this.$root.querySelectorAll('input[type=number]')].reduce((s, i) => s + (parseFloat(i.value) || 0), 0) } }"
+         x-init="calc()" @input="calc()">
+      {% for field in form.split_fields %}
+      <label class="flex items-center gap-3 text-sm">
+        <span class="w-24 truncate">{{ field.label }}</span>
+        <span class="relative w-28">
+          <input type="number" name="{{ field.html_name }}" id="{{ field.id_for_label }}" value="{{ field.value|default_if_none:''|stringformat:'s' }}" step="0.01" min="0" max="100" inputmode="decimal"
+                 class="block w-full rounded-xl border border-border bg-surface py-2 pl-3 pr-7 text-right tabular-nums">
+          <span class="pointer-events-none absolute inset-y-0 right-3 grid place-items-center text-muted">%</span>
+        </span>
+      </label>
+      {% endfor %}
+      <p class="text-xs" :class="Math.abs(t - 100) < 0.001 ? 'text-muted' : 'text-red-600 dark:text-red-400'">
+        {% translate "Total" %}: <span x-text="Math.round(t * 100) / 100"></span> %
+      </p>
+    </div>
+    </div>
+  </div>
+  </div>
+
   {% include "partials/field.html" with field=form.notes %}
   <p class="text-xs text-muted">{% translate "Si el movimiento toca una cuenta común, lo verá todo el hogar." %}</p>
 

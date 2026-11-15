@@ -51,6 +51,7 @@ uv run python manage.py backup / restore <copia>
 - El vigilante de Tailwind (`tailwind runserver` / `watch`) se cierra si no hay consola (procesos en segundo plano): en ese caso, ejecutar `tailwind build` tras cambiar plantillas.
 - El servidor de vista previa puede iniciarse con `.claude/launch.json` (configuración `hogar`).
 - Verificación visual: escritorio y móvil (375 px), modo claro y oscuro, sin errores en consola.
+- Si el panel del navegador está oculto, la página no dibuja: Alpine no aplica `x-show` hasta el siguiente fotograma (una captura lo fuerza). No confundirlo con un fallo.
 
 ## Mapa del código
 
@@ -63,7 +64,7 @@ uv run python manage.py backup / restore <copia>
 - Plantillas: `base.html` (app con sesión), `base_auth.html` (entrada, asistente, invitación); componentes en `templates/partials/` (`form_fields`, `avatar`, `user_menu`, `messages`…).
 - `assets/css/source.css`: colores semánticos (`bg-surface`, `text-muted`, `bg-accent`…) para claro/oscuro. Usarlos en lugar de colores fijos.
 - `apps/core/money.py`: importes (texto ↔ céntimos, formato "12,50 €"); filtros `euros` y `get_item` en `ui.py`.
-- `apps/finance/`: cuentas, categorías y movimientos; privacidad por cuenta (ADR-019): `Transaction.visibility` la calcula `services._prepare`, nunca el formulario. Saldos con `services.balances()`.
+- `apps/finance/`: `sharing.py` (repartos al céntimo con `allocate`, saldos, pagos), `planning.py` (presupuestos, metas, datos del gráfico); cuentas, categorías y movimientos; privacidad por cuenta (ADR-019): `Transaction.visibility` la calcula `services._prepare`, nunca el formulario. Saldos con `services.balances()`.
 - Valorar y comentar: `apps/core/social.py` (`AbstractRating`, `AbstractComment`, `rate`, `with_rating`) + `partials/rating.html` y `partials/comments.html`. Ejemplos: `apps/media/`, `apps/places/`.
 - `apps/events/`: calendario (URL `calendar:`), `items_between()` expande repeticiones y proyecta tareas (ADR-018). Repeticiones comunes en `apps/core/recurrence.py` y `RecurrenceFieldsMixin` (`core/forms.py`) + `partials/recurrence_fields.html`.
 - `apps/tasks/`: tablero de tareas (SortableJS, ADR-017; componente Alpine `taskColumn` en `app.js`). Ojo: en consultas con recuentos (`annotate(Count…)`) Django no aplica `Meta.ordering`: poner `order_by` explícito.

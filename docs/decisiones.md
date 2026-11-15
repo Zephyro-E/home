@@ -24,6 +24,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 017 | Arrastrar y soltar con SortableJS | Aceptada | 2026-11-15 |
 | 018 | Calendario generado en el servidor (sin FullCalendar) | Aceptada | 2026-11-15 |
 | 019 | Privacidad en finanzas: la cuenta manda | Aceptada | 2026-11-15 |
+| 020 | Gráficos generados en el servidor (sin Chart.js) | Aceptada | 2026-11-15 |
 
 ---
 
@@ -51,7 +52,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 
 **Por qué encaja.** Django incluye de serie autenticación, sesiones, protección CSRF, migraciones, validación de formularios, internacionalización, panel de administración y un ORM que impide inyección SQL. Menos librerías = menos cosas que mantener y menos errores que la IA pueda introducir.
 
-**Librerías complementarias previstas (se añaden cuando su fase lo requiera):** `django-htmx`, `argon2-cffi`, `Pillow`, `whitenoise`, `waitress` (servidor en Windows), `python-dateutil` (RRULE), `pytest-django`, `ruff`; SortableJS (kanban), Chart.js (gráficos). FullCalendar se descartó (ADR-018).
+**Librerías complementarias previstas (se añaden cuando su fase lo requiera):** `django-htmx`, `argon2-cffi`, `Pillow`, `whitenoise`, `waitress` (servidor en Windows), `python-dateutil` (RRULE), `pytest-django`, `ruff`; SortableJS (kanban). FullCalendar y Chart.js se descartaron (ADR-018, ADR-020).
 
 **Consecuencias.** Cambia la propuesta inicial (React + Fastify). No habrá API REST pública en las primeras fases: las vistas devuelven HTML. Si en el futuro se necesitara una app nativa o integraciones, se añadiría una API (Django Ninja o DRF) sobre los mismos servicios.
 
@@ -203,3 +204,15 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 - Los saldos se calculan con todos los movimientos de cada cuenta (inicial + ingresos − gastos ± transferencias). Las transferencias no cuentan en ingresos ni gastos del resumen (ADR-007).
 
 **Consecuencias.** El saldo de una cuenta común es el mismo para todos los miembros. Los repartos de gastos entre personas (Fase 7) se apoyarán en estos movimientos comunes.
+
+**Ampliación (Fase 7).** Un gasto compartido (`is_split`) solo puede pagarse con una cuenta personal: quien paga es el dueño de esa cuenta y adelanta el dinero; cada persona debe su parte (`TransactionSplit`). Un gasto compartido es siempre común aunque la cuenta sea personal. Los pagos entre miembros (`Settlement`) compensan los saldos.
+
+---
+
+## ADR-020 · Gráficos generados en el servidor (sin Chart.js)
+
+**Contexto.** ADR-002 preveía Chart.js para los gráficos de finanzas.
+
+**Decisión.** Los gráficos que se necesitan (ingresos y gastos de los últimos 12 meses, barras por categoría y de presupuesto) se dibujan con HTML y CSS desde la plantilla, con los datos ya calculados en `apps/finance/planning.py`. Cada barra tiene su texto accesible y enlaza a su mes.
+
+**Consecuencias.** Sin librería ni JavaScript extra, se ven bien en claro y oscuro y funcionan aunque falle el JavaScript. Si en el futuro hicieran falta gráficos más complejos (líneas, interacción), se valoraría añadir Chart.js con un ADR nuevo.

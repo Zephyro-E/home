@@ -3,10 +3,15 @@
   <h1 class="text-2xl font-semibold tracking-tight">{% translate "Finanzas" %}</h1>
   <a href="{% url 'finance:transaction_create' %}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nuevo movimiento" %}</a>
 </div>
-<nav class="mb-5 flex gap-1 overflow-x-auto rounded-xl bg-surface-2 p-1 text-sm font-medium" aria-label="{% translate 'Secciones de finanzas' %}">
+<nav class="mb-5 flex gap-1 overflow-x-auto rounded-xl bg-surface-2 p-1 text-sm font-medium" aria-label="{% translate 'Secciones de finanzas' %}"
+     x-data x-init="const a = $el.querySelector('[aria-current]'); if (a) $el.scrollLeft += a.getBoundingClientRect().left - $el.getBoundingClientRect().left - ($el.clientWidth - a.offsetWidth) / 2">
   {% url 'finance:summary' as u1 %}{% url 'finance:transactions' as u2 %}{% url 'finance:accounts' as u3 %}{% url 'finance:categories' as u4 %}
+  {% url 'finance:shared' as u5 %}{% url 'finance:budgets' as u6 %}{% url 'finance:goals' as u7 %}
   <a href="{{ u1 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'summary' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'summary' %}aria-current="page"{% endif %}>{% translate "Resumen" %}</a>
   <a href="{{ u2 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'transactions' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'transactions' %}aria-current="page"{% endif %}>{% translate "Movimientos" %}</a>
+  <a href="{{ u5 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'shared' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'shared' %}aria-current="page"{% endif %}>{% translate "Compartidos" %}</a>
+  <a href="{{ u6 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'budgets' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'budgets' %}aria-current="page"{% endif %}>{% translate "Presupuestos" %}</a>
+  <a href="{{ u7 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'goals' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'goals' %}aria-current="page"{% endif %}>{% translate "Ahorro" %}</a>
   <a href="{{ u3 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'accounts' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'accounts' %}aria-current="page"{% endif %}>{% translate "Cuentas" %}</a>
   <a href="{{ u4 }}" class="shrink-0 rounded-lg px-3 py-1.5 {% if active == 'categories' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'categories' %}aria-current="page"{% endif %}>{% translate "Categorías" %}</a>
 </nav>

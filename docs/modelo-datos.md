@@ -131,9 +131,25 @@ Transaction          (HouseholdOwnedModel) kind ('expense'|'income'|'transfer'),
                      visibility calculada: shared si toca alguna cuenta común (ADR-019)
 ```
 
+## Finanzas II (Fase 7)
+
+```
+Transaction (ampliado) is_split   (gasto compartido; quien paga = dueño de la cuenta)
+TransactionSplit     transaction, user, share_bp (10 000 = 100 %), amount_cents
+                     (las partes suman exactamente el importe)
+Settlement           (HouseholdOwnedModel, siempre shared) from_user, to_user,
+                     amount_cents, date, note        (pago entre miembros)
+Budget               (HouseholdOwnedModel, siempre shared) category (1 a 1, de gastos),
+                     amount_cents mensual
+SavingsGoal          (HouseholdOwnedModel) name, target_cents, account?, saved_cents,
+                     target_date?
+Membership.default_share_bp   reparto por defecto (se normaliza para sumar 100 %)
+```
+
+Saldo de una persona = lo que adelantó en gastos compartidos − su parte de todos ellos + pagos hechos − pagos recibidos.
+
 ## Módulos posteriores (esbozo)
 
-- **Finanzas II (F7)**: `TransactionSplit` (persona, parte en céntimos), `Budget` (mes, categoría, importe), `SavingsGoal`, `Settlement` (liquidación de saldos entre miembros).
 - **Recetas (F8)**: `Recipe`, `RecipeIngredient` (cantidad, unidad, nombre), etiquetas, valoraciones; acción "añadir a la lista de la compra" → `GroceryItem`.
 
 ## Diagrama de relaciones del núcleo

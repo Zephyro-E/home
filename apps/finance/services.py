@@ -8,12 +8,14 @@ editar un movimiento hay que poder usar todas las cuentas que toca.
 from datetime import date
 
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import transaction as db_transaction
 from django.db.models import Q, Sum
 from django.db.models.deletion import ProtectedError
 from django.utils.translation import gettext as _
 
 from apps.core.models import Visibility
 
+from . import sharing
 from .models import DEFAULT_CATEGORIES, Account, Category, Transaction
 
 # --- Cuentas ------------------------------------------------------------------------------
@@ -160,26 +162,43 @@ def _prepare(household, user, data) -> dict:
             category.household_id != household.pk or category.kind != kind
         ):
             raise ValidationError(_("La categoría no corresponde a este tipo de movimiento."))
-    shared = account.visibility == Visibility.SHARED or (
-        to_account is not None and to_account.visibility == Visibility.SHARED
+    # Gasto compartido: se reparte entre miembros y, por eso, lo ve todo el hogar.
+    data["is_split"] = bool(data.get("is_split")) and kind == Transaction.Kind.EXPENSE
+    if data["is_split"]:
+        shares = data.get("split_shares") or sharing.default_shares(household)
+        sharing.validate_split(household, account, shares)
+        data["split_shares"] = shares
+    else:
+        data["split_shares"] = []
+    shared = (
+        data["is_split"]
+        or account.visibility == Visibility.SHARED
+        or (to_account is not None and to_account.visibility == Visibility.SHARED)
     )
     data["visibility"] = Visibility.SHARED if shared else Visibility.PRIVATE
     data["description"] = " ".join((data.get("description") or "").split())[:200]
     return data
 
 
+@db_transaction.atomic
 def create_transaction(household, user, **data) -> Transaction:
     data = _prepare(household, user, data)
-    return Transaction.objects.create(household=household, owner=user, **data)
+    shares = data.pop("split_shares")
+    tx = Transaction.objects.create(household=household, owner=user, **data)
+    sharing.save_splits(tx, shares)
+    return tx
 
 
+@db_transaction.atomic
 def update_transaction(tx: Transaction, user, **data) -> Transaction:
     if not tx.can_edit(user):
         raise PermissionDenied
     data = _prepare(tx.household, user, data)
+    shares = data.pop("split_shares")
     for name, value in data.items():
         setattr(tx, name, value)
     tx.save()
+    sharing.save_splits(tx, shares)
     return tx
 
 

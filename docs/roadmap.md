@@ -15,7 +15,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ✅ 2026-11-15 |
 | **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ✅ 2026-11-15 |
 | **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ✅ 2026-11-15 |
-| **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ⬜ |
+| **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ✅ 2026-11-15 |
 | **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ⬜ |
 | **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ⬜ |
 | **10. Servidor** | Dockerfile + Docker Compose, HTTPS, posible paso a PostgreSQL, migración de datos desde el PC | M | ⬜ |
@@ -70,6 +70,15 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Categorías por defecto (supermercado, casa y facturas, restaurantes…) que se crean solas la primera vez; comunes al hogar. Una cuenta con movimientos no se borra: se archiva.
 - Fallo encontrado y corregido en la verificación: el resumen se desbordaba 13 px en el móvil.
 - Pendiente para la Fase 7: gastos compartidos y repartos, saldos entre miembros, presupuestos, ahorro y gráficos.
+
+## Notas de la Fase 7
+
+- Verificado: 415 pruebas automáticas (reparto al céntimo, reparto por defecto normalizado, saldos, pagos mínimos para saldar, presupuestos, metas, gráfico y autorización de cada vista) y recorrido en el navegador sobre una copia aparte como miembro sin administración: gráfico de 12 meses, presupuestos (en verde, ámbar y rojo), "Luis debe 30 € a Ana" → "Registrar pago" con el formulario relleno → "Estáis en paz", formulario de gasto compartido con total en vivo, metas de ahorro, móvil y modo oscuro.
+- Reglas (ADR-019 ampliado): solo se reparte lo pagado con una cuenta personal (lo de la cuenta común ya es de todos); un gasto compartido lo ve todo el hogar; el reparto por defecto lo decide la administración y en cada gasto se puede cambiar; el céntimo sobrante va a quien tenga mayor resto.
+- Presupuestos mensuales por categoría, comunes al hogar: cuentan los gastos comunes y los compartidos. Metas de ahorro con cuenta vinculada (progreso = saldo) o con aportaciones a mano.
+- Gráficos generados en el servidor, sin Chart.js (ADR-020).
+- Fallos encontrados y corregidos en la verificación: el enlace "Registrar pago" no rellenaba el formulario (los identificadores llevan guiones); en el móvil, la pestaña activa de finanzas quedaba fuera de la vista.
+- Nota de verificación: con el panel del navegador oculto, la página no dibuja y Alpine retrasa mostrar u ocultar elementos; no es un fallo de la app (se comprobó forzando el dibujado).
 
 ## Requisitos transversales: cuándo llega cada uno
 

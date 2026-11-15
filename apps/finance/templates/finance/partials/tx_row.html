@@ -9,7 +9,7 @@
       <span class="block truncate text-xs text-muted">
         {% if tx.kind == "transfer" %}{% account_label tx.account user %} → {% account_label tx.to_account user %}
         {% else %}{% if tx.category and tx.description %}{{ tx.category.name }} · {% endif %}{% account_label tx.account user %}{% endif %}
-        {% if tx.visibility == "private" %} · {% translate "personal" %}{% endif %}
+        {% if tx.is_split %} · {% translate "compartido" %}{% elif tx.visibility == "private" %} · {% translate "personal" %}{% endif %}
       </span>
     </span>
     <span class="shrink-0 text-right font-semibold tabular-nums {% if tx.kind == 'income' %}text-emerald-700 dark:text-emerald-400{% elif tx.kind == 'transfer' %}text-muted{% endif %}">{{ tx|signed_euros }}</span>

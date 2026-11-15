@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Presupuestos" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "finance/partials/nav.html" with active="budgets" %}
+
+<div class="grid gap-6 lg:grid-cols-[2fr_1fr]">
+  <section class="min-w-0 rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="presupuestos">
+    <div class="mb-4 flex flex-wrap items-center justify-between gap-2">
+      <h2 id="presupuestos" class="font-semibold">{% translate "Presupuestos del mes" %}</h2>
+      <div class="flex items-center gap-1 text-sm">
+        <a href="?mes={{ prev_month|date:'Y-m' }}" class="grid size-8 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes anterior' %}">{% icon "chevron-left" "size-4" %}</a>
+        <span class="first-letter:uppercase">{{ month|date:"F Y" }}</span>
+        <a href="?mes={{ next_month|date:'Y-m' }}" class="grid size-8 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes siguiente' %}">{% icon "chevron-right" "size-4" %}</a>
+      </div>
+    </div>
+    {% if rows %}
+    {% include "finance/partials/budget_rows.html" %}
+    <p class="mt-4 text-xs text-muted">{% translate "Cuentan los gastos comunes del hogar (incluidos los compartidos). Para cambiar o quitar un presupuesto, elige la categoría en el formulario." %}</p>
+    {% else %}
+    <p class="text-sm text-muted">{% translate "Aún no hay presupuestos. Pon un límite mensual a las categorías que quieras vigilar." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="nuevo-presupuesto">
+    <h2 id="nuevo-presupuesto" class="font-semibold">{% translate "Poner o cambiar un presupuesto" %}</h2>
+    <form method="post" class="mt-3 space-y-4" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+      {% include "partials/field.html" with field=form.category %}
+      {% include "partials/field.html" with field=form.amount %}
+      <button type="submit" class="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar" %}</button>
+    </form>
+  </section>
+</div>
+{% endblock %}

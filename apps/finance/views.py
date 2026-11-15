@@ -4,23 +4,34 @@ from datetime import date
 from itertools import groupby
 
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Q
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views import View
 from django.views.generic import TemplateView
 
 from apps.core.mixins import HouseholdRequiredMixin
-from apps.core.models import MEMBER_COLORS
+from apps.core.models import MEMBER_COLORS, Membership
 
-from . import services
-from .forms import AccountForm, CategoryForm, TransactionForm
+from . import planning, services, sharing
+from .forms import (
+    AccountForm,
+    BudgetForm,
+    CategoryForm,
+    ContributionForm,
+    GoalForm,
+    SettlementForm,
+    TransactionForm,
+)
 from .models import Category, Transaction
 
 SCOPES = {"comun", "mio"}
+User = get_user_model()
 
 
 def _month(text) -> date:
@@ -67,6 +78,8 @@ class SummaryView(FinanceMixin, TemplateView):
         context.update(
             scope=scope,
             summary=services.month_summary(user, household, month, scope),
+            chart=planning.monthly_totals(user, household, month, scope),
+            budgets=planning.budget_progress(user, household, month),
             accounts=accounts,
             recent=list(recent[:8]),
         )
@@ -322,3 +335,237 @@ class CategoryDeleteView(FinanceMixin, View):
         if request.headers.get("X-Undo-Commit"):
             return HttpResponse(status=204)
         return redirect("finance:categories")
+
+
+# --- Gastos compartidos -------------------------------------------------------------------
+
+
+def _members(household):
+    return {
+        m.user_id: m for m in Membership.objects.filter(household=household).select_related("user")
+    }
+
+
+class SharedView(FinanceMixin, TemplateView):
+    template_name = "finance/shared.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user, household = self.request.user, self.request.household
+        month = _month(self.request.GET.get("mes"))
+        first, following = services.month_range(month)
+        members = _members(household)
+        net = sharing.balances(household)
+        users = {uid: m.user for uid, m in members.items()}
+        missing = set(net) - set(users)  # antiguos miembros con saldo pendiente
+        if missing:
+            users.update({u.pk: u for u in User.objects.filter(pk__in=missing)})
+        payments = [
+            {"from": users[a], "to": users[b], "amount": c}
+            for a, b, c in sharing.suggested_payments(net)
+        ]
+        context.update(self.month_nav(month))
+        context.update(
+            balances=[
+                {"user": users[uid], "cents": c}
+                for uid, c in sorted(net.items(), key=lambda item: -item[1])
+            ],
+            payments=payments,
+            expenses=sharing.split_expenses(user, household, first, following),
+            settlements=sharing.settlements_for(user, household)[:20],
+            colors={uid: m.color for uid, m in members.items()},
+            shares=[(m.user, m.default_share_bp) for m in members.values()],
+            is_admin=self.request.membership.is_admin,
+            settlement_form=kwargs.get("settlement_form")
+            or SettlementForm(household=household, initial={"from_user": user}),
+        )
+        return context
+
+
+class SettlementCreateView(FinanceMixin, View):
+    def post(self, request):
+        form = SettlementForm(request.POST, household=request.household)
+        if form.is_valid():
+            d = form.cleaned_data
+            try:
+                sharing.create_settlement(
+                    request.household,
+                    request.user,
+                    d["from_user"],
+                    d["to_user"],
+                    d["amount"],
+                    d["date"],
+                    d["note"],
+                )
+            except ValidationError as error:
+                form.add_error(None, error)
+            else:
+                messages.success(request, _("Pago registrado."))
+                return redirect("finance:shared")
+        view = SharedView()
+        view.setup(request)
+        return view.render_to_response(view.get_context_data(settlement_form=form), status=400)
+
+
+class SettlementDeleteView(FinanceMixin, View):
+    def post(self, request, pk):
+        settlement = get_object_or_404(
+            sharing.settlements_for(request.user, request.household), pk=pk
+        )
+        sharing.delete_settlement(settlement, request.user, request.membership)
+        if request.headers.get("X-Undo-Commit"):
+            return HttpResponse(status=204)
+        return redirect("finance:shared")
+
+
+class DefaultSplitView(FinanceMixin, View):
+    """Reparto por defecto del hogar (solo administración)."""
+
+    def post(self, request):
+        if not request.membership.is_admin:
+            raise PermissionDenied
+        try:
+            shares = {}
+            for uid in _members(request.household):
+                raw = request.POST.get(f"share_{uid}", "0").replace(",", ".")
+                shares[uid] = round(float(raw) * 100)
+            sharing.set_default_shares(request.household, request.membership, shares)
+        except ValueError:
+            messages.error(request, _("Revisa los porcentajes."))
+        except ValidationError as error:
+            messages.error(request, " ".join(error.messages))
+        else:
+            messages.success(request, _("Reparto por defecto guardado."))
+        return redirect(reverse("finance:shared") + "#reparto")
+
+
+# --- Presupuestos -------------------------------------------------------------------------
+
+
+class BudgetsView(FinanceMixin, View):
+    template_name = "finance/budgets.html"
+
+    def form(self, data=None, **kwargs):
+        return BudgetForm(data, user=self.request.user, household=self.request.household, **kwargs)
+
+    def render_page(self, form, status=200):
+        user, household = self.request.user, self.request.household
+        services.ensure_default_categories(household, user)
+        month = _month(self.request.GET.get("mes"))
+        context = {"form": form, "rows": planning.budget_progress(user, household, month)}
+        context.update(self.month_nav(month))
+        return render(self.request, self.template_name, context, status=status)
+
+    def get(self, request):
+        initial = {}
+        if request.GET.get("categoria", "").isdigit():
+            initial["category"] = int(request.GET["categoria"])
+        return self.render_page(self.form(initial=initial))
+
+    def post(self, request):
+        form = self.form(request.POST)
+        if form.is_valid():
+            try:
+                planning.set_budget(
+                    request.household,
+                    request.user,
+                    form.cleaned_data["category"],
+                    form.cleaned_data["amount"],
+                )
+            except ValidationError as error:
+                form.add_error(None, error)
+            else:
+                messages.success(request, _("Presupuesto guardado."))
+                return redirect("finance:budgets")
+        return self.render_page(form, status=400)
+
+
+# --- Ahorro -------------------------------------------------------------------------------
+
+
+class GoalsView(FinanceMixin, View):
+    template_name = "finance/goals.html"
+
+    def form(self, data=None, **kwargs):
+        return GoalForm(data, user=self.request.user, household=self.request.household, **kwargs)
+
+    def render_page(self, form, status=200):
+        goals = list(planning.goals_for(self.request.user, self.request.household))
+        context = {"form": form, "rows": planning.goal_progress(goals)}
+        return render(self.request, self.template_name, context, status=status)
+
+    def get(self, request):
+        return self.render_page(self.form())
+
+    def post(self, request):
+        form = self.form(request.POST)
+        if form.is_valid():
+            try:
+                planning.create_goal(request.household, request.user, **form.goal_data())
+            except ValidationError as error:
+                form.add_error(None, error)
+            else:
+                messages.success(request, _("Meta creada."))
+                return redirect("finance:goals")
+        return self.render_page(form, status=400)
+
+
+class GoalMixin(FinanceMixin):
+    def get_goal(self, pk, editable=False):
+        visible = planning.goals_for(self.request.user, self.request.household)
+        goal = get_object_or_404(visible, pk=pk)
+        if editable and not goal.can_edit(self.request.user):
+            raise Http404
+        return goal
+
+
+class GoalEditView(GoalMixin, View):
+    template_name = "finance/goal_form.html"
+
+    def context(self, goal, form):
+        can_delete = goal.can_delete(self.request.user, self.request.membership)
+        return {"form": form, "goal": goal, "can_delete": can_delete}
+
+    def form(self, goal, data=None):
+        return GoalForm(data, user=self.request.user, household=self.request.household, goal=goal)
+
+    def get(self, request, pk):
+        goal = self.get_goal(pk, editable=True)
+        return render(request, self.template_name, self.context(goal, self.form(goal)))
+
+    def post(self, request, pk):
+        goal = self.get_goal(pk, editable=True)
+        form = self.form(goal, request.POST)
+        if form.is_valid():
+            try:
+                planning.update_goal(goal, request.user, **form.goal_data())
+            except ValidationError as error:
+                form.add_error(None, error)
+            else:
+                messages.success(request, _("Cambios guardados."))
+                return redirect("finance:goals")
+        return render(request, self.template_name, self.context(goal, form), status=400)
+
+
+class GoalContributeView(GoalMixin, View):
+    def post(self, request, pk):
+        goal = self.get_goal(pk, editable=True)
+        form = ContributionForm(request.POST)
+        if not form.is_valid():
+            messages.error(request, " ".join(form.errors.get("amount", [])))
+            return redirect("finance:goals")
+        try:
+            planning.contribute(goal, request.user, form.cleaned_data["amount"])
+        except ValidationError as error:
+            messages.error(request, " ".join(error.messages))
+        else:
+            messages.success(request, _("Aportación apuntada."))
+        return redirect("finance:goals")
+
+
+class GoalDeleteView(GoalMixin, View):
+    def post(self, request, pk):
+        planning.delete_goal(self.get_goal(pk), request.user, request.membership)
+        if request.headers.get("X-Undo-Commit"):
+            return HttpResponse(status=204)
+        return redirect("finance:goals")

@@ -1,0 +1,18 @@
+{% load i18n %}{# Formulario de meta de ahorro. Parámetros: form, goal (opcional) #}
+<form method="post" class="mt-3 space-y-4" novalidate>
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+  {% include "partials/field.html" with field=form.name %}
+  {% include "partials/field.html" with field=form.target %}
+  {% if form.visibility %}
+  <fieldset>
+    <legend class="mb-1.5 text-sm font-medium">{{ form.visibility.label }}</legend>
+    <div class="space-y-2">
+      {% for radio in form.visibility %}<label class="flex cursor-pointer items-start gap-2 rounded-xl border border-border p-3 text-sm has-checked:border-accent has-checked:bg-accent-soft">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+    </div>
+  </fieldset>
+  {% endif %}
+  {% include "partials/field.html" with field=form.account %}
+  {% include "partials/field.html" with field=form.target_date %}
+  <button type="submit" class="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg hover:opacity-90">{% if goal %}{% translate "Guardar" %}{% else %}{% translate "Crear meta" %}{% endif %}</button>
+</form>

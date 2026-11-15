@@ -2,6 +2,16 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.8.0] - 2026-11-15 · Fase 7: finanzas II
+
+### Añadido
+- Gastos compartidos: un gasto pagado con una cuenta personal se reparte entre el hogar según el reparto por defecto (50/50, configurable por la administración) o con porcentajes propios en cada gasto; total en vivo en el formulario.
+- "Quién debe a quién": saldos entre miembros y pagos mínimos para saldarlos; registrar pagos entre miembros con el formulario ya relleno.
+- Presupuestos mensuales por categoría con barras en verde, ámbar o rojo, también en el resumen.
+- Metas de ahorro vinculadas a una cuenta (progreso = saldo) o con aportaciones a mano.
+- Gráfico de ingresos y gastos de los últimos 12 meses (generado en el servidor, ADR-020).
+- 415 pruebas automáticas.
+
 ## [0.7.0] - 2026-11-15 · Fase 6: finanzas I
 
 ### Añadido

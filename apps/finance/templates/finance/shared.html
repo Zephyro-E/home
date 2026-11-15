@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load i18n ui finance %}
+
+{% block title %}{% translate "Gastos compartidos" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "finance/partials/nav.html" with active="shared" %}
+
+<div class="grid gap-6 lg:grid-cols-2">
+  <div class="min-w-0 space-y-6">
+    <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="saldos">
+      <h2 id="saldos" class="font-semibold">{% translate "Quién debe a quién" %}</h2>
+      {% if payments %}
+      <ul class="mt-3 space-y-2">
+        {% for p in payments %}
+        <li class="flex flex-wrap items-center gap-2 rounded-xl bg-surface-2 p-3 text-sm">
+          {% include "partials/avatar.html" with user=p.from color=colors|get_item:p.from.pk size="sm" %}
+          <span><strong>{{ p.from.get_short_name }}</strong> {% translate "debe" %} <strong class="tabular-nums">{{ p.amount|euros }}</strong> {% translate "a" %} <strong>{{ p.to.get_short_name }}</strong></span>
+          {% include "partials/avatar.html" with user=p.to color=colors|get_item:p.to.pk size="sm" %}
+          <a href="?pagar={{ p.from.pk }}_{{ p.to.pk }}_{{ p.amount }}#pago" class="ml-auto rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-accent-fg hover:opacity-90">{% translate "Registrar pago" %}</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="mt-2 flex items-center gap-2 text-sm text-muted">{% icon "check" "size-4 text-emerald-600" %}{% translate "Estáis en paz: nadie debe nada." %}</p>
+      {% endif %}
+      {% if balances %}
+      <details class="mt-3 text-sm">
+        <summary class="cursor-pointer text-muted">{% translate "Saldo de cada persona" %}</summary>
+        <ul class="mt-2 space-y-1">
+          {% for b in balances %}
+          <li class="flex justify-between"><span>{{ b.user.get_short_name }}</span><span class="tabular-nums {% if b.cents < 0 %}text-red-700 dark:text-red-400{% else %}text-emerald-700 dark:text-emerald-400{% endif %}">{% if b.cents > 0 %}+{% endif %}{{ b.cents|euros }}</span></li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+    </section>
+
+    <section id="pago" class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="pago-titulo">
+      <h2 id="pago-titulo" class="font-semibold">{% translate "Registrar un pago entre miembros" %}</h2>
+      <p class="mt-1 text-xs text-muted">{% translate "Cuando alguien devuelve dinero (Bizum, efectivo…), apúntalo aquí para que el saldo se ajuste." %}</p>
+      <form method="post" action="{% url 'finance:settlement_create' %}" class="mt-3 space-y-3" novalidate
+            x-data x-init="const p = new URLSearchParams(location.search).get('pagar'); if (p) { const [f, t, c] = p.split('_'); $el.from_user.value = f; $el.to_user.value = t; $el.amount.value = (c / 100).toFixed(2).replace('.', ','); }">
+        {% csrf_token %}
+        {% if settlement_form.non_field_errors %}<div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">{% for e in settlement_form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+        <div class="grid grid-cols-2 gap-3">
+          {% include "partials/field.html" with field=settlement_form.from_user %}
+          {% include "partials/field.html" with field=settlement_form.to_user %}
+          {% include "partials/field.html" with field=settlement_form.amount %}
+          {% include "partials/field.html" with field=settlement_form.date %}
+        </div>
+        {% include "partials/field.html" with field=settlement_form.note %}
+        <button type="submit" class="rounded-xl bg-accent px-4 py-2.5 text-sm font-semibold text-accent-fg hover:opacity-90">{% translate "Registrar pago" %}</button>
+      </form>
+    </section>
+
+    <section id="reparto" class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="reparto-titulo">
+      <h2 id="reparto-titulo" class="font-semibold">{% translate "Reparto por defecto" %}</h2>
+      <p class="mt-1 text-xs text-muted">{% translate "Se usa al marcar un gasto como compartido. En cada gasto se puede cambiar." %}</p>
+      {% if is_admin %}
+      <form method="post" action="{% url 'finance:default_split' %}" class="mt-3 space-y-2">
+        {% csrf_token %}
+        {% for member, bp in shares %}
+        <label class="flex items-center gap-3 text-sm">
+          <span class="w-24 truncate">{{ member.get_short_name }}</span>
+          <span class="relative w-28">
+            <input type="number" name="share_{{ member.pk }}" value="{{ bp|bp_percent }}" step="0.01" min="0" max="100" class="block w-full rounded-xl border border-border bg-surface py-2 pl-3 pr-7 text-right tabular-nums">
+            <span class="pointer-events-none absolute inset-y-0 right-3 grid place-items-center text-muted">%</span>
+          </span>
+        </label>
+        {% endfor %}
+        <button type="submit" class="mt-1 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-surface-2">{% translate "Guardar reparto" %}</button>
+      </form>
+      {% else %}
+      <ul class="mt-2 space-y-1 text-sm">{% for member, bp in shares %}<li class="flex justify-between"><span>{{ member.get_short_name }}</span><span class="tabular-nums">{{ bp|bp_percent }} %</span></li>{% endfor %}</ul>
+      {% endif %}
+    </section>
+  </div>
+
+  <div class="min-w-0 space-y-6">
+    <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="gastos-compartidos">
+      <div class="mb-2 flex items-center justify-between gap-2">
+        <h2 id="gastos-compartidos" class="font-semibold">{% translate "Gastos compartidos" %}</h2>
+        <div class="flex items-center gap-1 text-sm">
+          <a href="?mes={{ prev_month|date:'Y-m' }}" class="grid size-8 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes anterior' %}">{% icon "chevron-left" "size-4" %}</a>
+          <span class="first-letter:uppercase">{{ month|date:"F Y" }}</span>
+          <a href="?mes={{ next_month|date:'Y-m' }}" class="grid size-8 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes siguiente' %}">{% icon "chevron-right" "size-4" %}</a>
+        </div>
+      </div>
+      {% if expenses %}
+      <ul class="divide-y divide-border">
+        {% for tx in expenses %}
+        <li class="py-2.5">
+          <a {% if tx|can_edit_tx:user %}href="{% url 'finance:transaction_edit' tx.pk %}"{% endif %} class="block">
+            <div class="flex items-center justify-between gap-2">
+              <span class="min-w-0 truncate font-medium">{% if tx.description %}{{ tx.description }}{% elif tx.category %}{{ tx.category.name }}{% else %}{{ tx.get_kind_display }}{% endif %}</span>
+              <span class="shrink-0 font-semibold tabular-nums">{{ tx.amount_cents|euros }}</span>
+            </div>
+            <p class="mt-0.5 text-xs text-muted">{{ tx.date|date:"j M" }} · {% blocktranslate trimmed with name=tx.account.owner.get_short_name %}Pagó {{ name }}{% endblocktranslate %} ·
+              {% for s in tx.splits.all %}{{ s.user.get_short_name }} {{ s.amount_cents|euros }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-muted">{% translate "No hay gastos compartidos este mes." %}</p>
+      {% endif %}
+    </section>
+
+    <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="pagos">
+      <h2 id="pagos" class="mb-2 font-semibold">{% translate "Pagos registrados" %}</h2>
+      {% if settlements %}
+      <ul class="divide-y divide-border">
+        {% for s in settlements %}
+        <li x-data="deletable" x-show="!gone" class="flex items-center gap-2 py-2 text-sm"
+            data-delete-url="{% url 'finance:settlement_delete' s.pk %}" data-undo-message="{% translate 'Pago borrado' %}">
+          <span class="flex-1">{{ s.from_user.get_short_name }} → {{ s.to_user.get_short_name }} <span class="text-muted">· {{ s.date|date:"j M Y" }}{% if s.note %} · {{ s.note }}{% endif %}</span></span>
+          <span class="font-semibold tabular-nums">{{ s.amount_cents|euros }}</span>
+          {% if user == s.owner or user == s.from_user or user == s.to_user or request.membership.is_admin %}
+          <button type="button" @click="remove()" class="grid size-8 place-items-center rounded-lg text-muted hover:bg-red-50 hover:text-red-700 dark:hover:bg-red-950 dark:hover:text-red-300" aria-label="{% translate 'Borrar pago' %}">{% icon "trash-2" "size-4" %}</button>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-muted">{% translate "Todavía no hay pagos." %}</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

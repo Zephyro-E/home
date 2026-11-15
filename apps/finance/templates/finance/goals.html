@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Ahorro" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "finance/partials/nav.html" with active="goals" %}
+
+<div class="grid gap-6 lg:grid-cols-[2fr_1fr]">
+  <div class="min-w-0">
+    {% if rows %}
+    <ul class="grid gap-3 sm:grid-cols-2">
+      {% for row in rows %}
+      {% with goal=row.goal %}
+      <li class="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-2">
+          <div class="min-w-0">
+            <p class="flex items-center gap-1.5 font-semibold"><span class="truncate">{{ goal.name }}</span>{% if goal.visibility == "private" %}{% icon "lock" "size-3.5 shrink-0 text-muted" %}{% endif %}</p>
+            <p class="text-xs text-muted">{% if goal.account %}{% blocktranslate trimmed with name=goal.account.name %}Sigue el saldo de «{{ name }}»{% endblocktranslate %}{% else %}{% translate "Aportaciones a mano" %}{% endif %}{% if goal.target_date %} · {% blocktranslate trimmed with d=goal.target_date|date:"j M Y" %}para el {{ d }}{% endblocktranslate %}{% endif %}</p>
+          </div>
+          {% if goal.visibility == "shared" or goal.owner == user %}<a href="{% url 'finance:goal_edit' goal.pk %}" class="grid size-8 shrink-0 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg" aria-label="{% blocktranslate trimmed with name=goal.name %}Editar {{ name }}{% endblocktranslate %}">{% icon "pencil" "size-4" %}</a>{% endif %}
+        </div>
+        <p class="mt-3 text-sm"><span class="text-xl font-semibold tabular-nums">{{ row.saved|euros }}</span> <span class="text-muted">/ {{ goal.target_cents|euros }}</span></p>
+        <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ row.bar }}" aria-label="{{ goal.name }}">
+          <div class="h-full rounded-full bg-emerald-500" style="width: {{ row.bar }}%"></div>
+        </div>
+        <p class="mt-1 text-xs text-muted">{% if row.left %}{% blocktranslate trimmed with n=row.percent left=row.left|euros %}{{ n }} % · faltan {{ left }}{% endblocktranslate %}{% else %}🎉 {% translate "¡Conseguido!" %}{% endif %}</p>
+        {% if not goal.account and goal.visibility == "shared" or not goal.account and goal.owner == user %}
+        <form method="post" action="{% url 'finance:goal_contribute' goal.pk %}" class="mt-3 flex gap-2">
+          {% csrf_token %}
+          <label for="aporte-{{ goal.pk }}" class="sr-only">{% translate "Aportación (€)" %}</label>
+          <input id="aporte-{{ goal.pk }}" name="amount" inputmode="decimal" placeholder="{% translate '+50 o -20' %}" required
+                 class="min-w-0 flex-1 rounded-xl border border-border bg-surface px-3 py-2 text-sm">
+          <button type="submit" class="rounded-xl border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% translate "Apuntar" %}</button>
+        </form>
+        {% endif %}
+      </li>
+      {% endwith %}
+      {% endfor %}
+    </ul>
+    {% else %}
+    <div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+      <span class="mx-auto grid size-12 place-items-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300">{% icon "piggy-bank" "size-6" %}</span>
+      <p class="mt-3 font-medium">{% translate "Aún no hay metas de ahorro" %}</p>
+      <p class="mt-1 text-sm text-muted">{% translate "Por ejemplo: vacaciones, un fondo para imprevistos o un coche nuevo." %}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="nueva-meta">
+    <h2 id="nueva-meta" class="font-semibold">{% translate "Nueva meta" %}</h2>
+    {% include "finance/partials/goal_fields.html" %}
+  </section>
+</div>
+{% endblock %}

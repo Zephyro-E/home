@@ -1,0 +1,17 @@
+{% load i18n ui %}{# Barras de presupuesto. Parámetro: rows (planning.budget_progress) #}
+<ul class="space-y-4">
+  {% for row in rows %}
+  <li>
+    <div class="flex items-center justify-between gap-2 text-sm">
+      <span class="flex min-w-0 items-center gap-2"><span class="size-2.5 shrink-0 rounded-full {% member_dot row.category.color %}"></span><span class="truncate">{{ row.category.name }}</span></span>
+      <span class="shrink-0 tabular-nums"><span class="font-medium">{{ row.spent|euros }}</span> <span class="text-muted">/ {{ row.budget.amount_cents|euros }}</span></span>
+    </div>
+    <div class="mt-1 h-2.5 overflow-hidden rounded-full bg-surface-2" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ row.bar }}" aria-label="{{ row.category.name }}">
+      <div class="h-full rounded-full {% if row.state == 'over' %}bg-red-500{% elif row.state == 'warn' %}bg-amber-500{% else %}bg-emerald-500{% endif %}" style="width: {{ row.bar }}%"></div>
+    </div>
+    <p class="mt-0.5 text-xs {% if row.state == 'over' %}font-medium text-red-700 dark:text-red-400{% else %}text-muted{% endif %}">
+      {% if row.state == 'over' %}{% blocktranslate trimmed with n=row.percent %}Pasado: {{ n }} % del presupuesto{% endblocktranslate %}{% else %}{% blocktranslate trimmed with left=row.left|euros %}Quedan {{ left }}{% endblocktranslate %}{% endif %}
+    </p>
+  </li>
+  {% endfor %}
+</ul>

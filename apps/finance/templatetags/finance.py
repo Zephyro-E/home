@@ -30,3 +30,10 @@ def signed_euros(tx):
 @register.filter
 def can_edit_tx(tx, user):
     return tx.can_edit(user)
+
+
+@register.filter
+def bp_percent(bp):
+    """Puntos básicos como porcentaje para un campo numérico: 3333 → "33.33", 5000 → "50"."""
+    whole, rest = divmod(int(bp or 0), 100)
+    return f"{whole}.{rest:02d}".rstrip("0").rstrip(".") if rest else str(whole)
