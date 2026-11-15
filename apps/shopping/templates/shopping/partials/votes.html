@@ -1,0 +1,29 @@
+{% load i18n ui shopping %}{# Botones de voto (HTMX). Parámetros: item (con with_stats y my_vote), detail, voters, colors #}
+<div id="votes-{{ item.pk }}" class="{% if detail %}space-y-3{% endif %}">
+  <div class="flex items-center gap-1.5">
+    {% for value, icon_name, count, label in item|vote_buttons %}
+    <form method="post" action="{% url 'shopping:wish_vote' item.pk %}"
+          hx-post="{% url 'shopping:wish_vote' item.pk %}" hx-target="#votes-{{ item.pk }}" hx-swap="outerHTML">
+      {% csrf_token %}
+      <input type="hidden" name="value" value="{{ value }}">
+      {% if detail %}<input type="hidden" name="detail" value="1">{% endif %}
+      <button type="submit" aria-pressed="{% if item.my_vote == value %}true{% else %}false{% endif %}" aria-label="{{ label }}"
+              class="flex min-h-9 items-center gap-1.5 rounded-lg border px-2.5 py-1 text-sm font-medium transition
+              {% if item.my_vote == value %}{% if value == 1 %}border-emerald-500 bg-emerald-50 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-200{% else %}border-rose-500 bg-rose-50 text-rose-800 dark:bg-rose-950 dark:text-rose-200{% endif %}{% else %}border-border text-muted hover:bg-surface-2 hover:text-fg{% endif %}">
+        {% icon icon_name "size-4" %}<span>{{ count }}</span>
+      </button>
+    </form>
+    {% endfor %}
+  </div>
+  {% if detail and voters %}
+  <ul class="flex flex-wrap gap-2 text-sm">
+    {% for vote in voters %}
+    <li class="flex items-center gap-1.5 rounded-full bg-surface-2 py-0.5 pl-0.5 pr-2.5">
+      {% include "partials/avatar.html" with user=vote.user color=colors|get_item:vote.user_id size="sm" %}
+      <span>{{ vote.user.get_short_name }}</span>
+      <span class="{% if vote.value == 1 %}text-emerald-700 dark:text-emerald-300{% else %}text-rose-700 dark:text-rose-300{% endif %}">{% if vote.value == 1 %}{% icon "thumbs-up" "size-3.5" %}{% else %}{% icon "thumbs-down" "size-3.5" %}{% endif %}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>

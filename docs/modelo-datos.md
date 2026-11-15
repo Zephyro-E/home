@@ -48,15 +48,15 @@ household = hogar activo  AND  user es miembro  AND  (visibility = 'shared' OR o
 Escritura: elementos `shared` → cualquier miembro; `private` → solo el dueño.
 Pasar un elemento de personal a compartido = cambiar `visibility` (no se copia).
 
-## Compras (Fase 2)
+## Compras (Fase 2, implementado en `apps/shopping/models.py`)
 
 ```
-GroceryItem          lista de la compra cotidiana (siempre compartida)
-  household, added_by, name, quantity (texto: "2 kg"), note?, is_checked,
-  checked_at?, checked_by?, position, created_at
+GroceryItem          (HouseholdOwnedModel, siempre shared; owner = quien lo añadió)
+  name, quantity (texto: "2 kg"), is_checked, checked_at?, checked_by?
+  (no se duplica: volver a añadir un producto existente lo reactiva)
 
 WishItem             (HouseholdOwnedModel) deseos personales o propuestas comunes
-  name, description?, estimated_price_cents?, url?, image_url? / image → File?,
+  name, description?, estimated_price_cents?, url?, image_url? (foto subida: Fase 8),
   priority ('low'|'medium'|'high'),
   status ('pending'|'approved'|'bought'|'discarded'), status_changed_by?, status_changed_at?
 

@@ -62,4 +62,7 @@ uv run python manage.py backup / restore <copia>
 - `apps/core/`: registro de módulos (`modules.py`), navegación (`context_processors.py`), etiquetas `{% icon %}` y `{% member_color %}` (`templatetags/ui.py`).
 - Plantillas: `base.html` (app con sesión), `base_auth.html` (entrada, asistente, invitación); componentes en `templates/partials/` (`form_fields`, `avatar`, `user_menu`, `messages`…).
 - `assets/css/source.css`: colores semánticos (`bg-surface`, `text-muted`, `bg-accent`…) para claro/oscuro. Usarlos en lugar de colores fijos.
+- `apps/core/money.py`: importes (texto ↔ céntimos, formato "12,50 €"); filtros `euros` y `get_item` en `ui.py`.
+- `apps/shopping/`: lista de la compra y deseos (modelo de referencia para los módulos siguientes: services, vistas con HTMX, pruebas de autorización).
+- Borrar con "Deshacer" (ADR-016): `x-data="deletable"` + `data-delete-url` / `data-ids` / `data-undo-message`; la vista responde 204 si llega `X-Undo-Commit`.
 - `static/icons/`: iconos Lucide 0.460.0. Para añadir uno: descargar `https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/<nombre>.svg`.

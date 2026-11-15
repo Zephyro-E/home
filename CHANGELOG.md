@@ -2,6 +2,19 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.3.0] - 2026-11-15 · Fase 2: compras
+
+### Añadido
+- Lista de la compra compartida: añadir sin recargar la página, cantidad opcional, marcar como comprado, quitar productos y "Quitar comprados". Un producto repetido no se duplica.
+- Deseos personales (solo los ve su dueño) y propuestas comunes, con precio aproximado, prioridad, enlace a la tienda, imagen por enlace y descripción.
+- Estados Pendiente / Aprobado / Comprado / Descartado (cualquier miembro en lo común), con quién y cuándo lo cambió.
+- Votos a favor y en contra (uno por persona, modificable y retirable, visibles para el hogar) y comentarios.
+- Pasar un deseo personal a propuesta común.
+- Borrado con "Deshacer" durante 6 segundos (ADR-016).
+- Widgets en el inicio: productos pendientes y propuestas por votar.
+- Importes en céntimos con formato en euros (`apps/core/money.py`, filtro `euros`).
+- 144 pruebas automáticas.
+
 ## [0.2.0] - 2026-11-14 · Fase 1: identidad y hogar
 
 ### Añadido

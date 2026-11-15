@@ -12,7 +12,6 @@ Navegador (móvil / PC)
    ▼
 Waitress (servidor WSGI) ──► Django
                                ├─ core        usuarios, hogares, permisos, invitaciones, archivos
-                               ├─ dashboard   pantalla de inicio y widgets
                                ├─ shopping    lista de la compra + deseos (votos, comentarios)
                                ├─ tasks       tablero de tareas
                                ├─ calendar    eventos + proyección de tareas      (fase 4)
@@ -47,7 +46,6 @@ Hogar/
 ├─ config/                ajustes Django (settings, urls, wsgi)
 ├─ apps/
 │  ├─ core/               usuarios, hogares, permisos, middleware, mixins
-│  ├─ dashboard/
 │  └─ <módulo>/           models.py · views.py · forms.py · services.py · urls.py
 │     ├─ templates/<módulo>/
 │     └─ tests/

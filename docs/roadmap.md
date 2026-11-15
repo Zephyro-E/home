@@ -9,7 +9,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 |---|---|---|---|
 | **0. Cimientos** | Proyecto Django con uv, estructura, ajustes, Tailwind/HTMX/Alpine, ruff, pytest, CI en GitHub Actions, plantilla base con tema claro/oscuro, script de arranque | S | ✅ 2026-11-14 |
 | **1. Identidad y hogar** | Usuario propio (login por email), Argon2, sesiones, asistente inicial, hogar, invitaciones, roles, middleware de hogar activo, `visible_to`, pruebas de autorización, perfil (idioma, tema, avatar), i18n es/en, dashboard vacío, manifest PWA, copia de seguridad + restauración | M | ✅ 2026-11-14 |
-| **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ⬜ |
+| **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ✅ 2026-11-15 |
 | **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ⬜ |
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
 | **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ⬜ |
@@ -32,6 +32,13 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Verificado: 66 pruebas automáticas (permisos, acceso, invitaciones, miembros, perfil, copias, traducciones) y recorrido completo en el navegador: asistente inicial → crear invitación → alta de un segundo miembro con el enlace → enlace reutilizado rechazado → perfil en inglés y modo oscuro → menú en móvil. Copia y restauración probadas con datos reales.
 - Cambios respecto al plan: el **avatar** es de iniciales con el color del miembro; la subida de fotos se hará con la gestión de archivos (Fase 8) (ADR-014). La **recuperación de contraseña** por email sigue en la Fase 9; mientras, se cambia desde el panel de administración o con `manage.py changepassword`.
 - Pendiente de decidir: HTTPS para instalar la PWA en los móviles (Tailscale u otra opción). El manifest y los iconos ya están listos.
+
+## Notas de la Fase 2
+
+- Verificado: 144 pruebas automáticas (reglas de compras, permisos de cada vista: otro miembro, otro hogar, anónimo) y recorrido en el navegador sobre una copia aparte: añadir productos sin recargar, marcar, borrar con "Deshacer" (deshecho y definitivo), "Quitar comprados", votar, cambiar estado, comentar, crear un deseo personal con precio, proponerlo al hogar y borrarlo; móvil y modo oscuro.
+- Decisiones: la lista de la compra no duplica productos (si se vuelve a añadir uno comprado, vuelve a "Por comprar"); un deseo personal puede pasar a común pero no al revés (ya puede tener votos y comentarios); solo se vota y comenta en propuestas comunes; el borrado pendiente se confirma al salir de la página (ADR-016).
+- Imágenes de deseos: solo mediante enlace (se cargan sin enviar la dirección de origen). La subida de fotos llega en la Fase 8.
+- Pendiente para más adelante: la lista no se actualiza sola si otra persona la cambia a la vez (hay que recargar); botón "+" global para añadir desde cualquier pantalla.
 
 ## Requisitos transversales: cuándo llega cada uno
 

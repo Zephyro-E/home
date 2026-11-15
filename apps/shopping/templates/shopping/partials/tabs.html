@@ -1,0 +1,12 @@
+{% load i18n ui %}{# Cabecera del módulo con pestañas Lista / Deseos. Parámetro: active ("list"|"wishes") #}
+<div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight">{% translate "Compras" %}</h1>
+  <nav class="flex rounded-xl bg-surface-2 p-1 text-sm font-medium" aria-label="{% translate 'Secciones de compras' %}">
+    <a href="{% url 'shopping:list' %}" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 {% if active == 'list' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'list' %}aria-current="page"{% endif %}>
+      {% icon "shopping-cart" "size-4" %}{% translate "Lista" %}
+    </a>
+    <a href="{% url 'shopping:wishes' %}" class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 {% if active == 'wishes' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if active == 'wishes' %}aria-current="page"{% endif %}>
+      {% icon "gift" "size-4" %}{% translate "Deseos" %}
+    </a>
+  </nav>
+</div>

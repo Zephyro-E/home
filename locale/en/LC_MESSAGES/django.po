@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hogar VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-14 12:36+0100\n"
+"POT-Creation-Date: 2026-11-15 12:45+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -19,28 +19,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: apps/core/views.py:236
+#: apps/core/views.py:240
 #, python-format
 msgid "%(name)s ya no forma parte del hogar."
 msgstr "%(name)s is no longer part of the household."
+
+#: apps/shopping/models.py:105
+msgid "A favor"
+msgstr "In favour"
+
+#: apps/shopping/views.py:139
+msgid "Activos"
+msgstr "Active"
 
 #: apps/core/models.py:122
 msgid "Administración"
 msgstr "Admin"
 
+#: apps/shopping/views.py:224
+msgid "Ahora es una propuesta común: el resto del hogar ya la ve."
+msgstr "It is now a shared proposal: the rest of the household can see it."
+
 #: apps/core/forms.py:72
 msgid "Al menos 8 caracteres; evita contraseñas comunes o solo numéricas."
 msgstr "At least 8 characters; avoid common or numbers-only passwords."
+
+#: apps/shopping/models.py:58
+msgid "Alta"
+msgstr "High"
 
 #: templates/core/household.html:100
 msgid "Anular"
 msgstr "Revoke"
 
+#: apps/shopping/models.py:62
+msgid "Aprobado"
+msgstr "Approved"
+
+#: apps/shopping/templates/shopping/wishes.html:42
+msgid "Apunta lo que te gustaría tener. Solo lo verás tú, hasta que decidas compartirlo."
+msgstr "Write down what you'd like to have. Only you will see it, until you decide to share it."
+
+#: apps/shopping/templates/shopping/partials/grocery_list.html:7
+msgid "Añade lo que haga falta comprar. Todo el hogar ve esta lista."
+msgstr "Add whatever needs buying. The whole household sees this list."
+
+#: apps/shopping/templates/shopping/grocery.html:22
+msgid "Añadir"
+msgstr "Add"
+
+#: apps/shopping/forms.py:20 apps/shopping/templates/shopping/grocery.html:16
+msgid "Añadir producto…"
+msgstr "Add item…"
+
+#: apps/shopping/templates/shopping/wishes.html:41
+msgid "Aún no tienes deseos personales"
+msgstr "You have no personal wishes yet"
+
+#: apps/shopping/models.py:56
+msgid "Baja"
+msgstr "Low"
+
 #: templates/core/setup.html:4
 msgid "Bienvenida"
 msgstr "Welcome"
 
-#: apps/core/modules.py:56
+#: apps/shopping/templates/shopping/wish_detail.html:17
+msgid "Borrando…"
+msgstr "Deleting…"
+
+#: apps/shopping/templates/shopping/wish_detail.html:66
+msgid "Borrar"
+msgstr "Delete"
+
+#: apps/shopping/templates/shopping/wish_detail.html:103
+msgid "Borrar comentario"
+msgstr "Delete comment"
+
+#: apps/core/modules.py:57
 msgid "Calendario"
 msgstr "Calendar"
 
@@ -57,9 +113,17 @@ msgstr "Switch household"
 msgid "Cambiar tema"
 msgstr "Change theme"
 
+#: apps/shopping/views.py:182
+msgid "Cambios guardados."
+msgstr "Changes saved."
+
 #: templates/core/password_change.html:15
 msgid "Cancelar"
 msgstr "Cancel"
+
+#: apps/shopping/forms.py:24 apps/shopping/forms.py:27 apps/shopping/templates/shopping/grocery.html:20
+msgid "Cantidad"
+msgstr "Quantity"
 
 #: apps/core/forms.py:106
 msgid "Casa"
@@ -77,11 +141,32 @@ msgstr "Log out"
 msgid "Claro"
 msgstr "Light"
 
+#: apps/shopping/forms.py:92 apps/shopping/templates/shopping/wish_detail.html:116
+msgid "Comentario"
+msgstr "Comment"
+
+#: apps/shopping/templates/shopping/wish_detail.html:97
+msgid "Comentario borrado"
+msgstr "Comment deleted"
+
+#: apps/shopping/templates/shopping/wish_detail.html:92
+msgid "Comentarios"
+msgstr "Comments"
+
 #: apps/core/models.py:224
 msgid "Compartido"
 msgstr "Shared"
 
-#: apps/core/modules.py:38
+#: apps/shopping/models.py:63 apps/shopping/templates/shopping/partials/grocery_list.html:29
+msgid "Comprado"
+msgstr "Bought"
+
+#: apps/shopping/views.py:140
+msgid "Comprados"
+msgstr "Bought"
+
+#: apps/core/modules.py:38 apps/shopping/apps.py:7
+#: apps/shopping/templates/shopping/partials/tabs.html:3
 msgid "Compras"
 msgstr "Shopping"
 
@@ -93,7 +178,7 @@ msgstr "Let's set up your household"
 msgid "Contraseña"
 msgstr "Password"
 
-#: apps/core/views.py:281
+#: apps/core/views.py:285
 msgid "Contraseña cambiada."
 msgstr "Password changed."
 
@@ -149,9 +234,17 @@ msgstr "Create my household"
 msgid "Crear un hogar"
 msgstr "Create a household"
 
+#: apps/shopping/templates/shopping/wish_detail.html:74
+msgid "Cualquier miembro puede cambiarlo. Los votos ayudan a decidir, pero no lo cambian solos."
+msgstr "Any member can change it. Votes help decide, but don't change it on their own."
+
 #: apps/core/admin.py:30
 msgid "Datos personales"
 msgstr "Personal details"
+
+#: apps/shopping/templates/shopping/wish_detail.html:40
+msgid "De"
+msgstr "Owner"
 
 #: templates/core/household.html:112
 msgid "Dejarás de ver la información compartida de este hogar."
@@ -161,6 +254,52 @@ msgstr "You will no longer see this household's shared information."
 msgid "Demasiados intentos fallidos. Espera unos minutos y vuelve a probar."
 msgstr "Too many failed attempts. Wait a few minutes and try again."
 
+#: apps/shopping/models.py:64
+msgid "Descartado"
+msgstr "Discarded"
+
+#: apps/shopping/views.py:141
+msgid "Descartados"
+msgstr "Discarded"
+
+#: apps/shopping/views.py:269
+msgid "Deseo borrado."
+msgstr "Wish deleted."
+
+#: apps/shopping/views.py:159
+msgid "Deseo guardado."
+msgstr "Wish saved."
+
+#: apps/shopping/templates/shopping/wish_detail.html:31
+msgid "Deseo personal"
+msgstr "Personal wish"
+
+#: apps/shopping/forms.py:66
+msgid "Deseo personal: solo lo ves tú"
+msgstr "Personal wish: only you can see it"
+
+#: apps/shopping/templates/shopping/partials/tabs.html:9
+#: apps/shopping/templates/shopping/wish_detail.html:13 apps/shopping/templates/shopping/wishes.html:4
+msgid "Deseos"
+msgstr "Wishes"
+
+#: templates/partials/undo_toast.html:8
+msgid "Deshacer"
+msgstr "Undo"
+
+#: apps/shopping/templates/shopping/partials/grocery_row.html:11
+#, python-format
+msgid "Desmarcar %(name)s"
+msgstr "Uncheck %(name)s"
+
+#: apps/shopping/templates/shopping/wish_detail.html:57
+msgid "Editar"
+msgstr "Edit"
+
+#: apps/shopping/templates/shopping/wish_form.html:4 apps/shopping/templates/shopping/wish_form.html:10
+msgid "Editar deseo"
+msgstr "Edit wish"
+
 #: apps/core/models.py:26
 msgid "El correo electrónico es obligatorio."
 msgstr "Email is required."
@@ -168,6 +307,22 @@ msgstr "Email is required."
 #: apps/core/services.py:59
 msgid "El hogar debe tener al menos una persona con rol de administración."
 msgstr "The household must have at least one admin."
+
+#: apps/shopping/forms.py:82
+msgid "El importe es demasiado alto."
+msgstr "The amount is too high."
+
+#: apps/shopping/models.py:106
+msgid "En contra"
+msgstr "Against"
+
+#: apps/shopping/forms.py:38
+msgid "Enlace a la tienda"
+msgstr "Shop link"
+
+#: apps/shopping/forms.py:45
+msgid "Enlace a una imagen"
+msgstr "Image link"
 
 #: templates/core/household.html:65
 msgid "Enlace creado. Cópialo ahora: por seguridad no se volverá a mostrar."
@@ -181,6 +336,10 @@ msgstr "Invitation link"
 msgid "Entrar"
 msgstr "Log in"
 
+#: apps/shopping/templates/shopping/wish_detail.html:119
+msgid "Enviar"
+msgstr "Send"
+
 #: templates/core/setup.html:9
 msgid ""
 "Es el primer arranque de la aplicación. Crea tu cuenta y tu hogar; después podrás invitar al "
@@ -189,15 +348,39 @@ msgstr ""
 "This is the app's first start. Create your account and your household; then you can invite the "
 "other members."
 
+#: apps/shopping/services.py:28
+msgid "Escribe el nombre del producto."
+msgstr "Enter the item name."
+
+#: apps/shopping/services.py:143
+msgid "Escribe un comentario."
+msgstr "Write a comment."
+
+#: apps/shopping/templates/shopping/wish_detail.html:117
+msgid "Escribe un comentario…"
+msgstr "Write a comment…"
+
+#: apps/shopping/forms.py:80
+msgid "Escribe un importe válido, por ejemplo 12,50."
+msgstr "Enter a valid amount, for example 12.50."
+
 #: apps/core/forms.py:43
 msgid "Esta cuenta está desactivada."
 msgstr "This account is disabled."
 
-#: apps/core/modules.py:57
+#: apps/shopping/templates/shopping/wish_detail.html:73
+msgid "Estado"
+msgstr "Status"
+
+#: apps/shopping/services.py:103
+msgid "Estado no válido."
+msgstr "Invalid status."
+
+#: apps/core/modules.py:58
 msgid "Eventos, citas y cumpleaños"
 msgstr "Events, appointments and birthdays"
 
-#: templates/core/home.html:50
+#: templates/core/home.html:61
 #, python-format
 msgid "Fase %(phase)s"
 msgstr "Phase %(phase)s"
@@ -206,15 +389,19 @@ msgstr "Phase %(phase)s"
 msgid "Fechas"
 msgstr "Dates"
 
-#: apps/core/modules.py:81
+#: apps/shopping/templates/shopping/wishes.html:25
+msgid "Filtrar por estado"
+msgstr "Filter by status"
+
+#: apps/core/modules.py:82
 msgid "Finanzas"
 msgstr "Finances"
 
-#: apps/core/modules.py:82
+#: apps/core/modules.py:83
 msgid "Gastos, presupuestos y ahorro"
 msgstr "Expenses, budgets and savings"
 
-#: templates/core/household.html:17
+#: apps/shopping/templates/shopping/wish_form.html:49 templates/core/household.html:17
 msgid "Guardar"
 msgstr "Save"
 
@@ -227,7 +414,7 @@ msgstr "Save changes"
 msgid "Has iniciado sesión como %(email)s."
 msgstr "You are logged in as %(email)s."
 
-#: apps/core/views.py:251
+#: apps/core/views.py:255
 msgid "Has salido del hogar."
 msgstr "You have left the household."
 
@@ -235,7 +422,7 @@ msgstr "You have left the household."
 msgid "Hogar"
 msgstr "Household"
 
-#: apps/core/views.py:156
+#: apps/core/views.py:160
 msgid "Hogar creado."
 msgstr "Household created."
 
@@ -276,7 +463,7 @@ msgstr "Pending invitations"
 msgid "Invitación"
 msgstr "Invitation"
 
-#: apps/core/views.py:213
+#: apps/core/views.py:217
 msgid "Invitación anulada."
 msgstr "Invitation revoked."
 
@@ -296,10 +483,6 @@ msgstr "Invite someone"
 msgid "Ir al inicio"
 msgstr "Go to home"
 
-#: templates/core/home.html:29
-msgid "La aplicación está en construcción"
-msgstr "The app is under construction"
-
 #: apps/core/services.py:46
 msgid "La configuración inicial ya se realizó."
 msgstr "The initial setup has already been done."
@@ -308,17 +491,38 @@ msgstr "The initial setup has already been done."
 msgid "La invitación no es válida, ya se utilizó o ha caducado."
 msgstr "The invitation is not valid, has already been used or has expired."
 
+#: apps/shopping/templates/shopping/partials/grocery_list.html:6
+msgid "La lista está vacía"
+msgstr "The list is empty"
+
 #: apps/core/forms.py:92
 msgid "Las contraseñas no coinciden."
 msgstr "The passwords don't match."
+
+#: apps/shopping/templates/shopping/partials/tabs.html:6
+msgid "Lista"
+msgstr "List"
+
+#: apps/shopping/templates/shopping/grocery.html:4 templates/core/home.html:31
+msgid "Lista de la compra"
+msgstr "Shopping list"
 
 #: apps/core/modules.py:39
 msgid "Lista de la compra y deseos"
 msgstr "Shopping list and wishes"
 
-#: apps/core/modules.py:74
+#: apps/core/modules.py:75
 msgid "Lugares que queremos visitar"
 msgstr "Places we want to visit"
+
+#: apps/shopping/templates/shopping/partials/grocery_row.html:11
+#, python-format
+msgid "Marcar %(name)s como comprado"
+msgstr "Mark %(name)s as bought"
+
+#: apps/shopping/models.py:57
+msgid "Media"
+msgstr "Medium"
 
 #: templates/partials/user_menu.html:12
 msgid "Menú de usuario"
@@ -336,11 +540,19 @@ msgstr "Member"
 msgid "Miembros"
 msgstr "Members"
 
+#: apps/shopping/templates/shopping/wishes.html:16
+msgid "Mis deseos"
+msgstr "My wishes"
+
 #: templates/base.html:61
 msgid "Más"
 msgstr "More"
 
-#: templates/core/home.html:38
+#: apps/shopping/templates/shopping/wish_form.html:41
+msgid "Más opciones"
+msgstr "More options"
+
+#: templates/core/home.html:49
 msgid "Módulos"
 msgstr "Modules"
 
@@ -352,6 +564,14 @@ msgstr "Bottom navigation"
 msgid "Navegación principal"
 msgstr "Main navigation"
 
+#: apps/shopping/templates/shopping/wishes.html:39
+msgid "No hay nada con este estado"
+msgstr "Nothing with this status"
+
+#: apps/shopping/templates/shopping/wishes.html:44
+msgid "No hay propuestas comunes"
+msgstr "No shared proposals"
+
 #: templates/core/no_household.html:10
 msgid "No perteneces a ningún hogar. Puedes crear uno nuevo o pedir a alguien un enlace de invitación."
 msgstr "You don't belong to any household. You can create a new one or ask someone for an invitation link."
@@ -360,9 +580,18 @@ msgstr "You don't belong to any household. You can create a new one or ask someo
 msgid "Nombre del hogar"
 msgstr "Household name"
 
-#: apps/core/views.py:191
+#: apps/core/views.py:195
 msgid "Nombre del hogar actualizado."
 msgstr "Household name updated."
+
+#: apps/shopping/templates/shopping/wish_form.html:4 apps/shopping/templates/shopping/wish_form.html:10
+#: apps/shopping/templates/shopping/wishes.html:21
+msgid "Nuevo deseo"
+msgstr "New wish"
+
+#: apps/shopping/forms.py:49
+msgid "Opcional. La dirección de una foto del producto."
+msgstr "Optional. The address of a photo of the item."
 
 #: apps/core/models.py:52
 msgid "Oscuro"
@@ -372,11 +601,15 @@ msgstr "Dark"
 msgid "Panel de administración"
 msgstr "Admin panel"
 
-#: apps/core/modules.py:65
+#: apps/core/modules.py:66
 msgid "Películas y series"
 msgstr "Movies & series"
 
-#: apps/core/views.py:270
+#: apps/shopping/models.py:61
+msgid "Pendiente"
+msgstr "Pending"
+
+#: apps/core/views.py:274
 msgid "Perfil guardado."
 msgstr "Profile saved."
 
@@ -392,28 +625,106 @@ msgstr "Personal"
 msgid "Pide a alguien del hogar que te envíe un enlace nuevo."
 msgstr "Ask someone in the household to send you a new link."
 
+#: apps/shopping/templates/shopping/partials/grocery_list.html:14
+msgid "Por comprar"
+msgstr "To buy"
+
 #: apps/core/forms.py:107
 msgid "Por ejemplo: «Casa» o «Piso de Madrid». Se puede cambiar después."
 msgstr "For example: “Home” or “Madrid flat”. You can change it later."
 
+#: templates/core/home.html:40
+msgid "Por votar"
+msgstr "To vote on"
+
+#: apps/shopping/templates/shopping/wish_detail.html:37
+msgid "Precio aproximado"
+msgstr "Approximate price"
+
+#: apps/shopping/forms.py:33
+msgid "Precio aproximado (€)"
+msgstr "Approximate price (€)"
+
+#: apps/shopping/templates/shopping/wish_detail.html:39
+msgid "Prioridad"
+msgstr "Priority"
+
+#: apps/shopping/templates/shopping/partials/wish_card.html:15
+msgid "Prioridad alta"
+msgstr "High priority"
+
+#: apps/shopping/templates/shopping/partials/wish_card.html:15
+msgid "Prioridad baja"
+msgstr "Low priority"
+
+#: apps/shopping/forms.py:17
+msgid "Producto"
+msgstr "Item"
+
+#: apps/shopping/templates/shopping/partials/grocery_list.html:26
+msgid "Productos comprados quitados de la lista"
+msgstr "Bought items removed from the list"
+
 #: templates/partials/nav_link.html:11
 msgid "Pronto"
 msgstr "Soon"
+
+#: apps/shopping/templates/shopping/wish_detail.html:62
+msgid "Proponer al hogar"
+msgstr "Propose to the household"
+
+#: apps/shopping/templates/shopping/wish_detail.html:31
+msgid "Propuesta común"
+msgstr "Shared proposal"
+
+#: apps/shopping/forms.py:65
+msgid "Propuesta común: la ve todo el hogar"
+msgstr "Shared proposal: the whole household sees it"
+
+#: apps/shopping/templates/shopping/wishes.html:12
+msgid "Propuestas comunes"
+msgstr "Shared proposals"
+
+#: templates/core/home.html:41
+msgid "Propuestas comunes en las que aún no has votado"
+msgstr "Shared proposals you haven't voted on yet"
+
+#: apps/shopping/templates/shopping/wish_detail.html:40
+msgid "Propuesto por"
+msgstr "Proposed by"
+
+#: apps/shopping/templates/shopping/partials/wish_card.html:16
+#, python-format
+msgid "Propuesto por %(name)s"
+msgstr "Proposed by %(name)s"
+
+#: apps/shopping/templates/shopping/wishes.html:45
+msgid "Propón algo para el hogar y el resto podrá votarlo y comentarlo."
+msgstr "Propose something for the household and the others can vote and comment on it."
+
+#: apps/shopping/templates/shopping/partials/grocery_row.html:22
+#, python-format
+msgid "Quitar %(name)s"
+msgstr "Remove %(name)s"
 
 #: templates/core/household.html:47
 #, python-format
 msgid "Quitar a %(name)s"
 msgstr "Remove %(name)s"
 
-#: apps/core/modules.py:66
+#: apps/shopping/templates/shopping/partials/grocery_list.html:32
+msgid "Quitar comprados"
+msgstr "Remove bought"
+
+#: apps/core/modules.py:67
 msgid "Qué ver y qué hemos visto"
 msgstr "What to watch and what we've watched"
 
-#: apps/core/modules.py:90
+#: apps/core/modules.py:91
 msgid "Recetario del hogar"
 msgstr "Household recipe book"
 
-#: apps/core/modules.py:89
+#: apps/core/modules.py:90
 msgid "Recetas"
 msgstr "Recipes"
 
@@ -421,11 +732,15 @@ msgstr "Recipes"
 msgid "Repite la contraseña"
 msgstr "Repeat the password"
 
+#: templates/core/home.html:26
+msgid "Resumen"
+msgstr "Summary"
+
 #: templates/core/household.html:38 templates/core/household.html:79
 msgid "Rol"
 msgstr "Role"
 
-#: apps/core/views.py:222
+#: apps/core/views.py:226
 msgid "Rol actualizado."
 msgstr "Role updated."
 
@@ -441,6 +756,10 @@ msgstr "Leave household"
 msgid "Saltar al contenido"
 msgstr "Skip to content"
 
+#: apps/shopping/templates/shopping/partials/tabs.html:4
+msgid "Secciones de compras"
+msgstr "Shopping sections"
+
 #: templates/core/profile.html:25
 msgid "Seguridad"
 msgstr "Security"
@@ -449,15 +768,23 @@ msgstr "Security"
 msgid "Según el sistema"
 msgstr "System default"
 
-#: apps/core/modules.py:73
+#: apps/core/modules.py:74
 msgid "Sitios"
 msgstr "Places"
 
-#: apps/core/modules.py:48
+#: apps/shopping/services.py:145
+msgid "Solo se comenta en las propuestas comunes."
+msgstr "Only shared proposals can be commented on."
+
+#: apps/shopping/services.py:125
+msgid "Solo se vota en las propuestas comunes."
+msgstr "Only shared proposals can be voted on."
+
+#: apps/core/modules.py:49
 msgid "Tablero de tareas del hogar"
 msgstr "Household task board"
 
-#: apps/core/modules.py:47
+#: apps/core/modules.py:48
 msgid "Tareas"
 msgstr "Tasks"
 
@@ -482,6 +809,14 @@ msgstr "Theme: dark"
 msgid "Tema: sistema"
 msgstr "Theme: system"
 
+#: apps/shopping/templates/shopping/wishes.html:10
+msgid "Tipo de deseos"
+msgstr "Wish type"
+
+#: apps/shopping/templates/shopping/wish_detail.html:112
+msgid "Todavía no hay comentarios."
+msgstr "No comments yet."
+
 #: apps/core/forms.py:64
 msgid "Tu nombre"
 msgstr "Your name"
@@ -490,6 +825,30 @@ msgstr "Your name"
 msgid "Unirme a este hogar"
 msgstr "Join this household"
 
+#: apps/shopping/templates/shopping/wish_detail.html:49
+msgid "Ver en la tienda"
+msgstr "View in shop"
+
+#: apps/shopping/templates/shopping/wish_form.html:8
+msgid "Volver"
+msgstr "Back"
+
+#: apps/shopping/templatetags/shopping.py:11
+msgid "Votar a favor"
+msgstr "Vote in favour"
+
+#: apps/shopping/templatetags/shopping.py:12
+msgid "Votar en contra"
+msgstr "Vote against"
+
+#: apps/shopping/services.py:127
+msgid "Voto no válido."
+msgstr "Invalid vote."
+
+#: apps/shopping/templates/shopping/wish_detail.html:87
+msgid "Votos"
+msgstr "Votes"
+
 #: apps/core/forms.py:127
 msgid "Ya existe otra cuenta con este correo."
 msgstr "Another account already uses this email."
@@ -497,14 +856,6 @@ msgstr "Another account already uses this email."
 #: apps/core/forms.py:84
 msgid "Ya existe una cuenta con este correo. Inicia sesión para continuar."
 msgstr "An account with this email already exists. Log in to continue."
-
-#: templates/core/home.html:31
-msgid ""
-"Ya funcionan las cuentas y el hogar. Los módulos llegarán uno a uno, empezando por la lista de la"
-" compra."
-msgstr ""
-"Accounts and households are working. Modules will arrive one by one, starting with the shopping "
-"list."
 
 #: apps/core/services.py:98 templates/core/invitation.html:18
 msgid "Ya perteneces a este hogar."
@@ -523,9 +874,21 @@ msgstr "active"
 msgid "caduca el %(date)s"
 msgstr "expires %(date)s"
 
+#: apps/shopping/models.py:21
+msgid "cantidad"
+msgstr "quantity"
+
 #: apps/core/models.py:130
 msgid "color"
 msgstr "color"
+
+#: apps/shopping/models.py:129
+msgid "comentario"
+msgstr "comment"
+
+#: apps/shopping/templates/shopping/partials/wish_card.html:25
+msgid "comentarios"
+msgstr "comments"
 
 #: apps/core/models.py:101
 msgid "configuración"
@@ -534,6 +897,26 @@ msgstr "settings"
 #: apps/core/models.py:55
 msgid "correo electrónico"
 msgstr "email"
+
+#: apps/shopping/models.py:69
+msgid "descripción"
+msgstr "description"
+
+#: apps/shopping/models.py:86
+msgid "deseo"
+msgstr "wish"
+
+#: apps/shopping/models.py:87
+msgid "deseos"
+msgstr "wishes"
+
+#: apps/shopping/models.py:71
+msgid "enlace"
+msgstr "link"
+
+#: apps/shopping/models.py:76
+msgid "estado"
+msgstr "status"
 
 #: apps/core/models.py:63
 msgid "fecha de alta"
@@ -551,6 +934,10 @@ msgstr "households"
 msgid "idioma"
 msgstr "language"
 
+#: apps/shopping/models.py:72
+msgid "imagen (enlace)"
+msgstr "image (link)"
+
 #: apps/core/models.py:186
 msgid "invitaciones"
 msgstr "invitations"
@@ -562,6 +949,10 @@ msgstr "invitation"
 #: templates/core/home.html:8
 msgid "l, j \\d\\e F"
 msgstr "l, F j"
+
+#: apps/shopping/models.py:31
+msgid "lista de la compra"
+msgstr "shopping list"
 
 #: apps/core/models.py:136
 msgid "miembro"
@@ -575,9 +966,25 @@ msgstr "members"
 msgid "moneda"
 msgstr "currency"
 
-#: apps/core/models.py:56 apps/core/models.py:98
+#: apps/core/models.py:56 apps/core/models.py:98 apps/shopping/models.py:68
 msgid "nombre"
 msgstr "name"
+
+#: apps/shopping/models.py:70
+msgid "precio aproximado"
+msgstr "approximate price"
+
+#: apps/shopping/models.py:74
+msgid "prioridad"
+msgstr "priority"
+
+#: apps/shopping/models.py:20
+msgid "producto"
+msgstr "item"
+
+#: apps/shopping/models.py:30
+msgid "producto de la lista"
+msgstr "shopping list item"
 
 #: apps/core/models.py:132
 msgid "reparto por defecto"
@@ -620,9 +1027,23 @@ msgstr "Done! Your household has been created."
 msgid "¡Te damos la bienvenida a %(name)s!"
 msgstr "Welcome to %(name)s!"
 
+#: apps/shopping/templates/shopping/wish_detail.html:10
+#, python-format
+msgid "«%(name)s» borrado"
+msgstr "“%(name)s” deleted"
+
+#: apps/shopping/templates/shopping/partials/grocery_row.html:4
+#, python-format
+msgid "«%(name)s» quitado de la lista"
+msgstr "“%(name)s” removed from the list"
+
 #: templates/core/login.html:17
 msgid "¿No tienes cuenta? Pide a alguien de tu hogar un enlace de invitación."
 msgstr "Don't have an account? Ask someone in your household for an invitation link."
+
+#: apps/shopping/forms.py:60
+msgid "¿Para quién es?"
+msgstr "Who is it for?"
 
 #: templates/core/household.html:45
 #, python-format
@@ -636,4 +1057,8 @@ msgstr "Are you sure you want to leave this household?"
 #: templates/core/invitation.html:35
 msgid "¿Ya tienes cuenta?"
 msgstr "Already have an account?"
+
+#: apps/shopping/templates/shopping/wish_detail.html:42
+msgid "Último cambio de estado"
+msgstr "Last status change"
 

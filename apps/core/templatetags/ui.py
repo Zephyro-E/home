@@ -8,6 +8,8 @@ from django.conf import settings
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
+from apps.core.money import format_euros
+
 register = template.Library()
 
 _COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -58,3 +60,15 @@ MEMBER_COLOR_CLASSES = {
 def member_color(color: str) -> str:
     """Clases de color de un miembro: {% member_color membership.color %}."""
     return MEMBER_COLOR_CLASSES.get(color, MEMBER_COLOR_CLASSES["teal"])
+
+
+@register.filter
+def euros(cents):
+    """Muestra un importe en céntimos: {{ item.estimated_price_cents|euros }} → "12,50 €"."""
+    return format_euros(cents)
+
+
+@register.filter
+def get_item(mapping, key):
+    """Lee una clave de un diccionario: {{ colores|get_item:user.pk }}."""
+    return mapping.get(key) if hasattr(mapping, "get") else None

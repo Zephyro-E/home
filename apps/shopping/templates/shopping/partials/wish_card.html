@@ -1,0 +1,30 @@
+{% load i18n ui %}
+<li class="flex flex-col gap-3 rounded-2xl border border-border bg-surface p-4 shadow-sm">
+  <a href="{% url 'shopping:wish_detail' item.pk %}" class="flex gap-3">
+    {% if item.image_url %}
+    <img src="{{ item.image_url }}" alt="" loading="lazy" referrerpolicy="no-referrer"
+         class="size-16 shrink-0 rounded-xl bg-surface-2 object-cover">
+    {% endif %}
+    <div class="min-w-0 flex-1">
+      <div class="flex items-start justify-between gap-2">
+        <h3 class="font-semibold leading-snug">{{ item.name }}</h3>
+        {% include "shopping/partials/status_badge.html" %}
+      </div>
+      <p class="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+        {% if item.estimated_price_cents is not None %}<span class="font-medium text-fg">{{ item.estimated_price_cents|euros }}</span>{% endif %}
+        {% if item.priority == 'high' %}<span class="text-rose-700 dark:text-rose-300">{% translate "Prioridad alta" %}</span>{% elif item.priority == 'low' %}<span>{% translate "Prioridad baja" %}</span>{% endif %}
+        {% if item.is_shared %}<span>{% blocktranslate trimmed with name=item.owner.get_short_name %}Propuesto por {{ name }}{% endblocktranslate %}</span>{% endif %}
+      </p>
+    </div>
+  </a>
+  {% if item.is_shared %}
+  <div class="mt-auto flex items-center justify-between gap-2">
+    {% include "shopping/partials/votes.html" with detail=False %}
+    {% if item.comment_count %}
+    <a href="{% url 'shopping:wish_detail' item.pk %}#comentarios" class="flex items-center gap-1 text-sm text-muted hover:text-fg">
+      {% icon "message-circle" "size-4" %}{{ item.comment_count }}<span class="sr-only"> {% translate "comentarios" %}</span>
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+</li>

@@ -22,17 +22,28 @@
 </section>
 {% endif %}
 
-<section class="mb-8 rounded-2xl border border-border bg-surface p-5 shadow-sm">
-  <div class="flex items-start gap-4">
-    <span class="grid size-10 shrink-0 place-items-center rounded-xl bg-accent-soft text-accent">{% icon "settings" "size-5" %}</span>
-    <div>
-      <h2 class="font-semibold">{% translate "La aplicación está en construcción" %}</h2>
-      <p class="mt-1 text-sm text-muted">
-        {% blocktranslate trimmed %}Ya funcionan las cuentas y el hogar. Los módulos llegarán uno a uno, empezando por la lista de la compra.{% endblocktranslate %}
-      </p>
-    </div>
-  </div>
+{% if shopping.grocery_count or shopping.wishes_to_vote %}
+<section class="mb-8 grid gap-3 sm:grid-cols-2" aria-label="{% translate 'Resumen' %}">
+  {% if shopping.grocery_count %}
+  <a href="{% url 'shopping:list' %}" class="flex items-center gap-4 rounded-2xl border border-border bg-surface p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">{% icon "shopping-cart" "size-6" %}</span>
+    <span class="min-w-0 flex-1">
+      <span class="flex items-center gap-2 font-semibold">{% translate "Lista de la compra" %}<span class="rounded-full bg-accent px-2 text-xs leading-5 text-accent-fg">{{ shopping.grocery_count }}</span></span>
+      <span class="block truncate text-sm text-muted">{{ shopping.grocery_preview|join:", " }}</span>
+    </span>
+  </a>
+  {% endif %}
+  {% if shopping.wishes_to_vote %}
+  <a href="{% url 'shopping:wishes' %}" class="flex items-center gap-4 rounded-2xl border border-border bg-surface p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <span class="grid size-11 shrink-0 place-items-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300">{% icon "thumbs-up" "size-6" %}</span>
+    <span class="min-w-0 flex-1">
+      <span class="flex items-center gap-2 font-semibold">{% translate "Por votar" %}<span class="rounded-full bg-accent px-2 text-xs leading-5 text-accent-fg">{{ shopping.wishes_to_vote }}</span></span>
+      <span class="block text-sm text-muted">{% translate "Propuestas comunes en las que aún no has votado" %}</span>
+    </span>
+  </a>
+  {% endif %}
 </section>
+{% endif %}
 
 <section aria-labelledby="modulos">
   <h2 id="modulos" class="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Módulos" %}</h2>

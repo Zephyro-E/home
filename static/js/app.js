@@ -56,4 +56,93 @@ document.addEventListener("alpine:init", () => {
       document.documentElement.dataset.themePref = this.pref;
     },
   }));
+
+  // --- Borrar con "Deshacer" (ADR-010) -------------------------------------------------
+  // El elemento se oculta al momento y aparece un aviso durante unos segundos. Si no se
+  // deshace, se envía el borrado definitivo al servidor. Si se sale de la página antes,
+  // el borrado se envía al salir (keepalive); si la pestaña se cierra de golpe y el envío
+  // no llega, el elemento simplemente sigue existiendo.
+  Alpine.store("undo", {
+    visible: false,
+    message: "",
+    pending: null,
+    seconds: 6,
+
+    start({ message, commit, restore }) {
+      this.flush();
+      const timer = setTimeout(() => this.flush(), this.seconds * 1000);
+      this.pending = { timer, commit, restore };
+      this.message = message;
+      this.visible = true;
+    },
+
+    // Confirma el borrado pendiente (si lo hay). Devuelve una promesa.
+    flush() {
+      const p = this.pending;
+      if (!p) return Promise.resolve();
+      clearTimeout(p.timer);
+      this.pending = null;
+      this.visible = false;
+      return p.commit();
+    },
+
+    undo() {
+      const p = this.pending;
+      if (!p) return;
+      clearTimeout(p.timer);
+      this.pending = null;
+      this.visible = false;
+      p.restore();
+    },
+  });
+
+  // Elemento borrable. Atributos: data-delete-url, data-undo-message, data-ids (opcional,
+  // separados por comas) y data-after-url (opcional: adónde ir tras borrar).
+  Alpine.data("deletable", () => ({
+    gone: false,
+
+    remove() {
+      // $root es el elemento con x-data ($el sería el botón pulsado).
+      const d = this.$root.dataset;
+      const ids = (d.ids || "").split(",").filter(Boolean);
+      this.gone = true;
+      Alpine.store("undo").start({
+        message: d.undoMessage,
+        restore: () => (this.gone = false),
+        commit: () =>
+          hogarPost(d.deleteUrl, ids.map((id) => ["id", id])).then(() => {
+            if (d.afterUrl) window.location.href = d.afterUrl;
+          }),
+      });
+    },
+  }));
 });
+
+// POST con el token CSRF (el mismo que usa HTMX, puesto en <body hx-headers>).
+function hogarPost(url, pairs = []) {
+  let token = "";
+  try {
+    token = JSON.parse(document.body.getAttribute("hx-headers") || "{}")["X-CSRFToken"] || "";
+  } catch (e) {
+    /* sin token: el servidor rechazará la petición */
+  }
+  return fetch(url, {
+    method: "POST",
+    keepalive: true,
+    headers: { "X-CSRFToken": token, "X-Undo-Commit": "1" },
+    body: new URLSearchParams(pairs),
+  }).catch(() => {});
+}
+
+// Al salir de la página, confirma el borrado pendiente.
+window.addEventListener("pagehide", () => window.Alpine && Alpine.store("undo").flush());
+
+// Antes de cualquier petición HTMX, confirma primero el borrado pendiente para que la
+// respuesta no vuelva a traer el elemento borrado.
+document.addEventListener("htmx:confirm", (event) => {
+  const store = window.Alpine && Alpine.store("undo");
+  if (!store || !store.pending) return;
+  event.preventDefault();
+  store.flush().finally(() => event.detail.issueRequest(true));
+});
+

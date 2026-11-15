@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% if item %}{% translate "Editar deseo" %}{% else %}{% translate "Nuevo deseo" %}{% endif %} · Hogar{% endblock %}
+
+{% block content %}
+<a href="{% if item %}{% url 'shopping:wish_detail' item.pk %}{% else %}{% url 'shopping:wishes' %}{% endif %}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">
+  {% icon "arrow-left" "size-4" %}{% translate "Volver" %}
+</a>
+<h1 class="mb-6 text-2xl font-semibold tracking-tight">{% if item %}{% translate "Editar deseo" %}{% else %}{% translate "Nuevo deseo" %}{% endif %}</h1>
+
+<form method="post" class="max-w-xl space-y-4 rounded-2xl border border-border bg-surface p-5 shadow-sm" novalidate
+      x-data="{ more: {% if form.errors or item %}true{% else %}false{% endif %} }">
+  {% csrf_token %}
+  {% if form.non_field_errors %}
+  <div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">
+    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% include "shopping/partials/field.html" with field=form.name %}
+
+  {% if form.visibility %}
+  <fieldset>
+    <legend class="mb-1.5 text-sm font-medium">{{ form.visibility.label }}</legend>
+    <div class="grid gap-2 sm:grid-cols-2">
+      {% for radio in form.visibility %}
+      <label class="flex cursor-pointer items-start gap-2 rounded-xl border border-border p-3 text-sm has-checked:border-accent has-checked:bg-accent-soft">
+        {{ radio.tag }}<span>{{ radio.choice_label }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+  {% endif %}
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    {% include "shopping/partials/field.html" with field=form.price %}
+    {% include "shopping/partials/field.html" with field=form.priority %}
+  </div>
+
+  <button type="button" x-show="!more" @click="more = true" class="text-sm font-medium text-accent hover:underline">{% translate "Más opciones" %}</button>
+  <div x-show="more" x-cloak class="space-y-4">
+    {% include "shopping/partials/field.html" with field=form.description %}
+    {% include "shopping/partials/field.html" with field=form.url %}
+    {% include "shopping/partials/field.html" with field=form.image_url %}
+  </div>
+
+  <div class="flex justify-end gap-2 pt-2">
+    <button type="submit" class="rounded-xl bg-accent px-5 py-2.5 font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar" %}</button>
+  </div>
+</form>
+{% endblock %}

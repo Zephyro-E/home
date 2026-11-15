@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "django_htmx",
     "django_tailwind_cli",
     "apps.core",
+    "apps.shopping",
 ]
 
 MIDDLEWARE = [

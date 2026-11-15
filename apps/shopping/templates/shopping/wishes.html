@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Deseos" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "shopping/partials/tabs.html" with active="wishes" %}
+
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <nav class="flex gap-1 border-b border-border text-sm font-medium" aria-label="{% translate 'Tipo de deseos' %}">
+    <a href="?ver=comunes" class="-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2 {% if view == 'comunes' %}border-accent text-fg{% else %}border-transparent text-muted hover:text-fg{% endif %}" {% if view == 'comunes' %}aria-current="page"{% endif %}>
+      {% icon "users-round" "size-4" %}{% translate "Propuestas comunes" %}
+      {% if shared_count %}<span class="rounded-full bg-surface-2 px-1.5 text-xs">{{ shared_count }}</span>{% endif %}
+    </a>
+    <a href="?ver=mios" class="-mb-px flex items-center gap-1.5 border-b-2 px-3 py-2 {% if view == 'mios' %}border-accent text-fg{% else %}border-transparent text-muted hover:text-fg{% endif %}" {% if view == 'mios' %}aria-current="page"{% endif %}>
+      {% icon "lock" "size-4" %}{% translate "Mis deseos" %}
+      {% if mine_count %}<span class="rounded-full bg-surface-2 px-1.5 text-xs">{{ mine_count }}</span>{% endif %}
+    </a>
+  </nav>
+  <a href="{% url 'shopping:wish_create' %}?ver={{ view }}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">
+    {% icon "plus" "size-4" %}{% translate "Nuevo deseo" %}
+  </a>
+</div>
+
+<div class="mb-5 flex flex-wrap gap-2" role="group" aria-label="{% translate 'Filtrar por estado' %}">
+  {% for key, label in status_filters %}
+  <a href="?ver={{ view }}&amp;estado={{ key }}" class="rounded-full border px-3 py-1 text-sm {% if key == status %}border-accent bg-accent-soft font-medium text-fg{% else %}border-border text-muted hover:bg-surface-2{% endif %}" {% if key == status %}aria-current="true"{% endif %}>{{ label }}</a>
+  {% endfor %}
+</div>
+
+{% if items %}
+<ul class="grid gap-3 sm:grid-cols-2">
+  {% for item in items %}{% include "shopping/partials/wish_card.html" %}{% endfor %}
+</ul>
+{% else %}
+<div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+  <span class="mx-auto grid size-12 place-items-center rounded-2xl bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">{% icon "gift" "size-6" %}</span>
+  {% if status != 'activos' %}
+    <p class="mt-3 font-medium">{% translate "No hay nada con este estado" %}</p>
+  {% elif view == 'mios' %}
+    <p class="mt-3 font-medium">{% translate "Aún no tienes deseos personales" %}</p>
+    <p class="mt-1 text-sm text-muted">{% translate "Apunta lo que te gustaría tener. Solo lo verás tú, hasta que decidas compartirlo." %}</p>
+  {% else %}
+    <p class="mt-3 font-medium">{% translate "No hay propuestas comunes" %}</p>
+    <p class="mt-1 text-sm text-muted">{% translate "Propón algo para el hogar y el resto podrá votarlo y comentarlo." %}</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -40,6 +40,7 @@ MODULES: list[Module] = [
         "shopping-cart",
         "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
         phase=2,
+        url_name="shopping:list",
         in_bottom_nav=True,
     ),
     Module(

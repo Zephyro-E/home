@@ -20,6 +20,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 013 | Traducciones con Babel en lugar de GNU gettext | Aceptada | 2026-11-14 |
 | 014 | Avatar de iniciales; fotos con la gestión de archivos | Aceptada | 2026-11-14 |
 | 015 | Todas las páginas exigen sesión por defecto | Aceptada | 2026-11-14 |
+| 016 | "Deshacer": confirmación al salir de la página | Aceptada | 2026-11-15 |
 
 ---
 
@@ -119,7 +120,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 
 **Decisión.** Al borrar, el elemento desaparece de la interfaz y aparece un aviso con **Deshacer** durante ~6 segundos. Si no se deshace, se borra definitivamente en el servidor. No hay papelera.
 
-**Implementación prevista.** El borrado real se envía al servidor al expirar el aviso. Si la pestaña se cierra antes, el borrado no llega a producirse (fallo seguro: el elemento sigue existiendo). Para elementos con muchos datos asociados se pedirá además confirmación explícita.
+**Implementación prevista.** El borrado real se envía al servidor al expirar el aviso (precisado en ADR-016: también al salir de la página). Si el envío no llega, el borrado no se produce (fallo seguro: el elemento sigue existiendo). Para elementos con muchos datos asociados se pedirá además confirmación explícita.
 
 ---
 
@@ -154,3 +155,13 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 ## ADR-015 · Todas las páginas exigen sesión por defecto
 
 **Decisión.** Se activa `LoginRequiredMiddleware` de Django: cualquier vista nueva exige sesión salvo que se marque explícitamente con `@login_not_required` (hoy solo: entrada, asistente inicial, invitación y cambio de idioma). Olvidar proteger una vista deja de ser posible.
+
+---
+
+## ADR-016 · "Deshacer": confirmación al salir de la página
+
+**Contexto.** ADR-010 preveía que, si se cerraba la pestaña antes de que expirase el aviso, el borrado no se produjera. En la práctica, borrar algo y pasar enseguida a otra pantalla de la app hacía que el elemento "resucitara", lo que resulta confuso.
+
+**Decisión.** El aviso dura 6 segundos (`static/js/app.js`, store `undo`). El borrado pendiente se envía al servidor: al expirar el aviso, al empezar otro borrado, antes de cualquier petición HTMX de la página (para que la respuesta no vuelva a traer el elemento) y al salir de la página (`pagehide`, petición `keepalive`). Si el envío no llega (cierre brusco, sin red), el elemento simplemente sigue existiendo: el fallo sigue siendo seguro.
+
+**Consecuencias.** Los borrados se hacen con un único componente reutilizable (`x-data="deletable"` con `data-delete-url`, `data-ids`, `data-undo-message` y, opcionalmente, `data-after-url`). Las vistas de borrado responden 204 cuando la petición lleva la cabecera `X-Undo-Commit`.

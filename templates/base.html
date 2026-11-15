@@ -60,5 +60,7 @@
     {% url 'core:household' as household_url %}
     {% include "partials/bottom_link.html" with url=household_url label=_("Más") icon_name="ellipsis" key="more" %}
   </nav>
+
+  {% include "partials/undo_toast.html" %}
 </body>
 </html>

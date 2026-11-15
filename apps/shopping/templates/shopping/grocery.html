@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Lista de la compra" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "shopping/partials/tabs.html" with active="list" %}
+
+<form method="post" action="{% url 'shopping:grocery_add' %}"
+      hx-post="{% url 'shopping:grocery_add' %}" hx-target="#grocery-list" hx-swap="outerHTML"
+      x-data @htmx:after-request="if (event.detail.successful) { $el.reset(); $refs.name.focus() }"
+      class="mb-6 flex gap-2 rounded-2xl border border-border bg-surface p-2 shadow-sm">
+  {% csrf_token %}
+  <label for="{{ form.name.id_for_label }}" class="sr-only">{{ form.name.label }}</label>
+  <input type="text" name="name" id="{{ form.name.id_for_label }}" x-ref="name" maxlength="120" required autocomplete="off"
+         placeholder="{% translate 'Añadir producto…' %}"
+         class="min-w-0 flex-1 rounded-xl bg-transparent px-3 py-2.5 placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/30">
+  <label for="{{ form.quantity.id_for_label }}" class="sr-only">{{ form.quantity.label }}</label>
+  <input type="text" name="quantity" id="{{ form.quantity.id_for_label }}" maxlength="40" autocomplete="off"
+         placeholder="{% translate 'Cantidad' %}"
+         class="w-24 min-w-0 rounded-xl bg-surface-2 px-3 py-2.5 text-sm placeholder:text-muted/70 focus:outline-none focus:ring-2 focus:ring-accent/30 sm:w-32">
+  <button type="submit" class="grid size-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-fg hover:opacity-90" aria-label="{% translate 'Añadir' %}">
+    {% icon "plus" "size-5" %}
+  </button>
+</form>
+
+{% include "shopping/partials/grocery_list.html" %}
+{% endblock %}
