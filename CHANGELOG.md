@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.6.1] - 2026-11-15
+
+### Corregido
+- La versión 0.6.0 publicada en GitHub no incluía el código del módulo de películas y series (`apps/media`): una regla de `.gitignore` pensada para las imágenes subidas lo excluía. Ahora esa regla solo afecta a la raíz del proyecto; los datos siguen protegidos en `data/`.
+
 ## [0.6.0] - 2026-11-15 · Fase 5: películas, series y sitios
 
 ### Añadido
