@@ -22,13 +22,22 @@
 </section>
 {% endif %}
 
-{% if tasks.due_tasks %}
+{% if tasks.due_tasks or calendar.today_events %}
 <section class="mb-4 rounded-2xl border border-border bg-surface p-4 shadow-sm" aria-labelledby="hoy">
   <div class="mb-2 flex items-center justify-between gap-2">
     <h2 id="hoy" class="text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Para hoy" %}</h2>
-    <a href="{% url 'tasks:board' %}?de=yo" class="text-sm font-medium text-accent hover:underline">{% translate "Ver tareas" %}</a>
+    <a href="{% url 'calendar:agenda' %}" class="text-sm font-medium text-accent hover:underline">{% translate "Ver agenda" %}</a>
   </div>
   <ul class="divide-y divide-border">
+    {% for item in calendar.today_events %}
+    <li>
+      <a href="{{ item.url }}" class="flex items-center gap-3 py-2 hover:text-accent">
+        <span class="grid size-8 shrink-0 place-items-center rounded-lg bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300">{% icon "calendar" "size-4" %}</span>
+        <span class="min-w-0 flex-1 truncate font-medium">{% if item.obj.kind == "birthday" %}🎂 {% endif %}{{ item.title }}</span>
+        <span class="shrink-0 text-sm font-medium text-muted">{% if item.all_day %}{% translate "Todo el día" %}{% else %}{{ item.start|time:"H:i" }}{% endif %}</span>
+      </a>
+    </li>
+    {% endfor %}
     {% for task in tasks.due_tasks %}
     <li>
       <a href="{% url 'tasks:detail' task.pk %}" class="flex items-center gap-3 py-2 hover:text-accent">

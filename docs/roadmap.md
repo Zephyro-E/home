@@ -12,7 +12,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **2. Compras** | Lista de la compra cotidiana; deseos personales y comunes con estados, votos y comentarios; pasar de personal a común; "Deshacer" al borrar; widgets en dashboard | M | ✅ 2026-11-15 |
 | **3. Tareas** | Tablero Pendiente / En curso / Terminada con arrastrar y soltar, responsable, fecha límite, prioridad, etiquetas, subtareas, comentarios; widget | M | ✅ 2026-11-15 |
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
-| **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ⬜ |
+| **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ✅ 2026-11-15 |
 | **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ⬜ |
 | **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ⬜ |
 | **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ⬜ |
@@ -47,6 +47,13 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Decisiones: una tarea personal solo puede asignarse a su dueño (nadie más la vería); el responsable debe ser miembro del hogar; las etiquetas son comunes y cualquier miembro puede crearlas o borrarlas (borrar una etiqueta no borra tareas); se pueden comentar también las tareas personales (como notas propias).
 - Fallos encontrados y corregidos en la verificación: SortableJS se cargaba después de Alpine y el arrastre no se activaba; las columnas perdían el orden al contar subtareas (Django ignora el orden por defecto en consultas agrupadas).
 - Pendiente para la Fase 4: tareas recurrentes (RRULE) y su proyección en el calendario.
+
+## Notas de la Fase 4
+
+- Verificado: 270 pruebas automáticas (reglas de repetición, expansión con cambio de horario, eventos de varios días, proyección de tareas, tareas recurrentes y autorización de cada vista) y recorrido en el navegador sobre una copia aparte: mes, semana y agenda; cumpleaños con "todo el día" y "cada año" automáticos; tarea semanal que al terminarse crea la siguiente; aviso "Para hoy" con eventos y tareas; móvil y modo oscuro.
+- Diseño: vistas generadas en el servidor, sin FullCalendar (ADR-018). En el móvil el mes muestra puntos de color y la lista del día elegido debajo.
+- Decisiones: editar o borrar un evento repetido afecta a toda la serie (no se editan repeticiones sueltas); una tarea recurrente necesita fecha límite y, al terminarla, se crea la siguiente con la primera fecha posterior a hoy; en un evento personal solo participa su dueño. Repetición "cada mes" el día 31 se salta los meses sin día 31.
+- Pendiente para más adelante: excepciones en una serie (cambiar o quitar un único día), recordatorios/notificaciones (Fase 9).
 
 ## Requisitos transversales: cuándo llega cada uno
 

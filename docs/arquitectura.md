@@ -14,7 +14,7 @@ Waitress (servidor WSGI) ──► Django
                                ├─ core        usuarios, hogares, permisos, invitaciones, archivos
                                ├─ shopping    lista de la compra + deseos (votos, comentarios)
                                ├─ tasks       tablero de tareas (SortableJS para arrastrar)
-                               ├─ calendar    eventos + proyección de tareas      (fase 4)
+                               ├─ events      calendario: eventos, repeticiones, tareas proyectadas
                                ├─ media_lib   películas y series                   (fase 5)
                                ├─ places      sitios que visitar                   (fase 5)
                                ├─ finance     cuentas, movimientos, repartos       (fases 6–7)

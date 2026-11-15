@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.forms import StyledFormMixin
+from apps.core.forms import RecurrenceFieldsMixin, StyledFormMixin
 from apps.core.models import MEMBER_COLORS, Visibility
 
 from .models import Task, TaskLabel
@@ -15,7 +15,7 @@ class MemberChoiceField(forms.ModelChoiceField):
         return obj.name or obj.email
 
 
-class TaskForm(StyledFormMixin, forms.ModelForm):
+class TaskForm(RecurrenceFieldsMixin, StyledFormMixin, forms.ModelForm):
     assignee = MemberChoiceField(
         label=_("Responsable"), queryset=User.objects.none(), required=False, empty_label=_("Nadie")
     )
@@ -58,6 +58,7 @@ class TaskForm(StyledFormMixin, forms.ModelForm):
             (Visibility.PRIVATE, _("Personal: solo la ves tú")),
         ]
         self.fields["visibility"].widget.attrs["class"] = "accent-accent"
+        self.add_recurrence_fields(self.instance.recurrence_rule if self.instance.pk else "")
         if self.instance.pk:
             del self.fields["visibility"]
             del self.fields["status"]  # el estado se cambia desde el tablero o el detalle
@@ -71,11 +72,14 @@ class TaskForm(StyledFormMixin, forms.ModelForm):
         assignee = data.get("assignee")
         if visibility == Visibility.PRIVATE and assignee and assignee.pk != owner_id:
             self.add_error("assignee", _("Una tarea personal solo puede asignarse a ti."))
+        if data.get("repeat_freq") and not data.get("due_date"):
+            self.add_error("due_date", _("Una tarea que se repite necesita fecha límite."))
         return data
 
     def task_data(self) -> dict:
         data = {f: self.cleaned_data[f] for f in self._meta.fields if f in self.cleaned_data}
         data.pop("labels", None)
+        data["recurrence_rule"] = self.recurrence_rule()
         return data
 
 

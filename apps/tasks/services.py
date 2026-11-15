@@ -6,6 +6,7 @@ from django.db.models import Max, Min, Q
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
+from apps.core import recurrence
 from apps.core.models import Membership, Visibility
 
 from .models import Subtask, Task, TaskComment, TaskLabel
@@ -52,12 +53,57 @@ def _apply_status(task: Task, status: str):
     task.status = status
 
 
+def _check_recurrence(data):
+    rule = data.get("recurrence_rule")
+    if not rule:
+        return
+    if not recurrence.is_valid(rule):
+        raise ValidationError(_("La repetición no es válida."))
+    if not data.get("due_date"):
+        raise ValidationError(_("Una tarea que se repite necesita fecha límite."))
+
+
+def spawn_next(task: Task) -> Task | None:
+    """Si la tarea se repite, crea la siguiente (pendiente) con la próxima fecha límite.
+
+    La fecha siguiente es la primera de la serie posterior a hoy, para que una tarea
+    terminada con retraso no genere otra ya vencida. Se hace una sola vez por tarea.
+    """
+    if not task.recurrence_rule or not task.due_date or task.recurrence_spawned:
+        return None
+    today = timezone.localdate()
+    following = recurrence.next_date(task.recurrence_rule, task.due_date)
+    while following and following <= today:
+        following = recurrence.next_date(task.recurrence_rule, following)
+    task.recurrence_spawned = True
+    task.save(update_fields=["recurrence_spawned"])
+    if following is None:
+        return None  # la serie ha terminado (fecha "hasta")
+    new = Task.objects.create(
+        household=task.household,
+        owner=task.owner,
+        visibility=task.visibility,
+        title=task.title,
+        description=task.description,
+        assignee=task.assignee,
+        priority=task.priority,
+        due_date=following,
+        recurrence_rule=task.recurrence_rule,
+        position=_top_position(task.household, Task.Status.TODO),
+    )
+    new.labels.set(task.labels.all())
+    for sub in task.subtasks.all():
+        Subtask.objects.create(task=new, title=sub.title, position=sub.position)
+    return new
+
+
 def create_task(household, user, title, labels=(), **data) -> Task:
     title = " ".join((title or "").split())
     if not title:
         raise ValidationError(_("Escribe el título de la tarea."))
     visibility = data.get("visibility", Visibility.SHARED)
     _check_assignee(household, user, visibility, data.get("assignee"))
+    _check_recurrence(data)
     status = data.pop("status", Task.Status.TODO)
     task = Task(household=household, owner=user, title=title, **data)
     _apply_status(task, status)
@@ -65,6 +111,8 @@ def create_task(household, user, title, labels=(), **data) -> Task:
     task.save()
     if labels:
         task.labels.set([lb for lb in labels if lb.household_id == household.pk])
+    if task.is_done:
+        spawn_next(task)
     return task
 
 
@@ -76,6 +124,7 @@ def update_task(task: Task, user, labels=None, **data) -> Task:
         if not data["title"]:
             raise ValidationError(_("Escribe el título de la tarea."))
     _check_assignee(task.household, task.owner, task.visibility, data.get("assignee"))
+    _check_recurrence({"due_date": task.due_date, **data})
     for field, value in data.items():
         setattr(task, field, value)
     task.save()
@@ -99,6 +148,8 @@ def set_status(task: Task, user, status: str) -> Task:
         _apply_status(task, status)
         task.position = _top_position(task.household, status)
         task.save(update_fields=["status", "completed_at", "position", "updated_at"])
+        if task.is_done:
+            spawn_next(task)
     return task
 
 
@@ -109,6 +160,8 @@ def move_task(task: Task, user, status: str, order: list[int]) -> Task:
     _require_edit(task, user)
     _apply_status(task, status)
     task.save(update_fields=["status", "completed_at", "updated_at"])
+    if task.is_done:
+        spawn_next(task)
     column = {
         t.pk: t
         for t in tasks_for(user, task.household).filter(status=status, pk__in=order)

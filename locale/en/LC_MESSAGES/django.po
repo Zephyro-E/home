@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hogar VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 13:03+0100\n"
+"POT-Creation-Date: 2026-11-15 13:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -19,10 +19,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: apps/core/views.py:243
+#: apps/core/views.py:245
 #, python-format
 msgid "%(name)s ya no forma parte del hogar."
 msgstr "%(name)s is no longer part of the household."
+
+#: apps/events/templates/events/month.html:32
+#, python-format
+msgid "+%(n)s más"
+msgstr "+%(n)s more"
+
+#: apps/core/recurrence.py:95
+#, python-format
+msgid ", hasta el %(date)s"
+msgstr ", until %(date)s"
 
 #: apps/shopping/models.py:105
 msgid "A favor"
@@ -36,6 +46,14 @@ msgstr "Active"
 msgid "Administración"
 msgstr "Admin"
 
+#: apps/events/templates/events/agenda.html:4 apps/events/templates/events/partials/header.html:8
+msgid "Agenda"
+msgstr "Agenda"
+
+#: apps/events/views.py:216
+msgid "Ahora el evento es del hogar: el resto ya lo ve."
+msgstr "The event now belongs to the household: everyone else can see it."
+
 #: apps/shopping/views.py:228
 msgid "Ahora es una propuesta común: el resto del hogar ya la ve."
 msgstr "It is now a shared proposal: the rest of the household can see it."
@@ -44,11 +62,11 @@ msgstr "It is now a shared proposal: the rest of the household can see it."
 msgid "Ahora la tarea es del hogar: el resto ya la ve."
 msgstr "The task now belongs to the household: everyone else can see it."
 
-#: apps/core/forms.py:72
+#: apps/core/forms.py:73
 msgid "Al menos 8 caracteres; evita contraseñas comunes o solo numéricas."
 msgstr "At least 8 characters; avoid common or numbers-only passwords."
 
-#: apps/shopping/models.py:58 apps/tasks/models.py:63
+#: apps/shopping/models.py:58 apps/tasks/models.py:64
 msgid "Alta"
 msgstr "High"
 
@@ -64,14 +82,22 @@ msgstr "Approved"
 msgid "Apunta lo que te gustaría tener. Solo lo verás tú, hasta que decidas compartirlo."
 msgstr "Write down what you'd like to have. Only you will see it, until you decide to share it."
 
+#: apps/events/templates/events/agenda.html:25
+msgid "Añade citas, cumpleaños o planes. Las tareas con fecha también aparecen aquí."
+msgstr "Add appointments, birthdays or plans. Tasks with a due date also appear here."
+
 #: apps/shopping/templates/shopping/partials/grocery_list.html:7
 msgid "Añade lo que haga falta comprar. Todo el hogar ve esta lista."
 msgstr "Add whatever needs buying. The whole household sees this list."
 
-#: apps/shopping/templates/shopping/grocery.html:22 apps/tasks/templates/tasks/board.html:25
-#: apps/tasks/templates/tasks/partials/subtasks.html:36
+#: apps/events/templates/events/month.html:42 apps/shopping/templates/shopping/grocery.html:22
+#: apps/tasks/templates/tasks/board.html:25 apps/tasks/templates/tasks/partials/subtasks.html:36
 msgid "Añadir"
 msgstr "Add"
+
+#: apps/events/templates/events/week.html:23
+msgid "Añadir evento este día"
+msgstr "Add an event on this day"
 
 #: apps/shopping/forms.py:20 apps/shopping/templates/shopping/grocery.html:16
 msgid "Añadir producto…"
@@ -85,7 +111,7 @@ msgstr "Add subtask…"
 msgid "Añadir tarea pendiente…"
 msgstr "Add a to-do task…"
 
-#: apps/tasks/templates/tasks/labels.html:29 apps/tasks/templates/tasks/task_form.html:57
+#: apps/tasks/templates/tasks/labels.html:29 apps/tasks/templates/tasks/task_form.html:58
 msgid "Aún no hay etiquetas."
 msgstr "No labels yet."
 
@@ -97,7 +123,7 @@ msgstr "No finished tasks yet"
 msgid "Aún no tienes deseos personales"
 msgstr "You have no personal wishes yet"
 
-#: apps/shopping/models.py:56 apps/tasks/models.py:61
+#: apps/shopping/models.py:56 apps/tasks/models.py:62
 msgid "Baja"
 msgstr "Low"
 
@@ -105,11 +131,13 @@ msgstr "Low"
 msgid "Bienvenida"
 msgstr "Welcome"
 
+#: apps/events/templates/events/event_detail.html:16
 #: apps/shopping/templates/shopping/wish_detail.html:17 apps/tasks/templates/tasks/task_detail.html:16
 msgid "Borrando…"
 msgstr "Deleting…"
 
-#: apps/shopping/templates/shopping/wish_detail.html:66 apps/tasks/templates/tasks/task_detail.html:49
+#: apps/events/templates/events/event_detail.html:75
+#: apps/shopping/templates/shopping/wish_detail.html:66 apps/tasks/templates/tasks/task_detail.html:50
 msgid "Borrar"
 msgstr "Delete"
 
@@ -118,7 +146,7 @@ msgstr "Delete"
 msgid "Borrar %(name)s"
 msgstr "Delete %(name)s"
 
-#: apps/shopping/templates/shopping/wish_detail.html:103 apps/tasks/templates/tasks/task_detail.html:85
+#: apps/shopping/templates/shopping/wish_detail.html:103 apps/tasks/templates/tasks/task_detail.html:86
 msgid "Borrar comentario"
 msgstr "Delete comment"
 
@@ -127,7 +155,52 @@ msgstr "Delete comment"
 msgid "Borrar etiqueta %(name)s"
 msgstr "Delete label %(name)s"
 
-#: apps/core/modules.py:58
+#: apps/events/templates/events/event_detail.html:75
+msgid "Borrar toda la serie"
+msgstr "Delete the whole series"
+
+#: apps/core/forms.py:146
+msgid "Cada"
+msgstr "Every"
+
+#: apps/core/recurrence.py:91
+#, python-format
+msgid "Cada %(n)s años"
+msgstr "Every %(n)s years"
+
+#: apps/core/recurrence.py:88
+#, python-format
+msgid "Cada %(n)s días"
+msgstr "Every %(n)s days"
+
+#: apps/core/recurrence.py:90
+#, python-format
+msgid "Cada %(n)s meses"
+msgstr "Every %(n)s months"
+
+#: apps/core/recurrence.py:89
+#, python-format
+msgid "Cada %(n)s semanas"
+msgstr "Every %(n)s weeks"
+
+#: apps/core/recurrence.py:22
+msgid "Cada año"
+msgstr "Every year"
+
+#: apps/core/recurrence.py:19
+msgid "Cada día"
+msgstr "Every day"
+
+#: apps/core/recurrence.py:21
+msgid "Cada mes"
+msgstr "Every month"
+
+#: apps/core/recurrence.py:20
+msgid "Cada semana"
+msgstr "Every week"
+
+#: apps/core/modules.py:58 apps/events/apps.py:7 apps/events/templates/events/event_detail.html:13
+#: apps/events/templates/events/month.html:4 apps/events/templates/events/partials/header.html:3
 msgid "Calendario"
 msgstr "Calendar"
 
@@ -144,7 +217,7 @@ msgstr "Switch household"
 msgid "Cambiar tema"
 msgstr "Change theme"
 
-#: apps/shopping/views.py:186 apps/tasks/views.py:182
+#: apps/events/views.py:187 apps/shopping/views.py:186 apps/tasks/views.py:182
 msgid "Cambios guardados."
 msgstr "Changes saved."
 
@@ -156,9 +229,13 @@ msgstr "Cancel"
 msgid "Cantidad"
 msgstr "Quantity"
 
-#: apps/core/forms.py:106
+#: apps/core/forms.py:107
 msgid "Casa"
 msgstr "Home"
+
+#: apps/events/models.py:21
+msgid "Celebración"
+msgstr "Celebration"
 
 #: templates/partials/messages.html:7
 msgid "Cerrar"
@@ -168,11 +245,15 @@ msgstr "Close"
 msgid "Cerrar sesión"
 msgstr "Log out"
 
+#: apps/events/models.py:19
+msgid "Cita"
+msgstr "Appointment"
+
 #: apps/core/models.py:51
 msgid "Claro"
 msgstr "Light"
 
-#: apps/tasks/forms.py:88 apps/tasks/templates/tasks/labels.html:39
+#: apps/tasks/forms.py:92 apps/tasks/templates/tasks/labels.html:39
 msgid "Color"
 msgstr "Colour"
 
@@ -181,15 +262,15 @@ msgid "Columnas"
 msgstr "Columns"
 
 #: apps/shopping/forms.py:92 apps/shopping/templates/shopping/wish_detail.html:116
-#: apps/tasks/templates/tasks/task_detail.html:98
+#: apps/tasks/templates/tasks/task_detail.html:99
 msgid "Comentario"
 msgstr "Comment"
 
-#: apps/shopping/templates/shopping/wish_detail.html:97 apps/tasks/templates/tasks/task_detail.html:79
+#: apps/shopping/templates/shopping/wish_detail.html:97 apps/tasks/templates/tasks/task_detail.html:80
 msgid "Comentario borrado"
 msgstr "Comment deleted"
 
-#: apps/shopping/templates/shopping/wish_detail.html:92 apps/tasks/templates/tasks/task_detail.html:74
+#: apps/shopping/templates/shopping/wish_detail.html:92 apps/tasks/templates/tasks/task_detail.html:75
 msgid "Comentarios"
 msgstr "Comments"
 
@@ -197,7 +278,7 @@ msgstr "Comments"
 msgid "Compartido"
 msgstr "Shared"
 
-#: apps/tasks/templates/tasks/task_detail.html:45
+#: apps/events/templates/events/event_detail.html:71 apps/tasks/templates/tasks/task_detail.html:46
 msgid "Compartir con el hogar"
 msgstr "Share with the household"
 
@@ -218,11 +299,11 @@ msgstr "Shopping"
 msgid "Configuremos tu hogar"
 msgstr "Let's set up your household"
 
-#: apps/core/forms.py:69
+#: apps/core/forms.py:70
 msgid "Contraseña"
 msgstr "Password"
 
-#: apps/core/views.py:288
+#: apps/core/views.py:290
 msgid "Contraseña cambiada."
 msgstr "Password changed."
 
@@ -234,11 +315,11 @@ msgstr "Copied"
 msgid "Copiar"
 msgstr "Copy"
 
-#: apps/core/forms.py:37 apps/core/forms.py:66
+#: apps/core/forms.py:38 apps/core/forms.py:67
 msgid "Correo electrónico"
 msgstr "Email"
 
-#: apps/core/forms.py:42
+#: apps/core/forms.py:43
 msgid "Correo o contraseña incorrectos."
 msgstr "Incorrect email or password."
 
@@ -258,9 +339,14 @@ msgstr ""
 "Create a link and send it (by WhatsApp, for example). It works for one person only and expires in"
 " 7 days."
 
-#: apps/tasks/templates/tasks/task_detail.html:34
+#: apps/tasks/templates/tasks/task_detail.html:35
 msgid "Creada por"
 msgstr "Created by"
+
+#: apps/events/templates/events/event_detail.html:62
+#, python-format
+msgid "Creado por %(name)s"
+msgstr "Created by %(name)s"
 
 #: templates/core/invitation.html:32
 msgid "Crear cuenta y unirme"
@@ -274,7 +360,7 @@ msgstr "Create invitation link"
 msgid "Crear etiqueta"
 msgstr "Create label"
 
-#: apps/tasks/templates/tasks/task_form.html:57
+#: apps/tasks/templates/tasks/task_form.html:58
 msgid "Crear etiquetas"
 msgstr "Create labels"
 
@@ -294,6 +380,14 @@ msgstr "Create a household"
 msgid "Cualquier miembro puede cambiarlo. Los votos ayudan a decidir, pero no lo cambian solos."
 msgstr "Any member can change it. Votes help decide, but don't change it on their own."
 
+#: apps/events/models.py:20
+msgid "Cumpleaños"
+msgstr "Birthday"
+
+#: apps/events/templates/events/event_detail.html:28
+msgid "Cuándo"
+msgstr "When"
+
 #: apps/core/admin.py:30
 msgid "Datos personales"
 msgstr "Personal details"
@@ -306,7 +400,7 @@ msgstr "Owner"
 msgid "Dejarás de ver la información compartida de este hogar."
 msgstr "You will no longer see this household's shared information."
 
-#: apps/tasks/templates/tasks/task_detail.html:23
+#: apps/events/templates/events/event_detail.html:22 apps/tasks/templates/tasks/task_detail.html:23
 msgid "Del hogar"
 msgstr "Household"
 
@@ -314,7 +408,11 @@ msgstr "Household"
 msgid "Del hogar: la ve todo el mundo"
 msgstr "Household: everyone can see it"
 
-#: apps/core/forms.py:44
+#: apps/events/forms.py:25
+msgid "Del hogar: lo ve todo el mundo"
+msgstr "Household: everyone can see it"
+
+#: apps/core/forms.py:45
 msgid "Demasiados intentos fallidos. Espera unos minutos y vuelve a probar."
 msgstr "Too many failed attempts. Wait a few minutes and try again."
 
@@ -325,6 +423,14 @@ msgstr "Discarded"
 #: apps/shopping/views.py:144
 msgid "Descartados"
 msgstr "Discarded"
+
+#: apps/events/forms.py:38
+msgid "Descripción"
+msgstr "Description"
+
+#: apps/events/templates/events/event_detail.html:34
+msgid "Desde"
+msgstr "Since"
 
 #: apps/shopping/views.py:273
 msgid "Deseo borrado."
@@ -356,13 +462,18 @@ msgstr "Undo"
 msgid "Desmarcar %(name)s"
 msgstr "Uncheck %(name)s"
 
-#: apps/shopping/templates/shopping/wish_detail.html:57 apps/tasks/templates/tasks/task_detail.html:40
+#: apps/events/templates/events/event_detail.html:66
+#: apps/shopping/templates/shopping/wish_detail.html:57 apps/tasks/templates/tasks/task_detail.html:41
 msgid "Editar"
 msgstr "Edit"
 
 #: apps/shopping/templates/shopping/wish_form.html:4 apps/shopping/templates/shopping/wish_form.html:10
 msgid "Editar deseo"
 msgstr "Edit wish"
+
+#: apps/events/templates/events/event_form.html:4 apps/events/templates/events/event_form.html:10
+msgid "Editar evento"
+msgstr "Edit event"
 
 #: apps/tasks/templates/tasks/task_form.html:4 apps/tasks/templates/tasks/task_form.html:10
 msgid "Editar tarea"
@@ -372,6 +483,11 @@ msgstr "Edit task"
 msgid "El correo electrónico es obligatorio."
 msgstr "Email is required."
 
+#: apps/events/forms.py:97 apps/events/forms.py:112 apps/events/services.py:46
+#: apps/events/services.py:48
+msgid "El final no puede ser anterior al inicio."
+msgstr "The end cannot be before the start."
+
 #: apps/core/services.py:59
 msgid "El hogar debe tener al menos una persona con rol de administración."
 msgstr "The household must have at least one admin."
@@ -380,21 +496,29 @@ msgstr "The household must have at least one admin."
 msgid "El importe es demasiado alto."
 msgstr "The amount is too high."
 
-#: apps/tasks/services.py:35
+#: apps/tasks/services.py:36
 msgid "El responsable debe ser miembro del hogar."
 msgstr "The assignee must be a member of the household."
 
-#: apps/tasks/templates/tasks/partials/task_card.html:36
+#: apps/tasks/templates/tasks/partials/task_card.html:37
 msgid "Empezar"
 msgstr "Start"
+
+#: apps/events/forms.py:32
+msgid "Empieza"
+msgstr "Starts"
 
 #: apps/shopping/models.py:106
 msgid "En contra"
 msgstr "Against"
 
-#: apps/tasks/models.py:57 apps/tasks/views.py:61
+#: apps/tasks/models.py:58 apps/tasks/views.py:61
 msgid "En curso"
 msgstr "In progress"
+
+#: apps/events/forms.py:119 apps/events/services.py:41
+msgid "En un evento personal solo puedes participar tú."
+msgstr "Only you can take part in a personal event."
 
 #: apps/shopping/forms.py:38
 msgid "Enlace a la tienda"
@@ -417,7 +541,7 @@ msgid "Entrar"
 msgstr "Log in"
 
 #: apps/shopping/templates/shopping/wish_detail.html:119
-#: apps/tasks/templates/tasks/task_detail.html:101
+#: apps/tasks/templates/tasks/task_detail.html:102
 msgid "Enviar"
 msgstr "Send"
 
@@ -429,7 +553,7 @@ msgstr ""
 "This is the app's first start. Create your account and your household; then you can invite the "
 "other members."
 
-#: apps/tasks/services.py:201
+#: apps/tasks/services.py:254
 msgid "Escribe el nombre de la etiqueta."
 msgstr "Enter the label name."
 
@@ -437,19 +561,24 @@ msgstr "Enter the label name."
 msgid "Escribe el nombre del producto."
 msgstr "Enter the item name."
 
-#: apps/tasks/services.py:58 apps/tasks/services.py:77
+#: apps/tasks/services.py:103 apps/tasks/services.py:125
 msgid "Escribe el título de la tarea."
 msgstr "Enter the task title."
 
-#: apps/tasks/services.py:162
+#: apps/events/services.py:59
+msgid "Escribe el título del evento."
+msgstr "Enter the event title."
+
+#: apps/tasks/services.py:215
 msgid "Escribe la subtarea."
 msgstr "Enter the subtask."
 
-#: apps/shopping/services.py:141 apps/tasks/services.py:185
+#: apps/shopping/services.py:141 apps/tasks/services.py:238
 msgid "Escribe un comentario."
 msgstr "Write a comment."
 
-#: apps/shopping/templates/shopping/wish_detail.html:117 apps/tasks/templates/tasks/task_detail.html:99
+#: apps/shopping/templates/shopping/wish_detail.html:117
+#: apps/tasks/templates/tasks/task_detail.html:100
 msgid "Escribe un comentario…"
 msgstr "Write a comment…"
 
@@ -457,15 +586,15 @@ msgstr "Write a comment…"
 msgid "Escribe un importe válido, por ejemplo 12,50."
 msgstr "Enter a valid amount, for example 12.50."
 
-#: apps/core/forms.py:43
+#: apps/core/forms.py:44
 msgid "Esta cuenta está desactivada."
 msgstr "This account is disabled."
 
-#: apps/shopping/templates/shopping/wish_detail.html:73 apps/tasks/templates/tasks/task_detail.html:56
+#: apps/shopping/templates/shopping/wish_detail.html:73 apps/tasks/templates/tasks/task_detail.html:57
 msgid "Estado"
 msgstr "Status"
 
-#: apps/shopping/services.py:101 apps/tasks/services.py:47
+#: apps/shopping/services.py:101 apps/tasks/services.py:48
 msgid "Estado no válido."
 msgstr "Invalid status."
 
@@ -491,11 +620,23 @@ msgstr "Labels"
 msgid "Etiquetas del hogar"
 msgstr "Household labels"
 
+#: apps/events/models.py:18
+msgid "Evento"
+msgstr "Event"
+
+#: apps/events/views.py:225
+msgid "Evento borrado."
+msgstr "Event deleted."
+
+#: apps/events/views.py:160
+msgid "Evento guardado."
+msgstr "Event saved."
+
 #: apps/core/modules.py:59
 msgid "Eventos, citas y cumpleaños"
 msgstr "Events, appointments and birthdays"
 
-#: templates/core/home.html:81
+#: templates/core/home.html:90
 #, python-format
 msgid "Fase %(phase)s"
 msgstr "Phase %(phase)s"
@@ -516,16 +657,16 @@ msgstr "Filter by status"
 msgid "Filtrar tareas"
 msgstr "Filter tasks"
 
-#: apps/core/modules.py:83
+#: apps/core/modules.py:84
 msgid "Finanzas"
 msgstr "Finances"
 
-#: apps/core/modules.py:84
+#: apps/core/modules.py:85
 msgid "Gastos, presupuestos y ahorro"
 msgstr "Expenses, budgets and savings"
 
-#: apps/shopping/templates/shopping/wish_form.html:49 apps/tasks/templates/tasks/task_form.html:63
-#: templates/core/household.html:17
+#: apps/events/templates/events/event_form.html:69 apps/shopping/templates/shopping/wish_form.html:49
+#: apps/tasks/templates/tasks/task_form.html:64 templates/core/household.html:17
 msgid "Guardar"
 msgstr "Save"
 
@@ -538,15 +679,19 @@ msgstr "Save changes"
 msgid "Has iniciado sesión como %(email)s."
 msgstr "You are logged in as %(email)s."
 
-#: apps/core/views.py:258
+#: apps/core/views.py:260
 msgid "Has salido del hogar."
 msgstr "You have left the household."
+
+#: apps/core/forms.py:149
+msgid "Hasta (opcional)"
+msgstr "Until (optional)"
 
 #: templates/core/household.html:12
 msgid "Hogar"
 msgstr "Household"
 
-#: apps/core/views.py:163
+#: apps/core/views.py:165
 msgid "Hogar creado."
 msgstr "Household created."
 
@@ -559,14 +704,27 @@ msgstr "Household & members"
 msgid "Hola, %(name)s"
 msgstr "Hi, %(name)s"
 
-#: apps/tasks/templates/tasks/partials/task_card.html:25 apps/tasks/templates/tasks/task_detail.html:32
-#: templates/core/home.html:37
+#: apps/events/forms.py:35
+msgid "Hora de fin"
+msgstr "End time"
+
+#: apps/events/forms.py:33
+msgid "Hora de inicio"
+msgstr "Start time"
+
+#: apps/events/templates/events/agenda.html:15 apps/events/templates/events/month.html:14
+#: apps/events/templates/events/week.html:13 apps/tasks/templates/tasks/partials/task_card.html:25
+#: apps/tasks/templates/tasks/task_detail.html:32 templates/core/home.html:46
 msgid "Hoy"
 msgstr "Today"
 
 #: templates/partials/language_switcher.html:6
 msgid "Idioma"
 msgstr "Language"
+
+#: apps/events/forms.py:102
+msgid "Indica la hora o marca «Todo el día»."
+msgstr "Enter a time or tick “All day”."
 
 #: templates/core/invitation.html:36
 msgid "Inicia sesión"
@@ -592,7 +750,7 @@ msgstr "Pending invitations"
 msgid "Invitación"
 msgstr "Invitation"
 
-#: apps/core/views.py:220
+#: apps/core/views.py:222
 msgid "Invitación anulada."
 msgstr "Invitation revoked."
 
@@ -624,7 +782,11 @@ msgstr "The invitation is not valid, has already been used or has expired."
 msgid "La lista está vacía"
 msgstr "The list is empty"
 
-#: apps/core/forms.py:92
+#: apps/events/services.py:43 apps/tasks/services.py:61
+msgid "La repetición no es válida."
+msgstr "The repetition is not valid."
+
+#: apps/core/forms.py:93
 msgid "Las contraseñas no coinciden."
 msgstr "The passwords don't match."
 
@@ -632,7 +794,7 @@ msgstr "The passwords don't match."
 msgid "Lista"
 msgstr "List"
 
-#: apps/shopping/templates/shopping/grocery.html:4 templates/core/home.html:51
+#: apps/shopping/templates/shopping/grocery.html:4 templates/core/home.html:60
 msgid "Lista de la compra"
 msgstr "Shopping list"
 
@@ -640,7 +802,24 @@ msgstr "Shopping list"
 msgid "Lista de la compra y deseos"
 msgstr "Shopping list and wishes"
 
-#: apps/core/modules.py:76
+#: apps/events/templates/events/agenda.html:8
+#, python-format
+msgid "Lo que viene, hasta el %(until)s."
+msgstr "What is coming up, until %(until)s."
+
+#: apps/events/templates/events/event_detail.html:78
+msgid "Los cambios se aplican a todas las repeticiones."
+msgstr "Changes apply to every repetition."
+
+#: apps/events/services.py:39
+msgid "Los participantes deben ser miembros del hogar."
+msgstr "Participants must be members of the household."
+
+#: apps/events/forms.py:36 apps/events/templates/events/event_detail.html:50
+msgid "Lugar"
+msgstr "Place"
+
+#: apps/core/modules.py:77
 msgid "Lugares que queremos visitar"
 msgstr "Places we want to visit"
 
@@ -649,13 +828,25 @@ msgstr "Places we want to visit"
 msgid "Marcar %(name)s como comprado"
 msgstr "Mark %(name)s as bought"
 
-#: apps/shopping/models.py:57 apps/tasks/models.py:62
+#: apps/shopping/models.py:57 apps/tasks/models.py:63
 msgid "Media"
 msgstr "Medium"
 
 #: templates/partials/user_menu.html:12
 msgid "Menú de usuario"
 msgstr "User menu"
+
+#: apps/events/templates/events/partials/header.html:6
+msgid "Mes"
+msgstr "Month"
+
+#: apps/events/templates/events/month.html:11
+msgid "Mes anterior"
+msgstr "Previous month"
+
+#: apps/events/templates/events/month.html:15
+msgid "Mes siguiente"
+msgstr "Next month"
 
 #: templates/core/profile.html:4 templates/core/profile.html:11 templates/partials/user_menu.html:17
 msgid "Mi perfil"
@@ -677,7 +868,8 @@ msgstr "My wishes"
 msgid "Más"
 msgstr "More"
 
-#: apps/shopping/templates/shopping/wish_form.html:41 apps/tasks/templates/tasks/task_form.html:41
+#: apps/events/templates/events/event_form.html:62 apps/shopping/templates/shopping/wish_form.html:41
+#: apps/tasks/templates/tasks/task_form.html:41
 msgid "Más opciones"
 msgstr "More options"
 
@@ -685,13 +877,17 @@ msgstr "More options"
 msgid "Mías"
 msgstr "Mine"
 
-#: templates/core/home.html:69
+#: templates/core/home.html:78
 msgid "Módulos"
 msgstr "Modules"
 
 #: apps/tasks/templates/tasks/partials/board.html:19
 msgid "Nada en curso"
 msgstr "Nothing in progress"
+
+#: apps/events/templates/events/month.html:47
+msgid "Nada este día."
+msgstr "Nothing on this day."
 
 #: apps/tasks/templates/tasks/partials/board.html:19
 msgid "Nada pendiente"
@@ -713,6 +909,10 @@ msgstr "Main navigation"
 msgid "No hay nada con este estado"
 msgstr "Nothing with this status"
 
+#: apps/events/templates/events/agenda.html:24
+msgid "No hay nada próximamente"
+msgstr "Nothing coming up"
+
 #: apps/shopping/templates/shopping/wishes.html:44
 msgid "No hay propuestas comunes"
 msgstr "No shared proposals"
@@ -721,15 +921,19 @@ msgstr "No shared proposals"
 msgid "No perteneces a ningún hogar. Puedes crear uno nuevo o pedir a alguien un enlace de invitación."
 msgstr "You don't belong to any household. You can create a new one or ask someone for an invitation link."
 
-#: apps/tasks/forms.py:87
+#: apps/core/recurrence.py:18
+msgid "No se repite"
+msgstr "Does not repeat"
+
+#: apps/tasks/forms.py:91
 msgid "Nombre"
 msgstr "Name"
 
-#: apps/core/forms.py:104
+#: apps/core/forms.py:105
 msgid "Nombre del hogar"
 msgstr "Household name"
 
-#: apps/core/views.py:198
+#: apps/core/views.py:200
 msgid "Nombre del hogar actualizado."
 msgstr "Household name updated."
 
@@ -751,6 +955,11 @@ msgstr "New task"
 msgid "Nuevo deseo"
 msgstr "New wish"
 
+#: apps/events/templates/events/event_form.html:4 apps/events/templates/events/event_form.html:10
+#: apps/events/templates/events/partials/header.html:10
+msgid "Nuevo evento"
+msgstr "New event"
+
 #: apps/shopping/forms.py:49
 msgid "Opcional. La dirección de una foto del producto."
 msgstr "Optional. The address of a photo of the item."
@@ -767,15 +976,19 @@ msgstr "Admin panel"
 msgid "Para hoy"
 msgstr "For today"
 
-#: apps/core/modules.py:67
+#: apps/events/forms.py:41 apps/events/templates/events/event_detail.html:53
+msgid "Participantes"
+msgstr "Participants"
+
+#: apps/core/modules.py:68
 msgid "Películas y series"
 msgstr "Movies & series"
 
-#: apps/shopping/models.py:61 apps/tasks/models.py:56 apps/tasks/views.py:60
+#: apps/shopping/models.py:61 apps/tasks/models.py:57 apps/tasks/views.py:60
 msgid "Pendiente"
 msgstr "Pending"
 
-#: apps/core/views.py:277
+#: apps/core/views.py:279
 msgid "Perfil guardado."
 msgstr "Profile saved."
 
@@ -783,13 +996,17 @@ msgstr "Profile saved."
 msgid "Permisos"
 msgstr "Permissions"
 
-#: apps/core/models.py:223 apps/tasks/templates/tasks/partials/task_card.html:19
-#: apps/tasks/templates/tasks/task_detail.html:23
+#: apps/core/models.py:223 apps/events/templates/events/event_detail.html:22
+#: apps/tasks/templates/tasks/partials/task_card.html:19 apps/tasks/templates/tasks/task_detail.html:23
 msgid "Personal"
 msgstr "Personal"
 
 #: apps/tasks/forms.py:58
 msgid "Personal: solo la ves tú"
+msgstr "Personal: only you can see it"
+
+#: apps/events/forms.py:26
+msgid "Personal: solo lo ves tú"
 msgstr "Personal: only you can see it"
 
 #: templates/core/invitation.html:10
@@ -800,11 +1017,11 @@ msgstr "Ask someone in the household to send you a new link."
 msgid "Por comprar"
 msgstr "To buy"
 
-#: apps/core/forms.py:107
+#: apps/core/forms.py:108
 msgid "Por ejemplo: «Casa» o «Piso de Madrid». Se puede cambiar después."
 msgstr "For example: “Home” or “Madrid flat”. You can change it later."
 
-#: templates/core/home.html:60
+#: templates/core/home.html:69
 msgid "Por votar"
 msgstr "To vote on"
 
@@ -816,7 +1033,7 @@ msgstr "Approximate price"
 msgid "Precio aproximado (€)"
 msgstr "Approximate price (€)"
 
-#: apps/shopping/templates/shopping/wish_detail.html:39 apps/tasks/templates/tasks/task_detail.html:33
+#: apps/shopping/templates/shopping/wish_detail.html:39 apps/tasks/templates/tasks/task_detail.html:34
 msgid "Prioridad"
 msgstr "Priority"
 
@@ -857,7 +1074,7 @@ msgstr "Shared proposal: the whole household sees it"
 msgid "Propuestas comunes"
 msgstr "Shared proposals"
 
-#: templates/core/home.html:61
+#: templates/core/home.html:70
 msgid "Propuestas comunes en las que aún no has votado"
 msgstr "Shared proposals you haven't voted on yet"
 
@@ -888,23 +1105,32 @@ msgstr "Remove %(name)s"
 msgid "Quitar comprados"
 msgstr "Remove bought"
 
-#: apps/core/modules.py:68
+#: apps/core/modules.py:69
 msgid "Qué ver y qué hemos visto"
 msgstr "What to watch and what we've watched"
 
-#: apps/tasks/templates/tasks/partials/task_card.html:42
+#: apps/tasks/templates/tasks/partials/task_card.html:43
 msgid "Reabrir"
 msgstr "Reopen"
 
-#: apps/core/modules.py:92
+#: apps/core/modules.py:93
 msgid "Recetario del hogar"
 msgstr "Household recipe book"
 
-#: apps/core/modules.py:91
+#: apps/core/modules.py:92
 msgid "Recetas"
 msgstr "Recipes"
 
-#: apps/core/forms.py:75
+#: apps/events/templates/events/event_detail.html:47 apps/tasks/templates/tasks/task_detail.html:33
+#: templates/partials/recurrence_fields.html:3
+msgid "Repetición"
+msgstr "Repeats"
+
+#: apps/core/forms.py:143
+msgid "Repetir"
+msgstr "Repeat"
+
+#: apps/core/forms.py:76
 msgid "Repite la contraseña"
 msgstr "Repeat the password"
 
@@ -912,7 +1138,7 @@ msgstr "Repeat the password"
 msgid "Responsable"
 msgstr "Assignee"
 
-#: templates/core/home.html:46
+#: templates/core/home.html:55
 msgid "Resumen"
 msgstr "Summary"
 
@@ -920,7 +1146,7 @@ msgstr "Summary"
 msgid "Rol"
 msgstr "Role"
 
-#: apps/core/views.py:229
+#: apps/core/views.py:231
 msgid "Rol actualizado."
 msgstr "Role updated."
 
@@ -948,6 +1174,26 @@ msgstr "Security"
 msgid "Según el sistema"
 msgstr "System default"
 
+#: apps/events/templates/events/partials/header.html:7 apps/events/templates/events/week.html:4
+msgid "Semana"
+msgstr "Week"
+
+#: apps/events/templates/events/week.html:10
+msgid "Semana anterior"
+msgstr "Previous week"
+
+#: apps/events/templates/events/week.html:14
+msgid "Semana siguiente"
+msgstr "Next week"
+
+#: apps/events/templates/events/event_form.html:48
+msgid "Si no indicas el final, dura una hora."
+msgstr "If you leave the end empty, it lasts one hour."
+
+#: apps/events/templates/events/partials/item.html:6
+msgid "Sigue"
+msgstr "Cont."
+
 #: apps/tasks/templates/tasks/task_detail.html:32
 msgid "Sin fecha"
 msgstr "No date"
@@ -964,7 +1210,7 @@ msgstr "No subtasks."
 msgid "Sirven para agrupar tareas (cocina, jardín, papeleo…). Son comunes a todo el hogar."
 msgstr "Use them to group tasks (kitchen, garden, paperwork…). They are shared by the whole household."
 
-#: apps/core/modules.py:75
+#: apps/core/modules.py:76
 msgid "Sitios"
 msgstr "Places"
 
@@ -976,13 +1222,17 @@ msgstr "Only shared proposals can be commented on."
 msgid "Solo se vota en las propuestas comunes."
 msgstr "Only shared proposals can be voted on."
 
-#: apps/tasks/templates/tasks/task_detail.html:69
+#: apps/tasks/templates/tasks/task_detail.html:70
 msgid "Subtareas"
 msgstr "Subtasks"
 
 #: apps/core/modules.py:49
 msgid "Tablero de tareas del hogar"
 msgstr "Household task board"
+
+#: apps/events/templates/events/partials/item.html:5
+msgid "Tarea"
+msgstr "Task"
 
 #: apps/tasks/views.py:218
 msgid "Tarea borrada."
@@ -1019,13 +1269,21 @@ msgstr "Theme: dark"
 msgid "Tema: sistema"
 msgstr "Theme: system"
 
-#: apps/tasks/models.py:58 apps/tasks/views.py:62
+#: apps/events/forms.py:34
+msgid "Termina"
+msgstr "Ends"
+
+#: apps/tasks/models.py:59 apps/tasks/views.py:62
 msgid "Terminada"
 msgstr "Done"
 
-#: apps/tasks/templates/tasks/partials/task_card.html:39
+#: apps/tasks/templates/tasks/partials/task_card.html:40
 msgid "Terminar"
 msgstr "Finish"
+
+#: apps/events/forms.py:21
+msgid "Tipo"
+msgstr "Type"
 
 #: apps/shopping/templates/shopping/wishes.html:10
 msgid "Tipo de deseos"
@@ -1039,36 +1297,59 @@ msgstr "All"
 msgid "Todas las etiquetas"
 msgstr "All labels"
 
-#: apps/shopping/templates/shopping/wish_detail.html:112 apps/tasks/templates/tasks/task_detail.html:94
+#: apps/shopping/templates/shopping/wish_detail.html:112 apps/tasks/templates/tasks/task_detail.html:95
 msgid "Todavía no hay comentarios."
 msgstr "No comments yet."
 
-#: apps/core/forms.py:64
+#: apps/events/forms.py:31 apps/events/templates/events/event_detail.html:34
+#: apps/events/templates/events/event_detail.html:36 apps/events/templates/events/partials/item.html:7
+#: templates/core/home.html:37
+msgid "Todo el día"
+msgstr "All day"
+
+#: apps/core/forms.py:65
 msgid "Tu nombre"
 msgstr "Your name"
 
-#: apps/tasks/forms.py:73 apps/tasks/services.py:37
+#: apps/events/forms.py:20
+msgid "Título"
+msgstr "Title"
+
+#: apps/tasks/forms.py:74 apps/tasks/services.py:38
 msgid "Una tarea personal solo puede asignarse a ti."
 msgstr "A personal task can only be assigned to you."
+
+#: apps/tasks/forms.py:76 apps/tasks/services.py:63
+msgid "Una tarea que se repite necesita fecha límite."
+msgstr "A repeating task needs a due date."
 
 #: templates/core/invitation.html:24
 msgid "Unirme a este hogar"
 msgstr "Join this household"
 
 #: apps/tasks/templates/tasks/partials/task_card.html:25 apps/tasks/templates/tasks/task_detail.html:32
-#: templates/core/home.html:37
+#: templates/core/home.html:46
 msgid "Vencida"
 msgstr "Overdue"
+
+#: templates/core/home.html:29
+msgid "Ver agenda"
+msgstr "View agenda"
 
 #: apps/shopping/templates/shopping/wish_detail.html:49
 msgid "Ver en la tienda"
 msgstr "View in shop"
 
-#: templates/core/home.html:29
-msgid "Ver tareas"
-msgstr "View tasks"
+#: apps/events/models.py:22
+msgid "Viaje"
+msgstr "Trip"
 
-#: apps/shopping/templates/shopping/wish_form.html:8 apps/tasks/templates/tasks/task_form.html:8
+#: apps/events/templates/events/partials/header.html:5
+msgid "Vistas del calendario"
+msgstr "Calendar views"
+
+#: apps/events/templates/events/event_form.html:8 apps/shopping/templates/shopping/wish_form.html:8
+#: apps/tasks/templates/tasks/task_form.html:8
 msgid "Volver"
 msgstr "Back"
 
@@ -1093,15 +1374,15 @@ msgstr "Votes"
 msgid "Y %(n)s terminadas más antiguas."
 msgstr "And %(n)s older finished tasks."
 
-#: apps/core/forms.py:127
+#: apps/core/forms.py:128
 msgid "Ya existe otra cuenta con este correo."
 msgstr "Another account already uses this email."
 
-#: apps/core/forms.py:84
+#: apps/core/forms.py:85
 msgid "Ya existe una cuenta con este correo. Inicia sesión para continuar."
 msgstr "An account with this email already exists. Log in to continue."
 
-#: apps/tasks/services.py:203
+#: apps/tasks/services.py:256
 msgid "Ya existe una etiqueta con ese nombre."
 msgstr "A label with that name already exists."
 
@@ -1126,11 +1407,11 @@ msgstr "expires %(date)s"
 msgid "cantidad"
 msgstr "quantity"
 
-#: apps/core/models.py:130 apps/tasks/models.py:25
+#: apps/core/models.py:130 apps/tasks/models.py:26
 msgid "color"
 msgstr "color"
 
-#: apps/shopping/models.py:127 apps/tasks/models.py:129
+#: apps/shopping/models.py:127 apps/tasks/models.py:137
 msgid "comentario"
 msgstr "comment"
 
@@ -1146,7 +1427,7 @@ msgstr "settings"
 msgid "correo electrónico"
 msgstr "email"
 
-#: apps/shopping/models.py:69 apps/tasks/models.py:66
+#: apps/events/models.py:26 apps/shopping/models.py:69 apps/tasks/models.py:67
 msgid "descripción"
 msgstr "description"
 
@@ -1162,23 +1443,31 @@ msgstr "wishes"
 msgid "enlace"
 msgstr "link"
 
-#: apps/shopping/models.py:76 apps/tasks/models.py:75
+#: apps/shopping/models.py:76 apps/tasks/models.py:76
 msgid "estado"
 msgstr "status"
 
-#: apps/tasks/models.py:29
+#: apps/tasks/models.py:30
 msgid "etiqueta"
 msgstr "label"
 
-#: apps/tasks/models.py:30
+#: apps/tasks/models.py:31
 msgid "etiquetas"
 msgstr "labels"
+
+#: apps/events/models.py:40
+msgid "evento"
+msgstr "event"
+
+#: apps/events/models.py:41
+msgid "eventos"
+msgstr "events"
 
 #: apps/core/models.py:63
 msgid "fecha de alta"
 msgstr "date joined"
 
-#: apps/tasks/models.py:77
+#: apps/tasks/models.py:78
 msgid "fecha límite"
 msgstr "due date"
 
@@ -1206,13 +1495,26 @@ msgstr "invitations"
 msgid "invitación"
 msgstr "invitation"
 
-#: templates/core/home.html:8
+#: apps/events/templates/events/agenda.html:8
+msgid "j \\d\\e F"
+msgstr "F j"
+
+#: apps/events/templates/events/agenda.html:15 apps/events/templates/events/month.html:41
+#: apps/tasks/templates/tasks/task_detail.html:32 templates/core/home.html:8
 msgid "l, j \\d\\e F"
 msgstr "l, F j"
+
+#: apps/events/templates/events/event_detail.html:30
+msgid "l, j \\d\\e F \\d\\e Y"
+msgstr "l, F j, Y"
 
 #: apps/shopping/models.py:31
 msgid "lista de la compra"
 msgstr "shopping list"
+
+#: apps/events/models.py:27
+msgid "lugar"
+msgstr "place"
 
 #: apps/core/models.py:136
 msgid "miembro"
@@ -1226,15 +1528,19 @@ msgstr "members"
 msgid "moneda"
 msgstr "currency"
 
-#: apps/core/models.py:56 apps/core/models.py:98 apps/shopping/models.py:68 apps/tasks/models.py:24
+#: apps/core/models.py:56 apps/core/models.py:98 apps/shopping/models.py:68 apps/tasks/models.py:25
 msgid "nombre"
 msgstr "name"
+
+#: apps/events/models.py:35
+msgid "participantes"
+msgstr "participants"
 
 #: apps/shopping/models.py:70
 msgid "precio aproximado"
 msgstr "approximate price"
 
-#: apps/shopping/models.py:74 apps/tasks/models.py:79
+#: apps/shopping/models.py:74 apps/tasks/models.py:80
 msgid "prioridad"
 msgstr "priority"
 
@@ -1250,7 +1556,11 @@ msgstr "shopping list item"
 msgid "reparto por defecto"
 msgstr "default share"
 
-#: apps/tasks/models.py:69
+#: apps/events/models.py:33 apps/tasks/models.py:84
+msgid "repetición"
+msgstr "repetition"
+
+#: apps/tasks/models.py:70
 msgid "responsable"
 msgstr "assignee"
 
@@ -1258,15 +1568,15 @@ msgstr "assignee"
 msgid "rol"
 msgstr "role"
 
-#: apps/tasks/models.py:114
+#: apps/tasks/models.py:122
 msgid "subtarea"
 msgstr "subtask"
 
-#: apps/tasks/models.py:88
+#: apps/tasks/models.py:92
 msgid "tarea"
 msgstr "task"
 
-#: apps/tasks/models.py:89
+#: apps/tasks/models.py:93
 msgid "tareas"
 msgstr "tasks"
 
@@ -1274,7 +1584,15 @@ msgstr "tasks"
 msgid "tema"
 msgstr "theme"
 
-#: apps/tasks/models.py:65
+#: apps/events/models.py:25
+msgid "tipo"
+msgstr "type"
+
+#: apps/events/models.py:28
+msgid "todo el día"
+msgstr "all day"
+
+#: apps/events/models.py:24 apps/tasks/models.py:66
 msgid "título"
 msgstr "title"
 
@@ -1312,6 +1630,7 @@ msgstr "Welcome to %(name)s!"
 msgid "«%(name)s» borrada"
 msgstr "“%(name)s” deleted"
 
+#: apps/events/templates/events/event_detail.html:10
 #: apps/shopping/templates/shopping/wish_detail.html:10
 #, python-format
 msgid "«%(name)s» borrado"
@@ -1326,7 +1645,7 @@ msgstr "“%(name)s” removed from the list"
 msgid "¿No tienes cuenta? Pide a alguien de tu hogar un enlace de invitación."
 msgstr "Don't have an account? Ask someone in your household for an invitation link."
 
-#: apps/shopping/forms.py:60 apps/tasks/forms.py:46
+#: apps/events/forms.py:23 apps/shopping/forms.py:60 apps/tasks/forms.py:46
 msgid "¿Para quién es?"
 msgstr "Who is it for?"
 

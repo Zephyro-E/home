@@ -9,5 +9,6 @@ urlpatterns = [
     path("i18n/setlang/", login_not_required(set_language), name="set_language"),
     path("compras/", include("apps.shopping.urls")),
     path("tareas/", include("apps.tasks.urls")),
+    path("calendario/", include("apps.events.urls")),
     path("", include("apps.core.urls")),
 ]

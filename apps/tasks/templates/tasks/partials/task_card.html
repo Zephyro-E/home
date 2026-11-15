@@ -25,6 +25,7 @@
       {% if task.due_state == 'overdue' %}{% translate "Vencida" %} · {% elif task.due_state == 'today' %}{% translate "Hoy" %}{% endif %}{% if task.due_state != 'today' %}{{ task.due_date|date:"j M" }}{% endif %}
     </span>
     {% endif %}
+    {% if task.recurrence_rule %}<span title="{{ task.recurrence_text }}">{% icon "repeat" "size-3.5" %}<span class="sr-only">{{ task.recurrence_text }}</span></span>{% endif %}
     {% if task.subtask_count %}<span class="flex items-center gap-1">{% icon "square-check-big" "size-3.5" %}{{ task.subtask_done }}/{{ task.subtask_count }}</span>{% endif %}
     {% if task.comment_count %}<span class="flex items-center gap-1">{% icon "message-circle" "size-3.5" %}{{ task.comment_count }}</span>{% endif %}
 

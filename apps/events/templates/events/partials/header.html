@@ -1,0 +1,12 @@
+{% load i18n ui %}{# Cabecera del calendario. Parámetros: view ("month"|"week"|"agenda"), new_date (opcional) #}
+<div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+  <h1 class="text-2xl font-semibold tracking-tight">{% translate "Calendario" %}</h1>
+  <div class="flex flex-wrap items-center gap-2">
+    <nav class="flex rounded-xl bg-surface-2 p-1 text-sm font-medium" aria-label="{% translate 'Vistas del calendario' %}">
+      <a href="{% url 'calendar:month' %}" class="rounded-lg px-3 py-1.5 {% if view == 'month' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if view == 'month' %}aria-current="page"{% endif %}>{% translate "Mes" %}</a>
+      <a href="{% url 'calendar:week' %}" class="rounded-lg px-3 py-1.5 {% if view == 'week' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if view == 'week' %}aria-current="page"{% endif %}>{% translate "Semana" %}</a>
+      <a href="{% url 'calendar:agenda' %}" class="rounded-lg px-3 py-1.5 {% if view == 'agenda' %}bg-surface text-fg shadow-sm{% else %}text-muted hover:text-fg{% endif %}" {% if view == 'agenda' %}aria-current="page"{% endif %}>{% translate "Agenda" %}</a>
+    </nav>
+    <a href="{% url 'calendar:create' %}{% if new_date %}?fecha={{ new_date|date:'Y-m-d' }}{% endif %}" class="flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nuevo evento" %}</a>
+  </div>
+</div>

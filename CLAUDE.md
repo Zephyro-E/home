@@ -63,6 +63,7 @@ uv run python manage.py backup / restore <copia>
 - Plantillas: `base.html` (app con sesión), `base_auth.html` (entrada, asistente, invitación); componentes en `templates/partials/` (`form_fields`, `avatar`, `user_menu`, `messages`…).
 - `assets/css/source.css`: colores semánticos (`bg-surface`, `text-muted`, `bg-accent`…) para claro/oscuro. Usarlos en lugar de colores fijos.
 - `apps/core/money.py`: importes (texto ↔ céntimos, formato "12,50 €"); filtros `euros` y `get_item` en `ui.py`.
+- `apps/events/`: calendario (URL `calendar:`), `items_between()` expande repeticiones y proyecta tareas (ADR-018). Repeticiones comunes en `apps/core/recurrence.py` y `RecurrenceFieldsMixin` (`core/forms.py`) + `partials/recurrence_fields.html`.
 - `apps/tasks/`: tablero de tareas (SortableJS, ADR-017; componente Alpine `taskColumn` en `app.js`). Ojo: en consultas con recuentos (`annotate(Count…)`) Django no aplica `Meta.ordering`: poner `order_by` explícito.
 - `apps/shopping/`: lista de la compra y deseos (modelo de referencia para los módulos siguientes: services, vistas con HTMX, pruebas de autorización).
 - Borrar con "Deshacer" (ADR-016): `x-data="deletable"` + `data-delete-url` / `data-ids` / `data-undo-message`; la vista responde 204 si llega `X-Undo-Commit`.

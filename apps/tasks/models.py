@@ -16,6 +16,7 @@ from apps.core.models import (
     HouseholdOwnedQuerySet,
     Visibility,
 )
+from apps.core.recurrence import describe
 
 
 class TaskLabel(HouseholdOwnedModel):
@@ -79,6 +80,9 @@ class Task(HouseholdOwnedModel):
         _("prioridad"), max_length=8, choices=Priority, default=Priority.MEDIUM
     )
     completed_at = models.DateTimeField(null=True, blank=True)
+    # Repetición (RRULE, ADR-012): al terminarla se crea la siguiente con la nueva fecha.
+    recurrence_rule = models.CharField(_("repetición"), max_length=200, blank=True)
+    recurrence_spawned = models.BooleanField(default=False)  # ya se creó la siguiente
     labels = models.ManyToManyField(TaskLabel, blank=True, related_name="tasks")
 
     objects = TaskQuerySet.as_manager()
@@ -91,6 +95,10 @@ class Task(HouseholdOwnedModel):
 
     def __str__(self):
         return self.title
+
+    @property
+    def recurrence_text(self) -> str:
+        return describe(self.recurrence_rule)
 
     @property
     def is_done(self) -> bool:

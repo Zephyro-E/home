@@ -44,6 +44,7 @@
       {% include "partials/field.html" with field=form.priority %}
       {% if form.status %}{% include "partials/field.html" with field=form.status %}{% endif %}
     </div>
+    {% include "partials/recurrence_fields.html" %}
     {% include "partials/field.html" with field=form.description %}
     <fieldset>
       <legend class="mb-1.5 text-sm font-medium">{{ form.labels.label }}</legend>

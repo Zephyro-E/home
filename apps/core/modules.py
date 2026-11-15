@@ -60,6 +60,7 @@ MODULES: list[Module] = [
         "calendar",
         "bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300",
         phase=4,
+        url_name="calendar:month",
         in_bottom_nav=True,
     ),
     Module(

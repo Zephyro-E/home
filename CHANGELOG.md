@@ -2,6 +2,18 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.5.0] - 2026-11-15 · Fase 4: calendario
+
+### Añadido
+- Calendario con vistas de mes, semana y agenda (60 días), generadas en el servidor (ADR-018).
+- Eventos con tipo (evento, cita, cumpleaños, celebración, viaje), lugar, participantes, día completo o con hora, de varios días, del hogar o personales.
+- Repeticiones: cada día / semana / mes / año, cada N y hasta una fecha (RRULE, `python-dateutil`); conservan la hora con el cambio de horario.
+- Los cumpleaños se marcan solos como día completo y anuales.
+- Las tareas con fecha aparecen en el calendario sin duplicarse.
+- Tareas recurrentes: al terminarlas se crea la siguiente con su nueva fecha.
+- El aviso "Para hoy" del inicio incluye los eventos del día.
+- 270 pruebas automáticas.
+
 ## [0.4.0] - 2026-11-15 · Fase 3: tareas
 
 ### Añadido

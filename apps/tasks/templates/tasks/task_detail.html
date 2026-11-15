@@ -30,6 +30,7 @@
       <dd class="flex items-center gap-2">{% if task.assignee %}{% include "partials/avatar.html" with user=task.assignee color=colors|get_item:task.assignee_id size="sm" %}{{ task.assignee }}{% else %}<span class="text-muted">{% translate "Nadie" %}</span>{% endif %}</dd>
       <dt class="text-muted">{% translate "Fecha límite" %}</dt>
       <dd>{% if task.due_date %}<span class="{% if task.due_state == 'overdue' %}font-semibold text-red-700 dark:text-red-300{% elif task.due_state == 'today' %}font-semibold text-amber-700 dark:text-amber-300{% endif %}">{% translate "l, j \d\e F" as date_format %}{{ task.due_date|date:date_format }}{% if task.due_state == 'overdue' %} · {% translate "Vencida" %}{% elif task.due_state == 'today' %} · {% translate "Hoy" %}{% endif %}</span>{% else %}<span class="text-muted">{% translate "Sin fecha" %}</span>{% endif %}</dd>
+      {% if task.recurrence_rule %}<dt class="text-muted">{% translate "Repetición" %}</dt><dd>{{ task.recurrence_text }}</dd>{% endif %}
       <dt class="text-muted">{% translate "Prioridad" %}</dt><dd>{{ task.get_priority_display }}</dd>
       <dt class="text-muted">{% translate "Creada por" %}</dt><dd>{{ task.owner }}</dd>
     </dl>

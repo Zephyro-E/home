@@ -22,6 +22,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 015 | Todas las páginas exigen sesión por defecto | Aceptada | 2026-11-14 |
 | 016 | "Deshacer": confirmación al salir de la página | Aceptada | 2026-11-15 |
 | 017 | Arrastrar y soltar con SortableJS | Aceptada | 2026-11-15 |
+| 018 | Calendario generado en el servidor (sin FullCalendar) | Aceptada | 2026-11-15 |
 
 ---
 
@@ -49,7 +50,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 
 **Por qué encaja.** Django incluye de serie autenticación, sesiones, protección CSRF, migraciones, validación de formularios, internacionalización, panel de administración y un ORM que impide inyección SQL. Menos librerías = menos cosas que mantener y menos errores que la IA pueda introducir.
 
-**Librerías complementarias previstas (se añaden cuando su fase lo requiera):** `django-htmx`, `argon2-cffi`, `Pillow`, `whitenoise`, `waitress` (servidor en Windows), `python-dateutil` (RRULE), `pytest-django`, `ruff`; SortableJS (kanban), Chart.js (gráficos), FullCalendar (calendario).
+**Librerías complementarias previstas (se añaden cuando su fase lo requiera):** `django-htmx`, `argon2-cffi`, `Pillow`, `whitenoise`, `waitress` (servidor en Windows), `python-dateutil` (RRULE), `pytest-django`, `ruff`; SortableJS (kanban), Chart.js (gráficos). FullCalendar se descartó (ADR-018).
 
 **Consecuencias.** Cambia la propuesta inicial (React + Fastify). No habrá API REST pública en las primeras fases: las vistas devuelven HTML. Si en el futuro se necesitara una app nativa o integraciones, se añadiría una API (Django Ninja o DRF) sobre los mismos servicios.
 
@@ -174,3 +175,15 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 **Decisión.** El tablero de tareas usa SortableJS 1.15.6 (MIT), copiado en `static/js/sortable.min.js` y cargado solo en esa página (sin CDN, como HTMX y Alpine). Se usa su modo propio de arrastre (`forceFallback`), que se comporta igual con ratón y en pantallas táctiles; en táctil hay que mantener pulsado un momento para no interferir con el desplazamiento.
 
 **Funcionamiento.** Al soltar, se envía al servidor la columna de destino y el orden de esa columna; el servidor solo reordena las tareas que la persona puede ver y editar, y devuelve el tablero actualizado (HTMX). Como alternativa accesible y cómoda en el móvil, cada tarjeta tiene un botón para pasar a la columna siguiente (Empezar, Terminar, Reabrir).
+
+---
+
+## ADR-018 · Calendario generado en el servidor (sin FullCalendar)
+
+**Contexto.** ADR-002 preveía FullCalendar para las vistas del calendario. Es una librería grande, pensada sobre todo para escritorio, y obliga a exponer los datos como JSON.
+
+**Decisión.** Las vistas de mes, semana y agenda se generan en el servidor con plantillas de Django, como el resto de la aplicación. Las repeticiones se expanden al consultar (`apps/events/services.py`, `items_between`) con `python-dateutil`, en hora local para que un evento conserve su hora tras el cambio de horario. Las tareas con fecha límite se proyectan en el mismo listado sin copiarse.
+
+**Consecuencias.** Menos JavaScript y la misma lógica de permisos que el resto. No hay arrastrar eventos para cambiarlos de hora (se editan con el formulario). El rango consultado está limitado (400 días) para que nunca se expandan series enormes.
+
+**Nota.** La app se llama `apps/events` (el nombre `calendar` choca con el módulo estándar de Python), pero sus URL usan el espacio de nombres `calendar` y la ruta `/calendario/`.

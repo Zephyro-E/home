@@ -84,9 +84,23 @@ TaskComment          task, author, body, created_at
 Reglas: assignee debe ser miembro del hogar; si la tarea es private, solo su dueño.
 ```
 
+## Calendario (Fase 4, implementado en `apps/events/models.py`)
+
+```
+Event                (HouseholdOwnedModel)
+  title, kind ('general'|'appointment'|'birthday'|'celebration'|'trip'),
+  description, location, all_day,
+  starts_at/ends_at (UTC, si tiene hora)  ó  start_date/end_date (date, día completo),
+  recurrence_rule (RRULE sin DTSTART, p. ej. "FREQ=WEEKLY;INTERVAL=2;UNTIL=20270301T235959"),
+  participants → User (muchos a muchos; miembros del hogar; en privados solo el dueño)
+
+Task (ampliado)      recurrence_rule, recurrence_spawned (ya se creó la siguiente)
+```
+
+Las tareas con `due_date` se proyectan en el calendario al consultar, sin copiarse.
+
 ## Módulos posteriores (esbozo)
 
-- **Calendario (F4)**: `Event` (HouseholdOwnedModel: title, description, kind, starts_at/ends_at o start_date/end_date si es de día completo, location, recurrence_rule), `EventParticipant`. Las tareas con `due_date` se proyectan al consultar, sin copiarse.
 - **Películas y series (F5)**: `Title` (tipo, género, año, sinopsis, imagen, plataforma, estado), `TitleRating` (por persona), `SeriesProgress` (temporada, episodio).
 - **Sitios (F5)**: `Place` (categoría, ubicación, lat/lon opcionales, url, estado, imágenes), `PlaceRating`, `PlaceComment`.
 - **Finanzas (F6–F7)**: `Account` (personal o común), `Category`, `Transaction` (tipo ingreso / gasto / transferencia, importe en céntimos, fecha, cuenta, visibilidad), `TransactionSplit` (persona, parte en céntimos), `Budget` (mes, categoría, importe), `SavingsGoal`, `Settlement` (liquidación de saldos entre miembros).

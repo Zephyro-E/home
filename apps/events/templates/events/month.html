@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Calendario" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "events/partials/header.html" with new_date=selected %}
+
+<section class="rounded-2xl border border-border bg-surface p-3 shadow-sm md:p-4" aria-labelledby="mes">
+  <div class="mb-3 flex items-center justify-between gap-2">
+    <a href="?mes={{ prev_month|date:'Y-m' }}" class="grid size-9 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes anterior' %}">{% icon "chevron-left" "size-5" %}</a>
+    <h2 id="mes" class="font-semibold first-letter:uppercase">{{ month|date:"F Y" }}</h2>
+    <div class="flex items-center gap-1">
+      {% if month.month != today.month or month.year != today.year %}<a href="?" class="rounded-lg px-2 py-1 text-sm font-medium text-accent hover:bg-surface-2">{% translate "Hoy" %}</a>{% endif %}
+      <a href="?mes={{ next_month|date:'Y-m' }}" class="grid size-9 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes siguiente' %}">{% icon "chevron-right" "size-5" %}</a>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-7 text-center text-xs font-medium uppercase text-muted" aria-hidden="true">
+    {% for d in weekdays %}<div class="py-1">{{ d|date:"D" }}</div>{% endfor %}
+  </div>
+  <div class="grid grid-cols-7 gap-px overflow-hidden rounded-xl border border-border bg-border">
+    {% for week in weeks %}{% for day, items in week %}
+    <a href="?mes={{ month|date:'Y-m' }}&amp;dia={{ day|date:'Y-m-d' }}#dia"
+       class="flex min-h-14 min-w-0 flex-col gap-1 p-1 text-left md:min-h-24 md:p-1.5 {% if day.month != month.month %}bg-surface-2 text-muted{% else %}bg-surface{% endif %} {% if day == selected %}ring-2 ring-inset ring-accent{% endif %} hover:bg-surface-2"
+       aria-label="{{ day|date:'l j F' }}{% if items %} ({{ items|length }}){% endif %}" {% if day == selected %}aria-current="date"{% endif %}>
+      <span class="grid size-6 place-items-center rounded-full text-xs font-medium md:text-sm {% if day == today %}bg-accent text-accent-fg{% endif %}">{{ day.day }}</span>
+      {# Móvil: puntos. Escritorio: títulos. #}
+      <span class="flex flex-wrap gap-0.5 md:hidden">{% for item in items|slice:":4" %}<span class="size-1.5 rounded-full {{ item.dot }}"></span>{% endfor %}</span>
+      <span class="hidden min-w-0 flex-col gap-0.5 md:flex">
+        {% for item in items|slice:":3" %}<span class="truncate rounded px-1 text-[11px] leading-4 {{ item.color }} {% if item.done %}line-through opacity-70{% endif %}">{% if not item.all_day %}{{ item.start|time:"H:i" }} {% endif %}{{ item.title }}</span>{% endfor %}
+        {% if items|length > 3 %}<span class="px-1 text-[11px] text-muted">{% blocktranslate trimmed with n=items|length|add:"-3" %}+{{ n }} más{% endblocktranslate %}</span>{% endif %}
+      </span>
+    </a>
+    {% endfor %}{% endfor %}
+  </div>
+</section>
+
+<section id="dia" class="mt-5 rounded-2xl border border-border bg-surface p-4 shadow-sm" aria-labelledby="dia-titulo">
+  <div class="mb-2 flex items-center justify-between gap-2">
+    <h2 id="dia-titulo" class="font-semibold first-letter:uppercase">{% translate "l, j \d\e F" as date_format %}{{ selected|date:date_format }}</h2>
+    <a href="{% url 'calendar:create' %}?fecha={{ selected|date:'Y-m-d' }}" class="flex items-center gap-1 text-sm font-medium text-accent hover:underline">{% icon "plus" "size-4" %}{% translate "Añadir" %}</a>
+  </div>
+  {% if selected_items %}
+  <ul class="-mx-2">{% for item in selected_items %}{% include "events/partials/item.html" %}{% endfor %}</ul>
+  {% else %}
+  <p class="text-sm text-muted">{% translate "Nada este día." %}</p>
+  {% endif %}
+</section>
+{% endblock %}

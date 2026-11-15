@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from . import services
 from .models import Household
+from .recurrence import FREQUENCIES, build_rule, parse_rule
 
 User = get_user_model()
 
@@ -130,3 +131,32 @@ class ProfileForm(StyledFormMixin, forms.ModelForm):
 
 class StyledPasswordChangeForm(StyledFormMixin, PasswordChangeForm):
     pass
+
+
+class RecurrenceFieldsMixin:
+    """Añade los campos "Repetir", "Cada" y "Hasta" a un formulario y los convierte en
+    RRULE (ver apps/core/recurrence.py). Usar con `recurrence_initial(rule)` al editar."""
+
+    def add_recurrence_fields(self, rule: str = ""):
+        data = parse_rule(rule)
+        self.fields["repeat_freq"] = forms.ChoiceField(
+            label=_("Repetir"), choices=FREQUENCIES, required=False, initial=data["freq"]
+        )
+        self.fields["repeat_interval"] = forms.IntegerField(
+            label=_("Cada"), min_value=1, max_value=99, required=False, initial=data["interval"]
+        )
+        self.fields["repeat_until"] = forms.DateField(
+            label=_("Hasta (opcional)"),
+            required=False,
+            initial=data["until"],
+            widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+        )
+        for name in ("repeat_freq", "repeat_interval", "repeat_until"):
+            self.fields[name].widget.attrs.setdefault("class", INPUT_CSS)
+
+    def recurrence_rule(self) -> str:
+        return build_rule(
+            self.cleaned_data.get("repeat_freq") or "",
+            self.cleaned_data.get("repeat_interval") or 1,
+            self.cleaned_data.get("repeat_until"),
+        )

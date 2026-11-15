@@ -1,0 +1,15 @@
+{% load i18n %}{# Campos de repetición (RecurrenceFieldsMixin). Parámetro: form #}
+<fieldset x-data="{ freq: '{{ form.repeat_freq.value|default_if_none:''|escapejs }}' }" @set-yearly.window="freq = 'YEARLY'; more = true">
+  <legend class="sr-only">{% translate "Repetición" %}</legend>
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div>
+      <label for="{{ form.repeat_freq.id_for_label }}" class="mb-1.5 block text-sm font-medium">{{ form.repeat_freq.label }}</label>
+      <select name="{{ form.repeat_freq.html_name }}" id="{{ form.repeat_freq.id_for_label }}" x-model="freq" class="{{ form.repeat_freq.field.widget.attrs.class }}">
+        {% for value, label in form.repeat_freq.field.choices %}<option value="{{ value }}" {% if form.repeat_freq.value == value %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </div>
+    <div x-show="freq" x-cloak>{% include "partials/field.html" with field=form.repeat_interval %}</div>
+    <div x-show="freq" x-cloak>{% include "partials/field.html" with field=form.repeat_until %}</div>
+  </div>
+  {% for error in form.repeat_freq.errors %}<p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ error }}</p>{% endfor %}
+</fieldset>
