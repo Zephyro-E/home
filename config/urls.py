@@ -12,5 +12,6 @@ urlpatterns = [
     path("calendario/", include("apps.events.urls")),
     path("peliculas/", include("apps.media.urls")),
     path("sitios/", include("apps.places.urls")),
+    path("finanzas/", include("apps.finance.urls")),
     path("", include("apps.core.urls")),
 ]

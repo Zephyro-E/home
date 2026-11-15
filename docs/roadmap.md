@@ -14,7 +14,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **— MVP —** | Uso real en casa durante ~2 semanas, copias automáticas, ajustes según la experiencia | | ⬜ |
 | **4. Calendario** | Eventos y tipos, participantes, vistas mes / semana / agenda, recurrencias (RRULE), tareas proyectadas, tareas recurrentes | L | ✅ 2026-11-15 |
 | **5. Películas/series y Sitios** | CRUD con patrón común, valoraciones por persona, progreso de series, selección aleatoria de sitio pendiente | M | ✅ 2026-11-15 |
-| **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ⬜ |
+| **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ✅ 2026-11-15 |
 | **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ⬜ |
 | **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ⬜ |
 | **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ⬜ |
@@ -62,6 +62,14 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Decisiones: el progreso de una serie es de cada persona; apuntar progreso pasa una serie "por ver" a "viendo"; "¿Qué vemos?" también se añadió para películas y series (el plan solo lo pedía para sitios); "Ver en el mapa" abre una búsqueda en OpenStreetMap (no se usa ninguna API ni se envía nada hasta que se pulsa).
 - Mejora de navegación: en el móvil, "Más" muestra arriba los módulos que no caben en la barra inferior.
 - Pendiente (futuro): mapa con los sitios, datos automáticos de películas (TMDB), votación de qué ver.
+
+## Notas de la Fase 6
+
+- Verificado: 384 pruebas automáticas (saldos, privacidad de cuentas y movimientos, resumen mensual sin transferencias, validaciones y autorización de cada vista) y recorrido en el navegador sobre una copia aparte, entrando como miembro sin administración: resumen, saldos, aportación desde una cuenta personal ajena mostrada como "Cuenta personal de Ana", formulario con "Guardar y añadir otro", móvil y modo oscuro.
+- Privacidad (ADR-019): las cuentas son comunes o personales; un movimiento que toca una cuenta común es común; para editarlo hay que poder usar todas sus cuentas. La privacidad de una cuenta no se cambia después.
+- Categorías por defecto (supermercado, casa y facturas, restaurantes…) que se crean solas la primera vez; comunes al hogar. Una cuenta con movimientos no se borra: se archiva.
+- Fallo encontrado y corregido en la verificación: el resumen se desbordaba 13 px en el móvil.
+- Pendiente para la Fase 7: gastos compartidos y repartos, saldos entre miembros, presupuestos, ahorro y gráficos.
 
 ## Requisitos transversales: cuándo llega cada uno
 

@@ -32,7 +32,8 @@ def cents_to_input(cents: int | None) -> str:
 
 
 def format_euros(cents: int | None) -> str:
-    """Importe para mostrar: 1250 → "12,50 €"."""
+    """Importe para mostrar: 1250 → "12,50 €"; -1250 → "−12,50 €"."""
     if cents is None:
         return ""
-    return f"{number_format(Decimal(cents) / 100, 2, force_grouping=True)} €"
+    sign = "−" if cents < 0 else ""
+    return f"{sign}{number_format(Decimal(abs(cents)) / 100, 2, force_grouping=True)} €"

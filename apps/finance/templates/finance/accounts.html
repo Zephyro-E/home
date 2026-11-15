@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Cuentas" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "finance/partials/nav.html" with active="accounts" %}
+
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <p class="text-sm text-muted">{% translate "Total en cuentas activas que ves:" %} <span class="font-semibold text-fg tabular-nums">{{ total|euros }}</span></p>
+  <a href="{% url 'finance:account_create' %}" class="flex items-center gap-1.5 rounded-xl border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "plus" "size-4" %}{% translate "Nueva cuenta" %}</a>
+</div>
+
+{% if active %}
+<ul class="grid gap-3 sm:grid-cols-2">
+  {% for account in active %}
+  <li class="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+    <div class="flex items-start justify-between gap-2">
+      <div class="min-w-0">
+        <p class="flex items-center gap-1.5 font-semibold"><span class="truncate">{{ account.name }}</span>{% if account.visibility == "private" %}{% icon "lock" "size-3.5 shrink-0 text-muted" %}{% endif %}</p>
+        <p class="text-xs text-muted">{{ account.get_kind_display }} · {% if account.visibility == "shared" %}{% translate "Común" %}{% else %}{% translate "Personal" %}{% endif %}</p>
+      </div>
+      {% if account.visibility == "shared" or account.owner == user %}<a href="{% url 'finance:account_edit' account.pk %}" class="grid size-8 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg" aria-label="{% blocktranslate trimmed with name=account.name %}Editar {{ name }}{% endblocktranslate %}">{% icon "pencil" "size-4" %}</a>{% endif %}
+    </div>
+    <p class="mt-3 text-2xl font-semibold tabular-nums {% if account.balance < 0 %}text-red-700 dark:text-red-400{% endif %}">{{ account.balance|euros }}</p>
+    <div class="mt-3 flex gap-3 text-sm font-medium">
+      <a href="{% url 'finance:transactions' %}?cuenta={{ account.pk }}" class="text-accent hover:underline">{% translate "Movimientos" %}</a>
+      <a href="{% url 'finance:transaction_create' %}?cuenta={{ account.pk }}" class="text-accent hover:underline">{% translate "Apuntar" %}</a>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+  <span class="mx-auto grid size-12 place-items-center rounded-2xl bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300">{% icon "landmark" "size-6" %}</span>
+  <p class="mt-3 font-medium">{% translate "Aún no hay cuentas" %}</p>
+  <p class="mt-1 text-sm text-muted">{% translate "Crea la cuenta común del banco, el efectivo o tus cuentas personales." %}</p>
+</div>
+{% endif %}
+
+{% if archived %}
+<section class="mt-8" aria-labelledby="archivadas">
+  <h2 id="archivadas" class="mb-2 text-sm font-semibold uppercase tracking-wide text-muted">{% translate "Archivadas" %}</h2>
+  <ul class="divide-y divide-border rounded-2xl border border-border bg-surface">
+    {% for account in archived %}
+    <li class="flex items-center justify-between gap-2 px-4 py-2.5 text-sm text-muted">
+      <a href="{% url 'finance:account_edit' account.pk %}" class="hover:underline">{{ account.name }}</a>
+      <span class="tabular-nums">{{ account.balance|euros }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock %}

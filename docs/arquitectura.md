@@ -17,7 +17,7 @@ Waitress (servidor WSGI) ──► Django
                                ├─ events      calendario: eventos, repeticiones, tareas proyectadas
                                ├─ media       películas y series
                                ├─ places      sitios que visitar
-                               ├─ finance     cuentas, movimientos, repartos       (fases 6–7)
+                               ├─ finance     cuentas, categorías, movimientos (repartos en la fase 7)
                                └─ recipes     recetario                            (fase 8)
                                ▼
                            SQLite (WAL)  +  carpeta media/ (imágenes subidas)

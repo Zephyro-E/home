@@ -88,6 +88,7 @@ MODULES: list[Module] = [
         "wallet",
         "bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300",
         phase=6,
+        url_name="finance:summary",
     ),
     Module(
         "recipes",

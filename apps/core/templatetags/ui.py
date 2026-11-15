@@ -72,3 +72,22 @@ def euros(cents):
 def get_item(mapping, key):
     """Lee una clave de un diccionario: {{ colores|get_item:user.pk }}."""
     return mapping.get(key) if hasattr(mapping, "get") else None
+
+
+# Versión intensa del color (puntos y barras).
+MEMBER_DOT_CLASSES = {
+    "teal": "bg-teal-500",
+    "violet": "bg-violet-500",
+    "amber": "bg-amber-500",
+    "rose": "bg-rose-500",
+    "sky": "bg-sky-500",
+    "lime": "bg-lime-500",
+    "orange": "bg-orange-500",
+    "fuchsia": "bg-fuchsia-500",
+}
+
+
+@register.simple_tag
+def member_dot(color: str) -> str:
+    """Color intenso para puntos y barras: {% member_dot categoria.color %}."""
+    return MEMBER_DOT_CLASSES.get(color, MEMBER_DOT_CLASSES["teal"])

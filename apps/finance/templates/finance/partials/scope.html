@@ -1,0 +1,6 @@
+{% load i18n %}{# Selector Todo / Común / Personal. Usa: scope, month #}
+<div class="flex rounded-full border border-border p-0.5 text-sm" role="group" aria-label="{% translate 'Qué mostrar' %}">
+  <a href="?mes={{ month|date:'Y-m' }}" class="rounded-full px-3 py-1 {% if not scope %}bg-accent-soft font-medium{% else %}text-muted{% endif %}">{% translate "Todo" %}</a>
+  <a href="?mes={{ month|date:'Y-m' }}&amp;ver=comun" class="rounded-full px-3 py-1 {% if scope == 'comun' %}bg-accent-soft font-medium{% else %}text-muted{% endif %}">{% translate "Común" %}</a>
+  <a href="?mes={{ month|date:'Y-m' }}&amp;ver=mio" class="rounded-full px-3 py-1 {% if scope == 'mio' %}bg-accent-soft font-medium{% else %}text-muted{% endif %}">{% translate "Personal" %}</a>
+</div>

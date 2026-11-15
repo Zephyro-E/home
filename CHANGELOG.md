@@ -2,6 +2,18 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
+## [0.7.0] - 2026-11-15 · Fase 6: finanzas I
+
+### Añadido
+- Cuentas comunes o personales (banco, efectivo, tarjeta, ahorro) con saldo inicial y saldo actual; archivar cuentas.
+- Movimientos: gastos, ingresos y transferencias entre cuentas, con concepto, categoría y notas; "Guardar y añadir otro".
+- Categorías de gastos e ingresos con colores; se crean unas por defecto.
+- Resumen mensual: ingresos, gastos y balance (sin contar transferencias), gastos por categoría, saldos y últimos movimientos; ver todo, solo lo común o solo lo personal.
+- Lista de movimientos por mes con filtros por tipo, cuenta y categoría.
+- Privacidad por cuenta (ADR-019): lo que toca una cuenta común lo ve todo el hogar; las cuentas personales ajenas aparecen como "Cuenta personal de X".
+- Importes negativos con formato "−12,50 €".
+- 384 pruebas automáticas.
+
 ## [0.6.1] - 2026-11-15
 
 ### Corregido

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hogar VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 13:45+0100\n"
+"POT-Creation-Date: 2026-11-15 13:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -42,6 +42,10 @@ msgstr ", until %(date)s"
 #: apps/shopping/models.py:105
 msgid "A favor"
 msgstr "In favour"
+
+#: apps/finance/forms.py:84
+msgid "A la cuenta"
+msgstr "To account"
 
 #: apps/media/models.py:20
 msgid "Abandonada"
@@ -79,13 +83,17 @@ msgstr "It is now a shared proposal: the rest of the household can see it."
 msgid "Ahora la tarea es del hogar: el resto ya la ve."
 msgstr "The task now belongs to the household: everyone else can see it."
 
-#: apps/media/views.py:156
+#: apps/media/views.py:158
 msgid "Ahora la ve todo el hogar."
 msgstr "The whole household can see it now."
 
 #: apps/places/views.py:163
 msgid "Ahora lo ve todo el hogar."
 msgstr "The whole household can see it now."
+
+#: apps/finance/models.py:20
+msgid "Ahorro"
+msgstr "Savings"
 
 #: apps/core/forms.py:73
 msgid "Al menos 8 caracteres; evita contraseñas comunes o solo numéricas."
@@ -103,6 +111,10 @@ msgstr "Revoke"
 msgid "Aprobado"
 msgstr "Approved"
 
+#: apps/finance/templates/finance/transactions.html:51
+msgid "Apunta gastos e ingresos para ver a dónde va el dinero."
+msgstr "Record expenses and income to see where the money goes."
+
 #: apps/shopping/templates/shopping/wishes.html:42
 msgid "Apunta lo que te gustaría tener. Solo lo verás tú, hasta que decidas compartirlo."
 msgstr "Write down what you'd like to have. Only you will see it, until you decide to share it."
@@ -114,6 +126,22 @@ msgstr "Write down films and series people recommend so you do not forget them."
 #: apps/places/templates/places/list.html:62
 msgid "Apunta restaurantes, excursiones o viajes que os apetezcan."
 msgstr "Write down restaurants, outings or trips you fancy."
+
+#: apps/finance/templates/finance/accounts.html:28
+msgid "Apuntar"
+msgstr "Record"
+
+#: apps/finance/templates/finance/accounts.html:43
+msgid "Archivadas"
+msgstr "Archived"
+
+#: apps/finance/templates/finance/account_form.html:34
+msgid "Archivar cuenta"
+msgstr "Archive account"
+
+#: apps/finance/templates/finance/account_form.html:42
+msgid "Archivar oculta la cuenta del resumen y de los formularios, pero conserva sus movimientos."
+msgstr "Archiving hides the account from the summary and forms, but keeps its transactions."
 
 #: apps/events/templates/events/agenda.html:25
 msgid "Añade citas, cumpleaños o planes. Las tareas con fecha también aparecen aquí."
@@ -166,6 +194,10 @@ msgstr "Add a to-do task…"
 msgid "Año no válido."
 msgstr "Invalid year."
 
+#: apps/finance/templates/finance/accounts.html:36
+msgid "Aún no hay cuentas"
+msgstr "No accounts yet"
+
 #: apps/tasks/templates/tasks/labels.html:29 apps/tasks/templates/tasks/task_form.html:58
 msgid "Aún no hay etiquetas."
 msgstr "No labels yet."
@@ -182,6 +214,10 @@ msgstr "You have no personal wishes yet"
 msgid "Baja"
 msgstr "Low"
 
+#: apps/finance/templates/finance/summary.html:29
+msgid "Balance"
+msgstr "Balance"
+
 #: apps/places/models.py:13
 msgid "Bar o cafetería"
 msgstr "Bar or café"
@@ -190,17 +226,19 @@ msgstr "Bar or café"
 msgid "Bienvenida"
 msgstr "Welcome"
 
-#: apps/media/views.py:165
+#: apps/media/views.py:167
 msgid "Borrado."
 msgstr "Deleted."
 
-#: apps/events/templates/events/event_detail.html:16 apps/media/templates/media/detail.html:11
+#: apps/events/templates/events/event_detail.html:16
+#: apps/finance/templates/finance/transaction_form.html:12 apps/media/templates/media/detail.html:11
 #: apps/places/templates/places/detail.html:11 apps/shopping/templates/shopping/wish_detail.html:17
 #: apps/tasks/templates/tasks/task_detail.html:16
 msgid "Borrando…"
 msgstr "Deleting…"
 
-#: apps/events/templates/events/event_detail.html:75 apps/media/templates/media/detail.html:35
+#: apps/events/templates/events/event_detail.html:75
+#: apps/finance/templates/finance/transaction_form.html:54 apps/media/templates/media/detail.html:35
 #: apps/places/templates/places/detail.html:50 apps/shopping/templates/shopping/wish_detail.html:66
 #: apps/tasks/templates/tasks/task_detail.html:50
 msgid "Borrar"
@@ -211,10 +249,19 @@ msgstr "Delete"
 msgid "Borrar %(name)s"
 msgstr "Delete %(name)s"
 
+#: apps/finance/templates/finance/partials/category_list.html:10
+#, python-format
+msgid "Borrar categoría %(name)s"
+msgstr "Delete category %(name)s"
+
 #: apps/shopping/templates/shopping/wish_detail.html:103 apps/tasks/templates/tasks/task_detail.html:86
 #: templates/partials/comments.html:14
 msgid "Borrar comentario"
 msgstr "Delete comment"
+
+#: apps/finance/templates/finance/account_form.html:39
+msgid "Borrar cuenta"
+msgstr "Delete account"
 
 #: apps/tasks/templates/tasks/labels.html:24
 #, python-format
@@ -299,8 +346,8 @@ msgstr "Switch household"
 msgid "Cambiar tema"
 msgstr "Change theme"
 
-#: apps/events/views.py:187 apps/media/views.py:115 apps/places/views.py:125 apps/shopping/views.py:186
-#: apps/tasks/views.py:182
+#: apps/events/views.py:187 apps/finance/views.py:180 apps/finance/views.py:274 apps/media/views.py:117
+#: apps/places/views.py:125 apps/shopping/views.py:186 apps/tasks/views.py:182
 msgid "Cambios guardados."
 msgstr "Changes saved."
 
@@ -316,9 +363,28 @@ msgstr "Quantity"
 msgid "Casa"
 msgstr "Home"
 
-#: apps/places/templates/places/list.html:22 apps/places/templates/places/random.html:10
+#: apps/finance/models.py:139
+msgid "Casa y facturas"
+msgstr "Home and bills"
+
+#: apps/finance/forms.py:87 apps/finance/forms.py:93
+#: apps/finance/templates/finance/transactions.html:31 apps/places/templates/places/list.html:22
+#: apps/places/templates/places/random.html:10
 msgid "Categoría"
 msgstr "Category"
+
+#: apps/finance/views.py:311
+msgid "Categoría creada."
+msgstr "Category created."
+
+#: apps/finance/templates/finance/partials/category_list.html:6
+#, python-format
+msgid "Categoría «%(name)s» borrada"
+msgstr "Category “%(name)s” deleted"
+
+#: apps/finance/templates/finance/categories.html:4 apps/finance/templates/finance/partials/nav.html:11
+msgid "Categorías"
+msgstr "Categories"
 
 #: apps/events/models.py:21
 msgid "Celebración"
@@ -340,7 +406,8 @@ msgstr "Appointment"
 msgid "Claro"
 msgstr "Light"
 
-#: apps/tasks/forms.py:92 apps/tasks/templates/tasks/labels.html:39
+#: apps/finance/forms.py:164 apps/finance/templates/finance/categories.html:26 apps/tasks/forms.py:92
+#: apps/tasks/templates/tasks/labels.html:39
 msgid "Color"
 msgstr "Colour"
 
@@ -385,6 +452,18 @@ msgstr "Bought"
 msgid "Compras"
 msgstr "Shopping"
 
+#: apps/finance/templates/finance/accounts.html:21 apps/finance/templates/finance/partials/scope.html:4
+msgid "Común"
+msgstr "Shared"
+
+#: apps/finance/forms.py:45
+msgid "Común: la ve y la usa todo el hogar"
+msgstr "Shared: the whole household sees and uses it"
+
+#: apps/finance/forms.py:81
+msgid "Concepto"
+msgstr "Description"
+
 #: templates/core/setup.html:7
 msgid "Configuremos tu hogar"
 msgstr "Let's set up your household"
@@ -413,9 +492,17 @@ msgstr "Email"
 msgid "Correo o contraseña incorrectos."
 msgstr "Incorrect email or password."
 
+#: apps/finance/templates/finance/accounts.html:37
+msgid "Crea la cuenta común del banco, el efectivo o tus cuentas personales."
+msgstr "Create the shared bank account, cash or your personal accounts."
+
 #: templates/core/invitation.html:28
 msgid "Crea tu cuenta para entrar."
 msgstr "Create your account to join."
+
+#: apps/finance/templates/finance/summary.html:70
+msgid "Crea tu primera cuenta para empezar a apuntar movimientos."
+msgstr "Create your first account to start recording transactions."
 
 #: templates/core/home.html:18
 msgid "Crea un enlace de invitación para que se unan los demás miembros."
@@ -437,6 +524,10 @@ msgstr "Created by"
 #, python-format
 msgid "Creado por %(name)s"
 msgstr "Created by %(name)s"
+
+#: apps/finance/templates/finance/categories.html:37
+msgid "Crear categoría"
+msgstr "Create category"
 
 #: templates/core/invitation.html:32
 msgid "Crear cuenta y unirme"
@@ -477,6 +568,32 @@ msgstr "Any member can change it. Votes help decide, but don't change it on thei
 #: apps/media/templates/media/random.html:10
 msgid "Cualquiera"
 msgstr "Any"
+
+#: apps/finance/forms.py:82 apps/finance/templates/finance/transactions.html:26
+msgid "Cuenta"
+msgstr "Account"
+
+#: apps/finance/models.py:17
+msgid "Cuenta bancaria"
+msgstr "Bank account"
+
+#: apps/finance/views.py:269
+msgid "Cuenta borrada."
+msgstr "Account deleted."
+
+#: apps/finance/views.py:245
+msgid "Cuenta creada."
+msgstr "Account created."
+
+#: apps/finance/templatetags/finance.py:16
+#, python-format
+msgid "Cuenta personal de %(name)s"
+msgstr "%(name)s’s personal account"
+
+#: apps/finance/templates/finance/account_form.html:7 apps/finance/templates/finance/accounts.html:4
+#: apps/finance/templates/finance/partials/nav.html:10 apps/finance/templates/finance/summary.html:57
+msgid "Cuentas"
+msgstr "Accounts"
 
 #: apps/events/models.py:20
 msgid "Cumpleaños"
@@ -567,6 +684,16 @@ msgstr "Uncheck %(name)s"
 msgid "Editar"
 msgstr "Edit"
 
+#: apps/finance/templates/finance/accounts.html:23
+#, python-format
+msgid "Editar %(name)s"
+msgstr "Edit %(name)s"
+
+#: apps/finance/templates/finance/account_form.html:4
+#: apps/finance/templates/finance/account_form.html:8
+msgid "Editar cuenta"
+msgstr "Edit account"
+
 #: apps/shopping/templates/shopping/wish_form.html:4 apps/shopping/templates/shopping/wish_form.html:10
 msgid "Editar deseo"
 msgstr "Edit wish"
@@ -575,6 +702,11 @@ msgstr "Edit wish"
 msgid "Editar evento"
 msgstr "Edit event"
 
+#: apps/finance/templates/finance/transaction_form.html:4
+#: apps/finance/templates/finance/transaction_form.html:11
+msgid "Editar movimiento"
+msgstr "Edit transaction"
+
 #: apps/places/templates/places/form.html:4 apps/places/templates/places/form.html:8
 msgid "Editar sitio"
 msgstr "Edit place"
@@ -582,6 +714,10 @@ msgstr "Edit place"
 #: apps/tasks/templates/tasks/task_form.html:4 apps/tasks/templates/tasks/task_form.html:10
 msgid "Editar tarea"
 msgstr "Edit task"
+
+#: apps/finance/models.py:18
+msgid "Efectivo"
+msgstr "Cash"
 
 #: apps/core/models.py:26
 msgid "El correo electrónico es obligatorio."
@@ -596,17 +732,29 @@ msgstr "The end cannot be before the start."
 msgid "El hogar debe tener al menos una persona con rol de administración."
 msgstr "The household must have at least one admin."
 
-#: apps/shopping/forms.py:82
+#: apps/finance/services.py:143
+msgid "El importe debe ser mayor que cero."
+msgstr "The amount must be greater than zero."
+
+#: apps/finance/forms.py:24 apps/shopping/forms.py:82
 msgid "El importe es demasiado alto."
 msgstr "The amount is too high."
 
-#: apps/media/services.py:95
+#: apps/media/services.py:97
 msgid "El progreso solo se apunta en series."
 msgstr "Progress can only be tracked for series."
 
 #: apps/tasks/services.py:36
 msgid "El responsable debe ser miembro del hogar."
 msgstr "The assignee must be a member of the household."
+
+#: apps/finance/services.py:155
+msgid "Elige una cuenta de destino distinta."
+msgstr "Choose a different destination account."
+
+#: apps/finance/services.py:151
+msgid "Elige una cuenta."
+msgstr "Choose an account."
 
 #: apps/tasks/templates/tasks/partials/task_card.html:37
 msgid "Empezar"
@@ -677,6 +825,18 @@ msgstr ""
 "This is the app's first start. Create your account and your household; then you can invite the "
 "other members."
 
+#: apps/finance/forms.py:17
+msgid "Escribe el importe."
+msgstr "Enter the amount."
+
+#: apps/finance/services.py:113
+msgid "Escribe el nombre de la categoría."
+msgstr "Enter the category name."
+
+#: apps/finance/services.py:30
+msgid "Escribe el nombre de la cuenta."
+msgstr "Enter the account name."
+
 #: apps/tasks/services.py:254
 msgid "Escribe el nombre de la etiqueta."
 msgstr "Enter the label name."
@@ -697,7 +857,7 @@ msgstr "Enter the task title."
 msgid "Escribe el título del evento."
 msgstr "Enter the event title."
 
-#: apps/media/services.py:41
+#: apps/media/services.py:43
 msgid "Escribe el título."
 msgstr "Enter the title."
 
@@ -714,7 +874,7 @@ msgstr "Write a comment."
 msgid "Escribe un comentario…"
 msgstr "Write a comment…"
 
-#: apps/shopping/forms.py:80
+#: apps/finance/forms.py:22 apps/shopping/forms.py:80
 msgid "Escribe un importe válido, por ejemplo 12,50."
 msgstr "Enter a valid amount, for example 12.50."
 
@@ -727,7 +887,7 @@ msgstr "This account is disabled."
 msgid "Estado"
 msgstr "Status"
 
-#: apps/media/services.py:63 apps/shopping/services.py:101 apps/tasks/services.py:48
+#: apps/media/services.py:65 apps/shopping/services.py:101 apps/tasks/services.py:48
 msgid "Estado no válido."
 msgstr "Invalid status."
 
@@ -774,6 +934,10 @@ msgstr "Events, appointments and birthdays"
 msgid "Fase %(phase)s"
 msgstr "Phase %(phase)s"
 
+#: apps/finance/forms.py:79
+msgid "Fecha"
+msgstr "Date"
+
 #: apps/tasks/templates/tasks/task_detail.html:31
 msgid "Fecha límite"
 msgstr "Due date"
@@ -791,19 +955,37 @@ msgstr "Filter by status"
 msgid "Filtrar tareas"
 msgstr "Filter tasks"
 
-#: apps/core/modules.py:86
+#: apps/core/modules.py:86 apps/finance/apps.py:7 apps/finance/templates/finance/partials/nav.html:3
+#: apps/finance/templates/finance/summary.html:4
 msgid "Finanzas"
 msgstr "Finances"
+
+#: apps/finance/models.py:43 apps/finance/models.py:72
+msgid "Gasto"
+msgstr "Expense"
+
+#: apps/finance/templates/finance/categories.html:12 apps/finance/templates/finance/summary.html:25
+msgid "Gastos"
+msgstr "Expenses"
+
+#: apps/finance/templates/finance/summary.html:36
+msgid "Gastos por categoría"
+msgstr "Expenses by category"
 
 #: apps/core/modules.py:87
 msgid "Gastos, presupuestos y ahorro"
 msgstr "Expenses, budgets and savings"
 
-#: apps/media/views.py:94
+#: apps/finance/templates/finance/summary.html:58
+msgid "Gestionar"
+msgstr "Manage"
+
+#: apps/media/views.py:96
 msgid "Guardado."
 msgstr "Saved."
 
-#: apps/events/templates/events/event_form.html:69 apps/media/templates/media/detail.html:62
+#: apps/events/templates/events/event_form.html:69 apps/finance/templates/finance/account_form.html:26
+#: apps/finance/templates/finance/transaction_form.html:57 apps/media/templates/media/detail.html:62
 #: apps/media/templates/media/form.html:43 apps/places/templates/places/form.html:40
 #: apps/shopping/templates/shopping/wish_form.html:49 apps/tasks/templates/tasks/task_form.html:64
 #: templates/core/household.html:32
@@ -813,6 +995,10 @@ msgstr "Save"
 #: templates/core/profile.html:20
 msgid "Guardar cambios"
 msgstr "Save changes"
+
+#: apps/finance/templates/finance/transaction_form.html:56
+msgid "Guardar y añadir otro"
+msgstr "Save and add another"
 
 #: templates/core/invitation.html:21
 #, python-format
@@ -854,8 +1040,9 @@ msgid "Hora de inicio"
 msgstr "Start time"
 
 #: apps/events/templates/events/agenda.html:15 apps/events/templates/events/month.html:14
-#: apps/events/templates/events/week.html:13 apps/tasks/templates/tasks/partials/task_card.html:25
-#: apps/tasks/templates/tasks/task_detail.html:32 templates/core/home.html:46
+#: apps/events/templates/events/week.html:13 apps/finance/templates/finance/summary.html:14
+#: apps/tasks/templates/tasks/partials/task_card.html:25 apps/tasks/templates/tasks/task_detail.html:32
+#: templates/core/home.html:46
 msgid "Hoy"
 msgstr "Today"
 
@@ -863,9 +1050,21 @@ msgstr "Today"
 msgid "Idioma"
 msgstr "Language"
 
+#: apps/finance/forms.py:73
+msgid "Importe (€)"
+msgstr "Amount (€)"
+
 #: apps/events/forms.py:102
 msgid "Indica la hora o marca «Todo el día»."
 msgstr "Enter a time or tick “All day”."
+
+#: apps/finance/models.py:44 apps/finance/models.py:73
+msgid "Ingreso"
+msgstr "Income"
+
+#: apps/finance/templates/finance/categories.html:16 apps/finance/templates/finance/summary.html:21
+msgid "Ingresos"
+msgstr "Income"
 
 #: templates/core/invitation.html:36
 msgid "Inicia sesión"
@@ -911,9 +1110,17 @@ msgstr "Invite someone"
 msgid "Ir al inicio"
 msgstr "Go to home"
 
+#: apps/finance/services.py:162
+msgid "La categoría no corresponde a este tipo de movimiento."
+msgstr "The category does not match this type of transaction."
+
 #: apps/core/services.py:46
 msgid "La configuración inicial ya se realizó."
 msgstr "The initial setup has already been done."
+
+#: apps/finance/services.py:61
+msgid "La cuenta tiene movimientos: archívala en lugar de borrarla."
+msgstr "The account has transactions: archive it instead of deleting it."
 
 #: apps/core/services.py:87
 msgid "La invitación no es válida, ya se utilizó o ha caducado."
@@ -946,6 +1153,10 @@ msgstr "Shopping list"
 #: apps/core/modules.py:39
 msgid "Lista de la compra y deseos"
 msgstr "Shopping list and wishes"
+
+#: apps/finance/forms.py:33
+msgid "Lo que hay en la cuenta al empezar a usar la app. Puede ser negativo."
+msgstr "What the account holds when you start using the app. It can be negative."
 
 #: apps/events/templates/events/agenda.html:8
 #, python-format
@@ -994,11 +1205,13 @@ msgstr "User menu"
 msgid "Mes"
 msgstr "Month"
 
-#: apps/events/templates/events/month.html:11
+#: apps/events/templates/events/month.html:11 apps/finance/templates/finance/summary.html:11
+#: apps/finance/templates/finance/transactions.html:11
 msgid "Mes anterior"
 msgstr "Previous month"
 
-#: apps/events/templates/events/month.html:15
+#: apps/events/templates/events/month.html:15 apps/finance/templates/finance/summary.html:13
+#: apps/finance/templates/finance/transactions.html:13
 msgid "Mes siguiente"
 msgstr "Next month"
 
@@ -1017,6 +1230,24 @@ msgstr "Members"
 #: apps/shopping/templates/shopping/wishes.html:16
 msgid "Mis deseos"
 msgstr "My wishes"
+
+#: apps/finance/templates/finance/transaction_form.html:9
+msgid "Movimiento borrado"
+msgstr "Transaction deleted"
+
+#: apps/finance/views.py:195
+msgid "Movimiento borrado."
+msgstr "Transaction deleted."
+
+#: apps/finance/views.py:146
+msgid "Movimiento guardado."
+msgstr "Transaction saved."
+
+#: apps/finance/templates/finance/accounts.html:27 apps/finance/templates/finance/partials/nav.html:9
+#: apps/finance/templates/finance/transaction_form.html:10
+#: apps/finance/templates/finance/transactions.html:4
+msgid "Movimientos"
+msgstr "Transactions"
 
 #: apps/places/models.py:14
 msgid "Museo o cultura"
@@ -1080,6 +1311,14 @@ msgstr "Main navigation"
 msgid "Netflix, cine, DVD…"
 msgstr "Netflix, cinema, DVD…"
 
+#: apps/finance/templates/finance/summary.html:50
+msgid "No hay gastos este mes."
+msgstr "No expenses this month."
+
+#: apps/finance/templates/finance/transactions.html:50
+msgid "No hay movimientos"
+msgstr "No transactions"
+
 #: apps/shopping/templates/shopping/wishes.html:39
 msgid "No hay nada con este estado"
 msgstr "Nothing with this status"
@@ -1108,11 +1347,19 @@ msgstr "No places to visit."
 msgid "No perteneces a ningún hogar. Puedes crear uno nuevo o pedir a alguien un enlace de invitación."
 msgstr "You don't belong to any household. You can create a new one or ask someone for an invitation link."
 
+#: apps/finance/services.py:149
+msgid "No puedes usar esa cuenta."
+msgstr "You cannot use that account."
+
+#: apps/finance/templates/finance/account_form.html:22
+msgid "No se puede cambiar después, para que los saldos cuadren siempre."
+msgstr "It cannot be changed later, so balances always add up."
+
 #: apps/core/recurrence.py:18
 msgid "No se repite"
 msgstr "Does not repeat"
 
-#: apps/tasks/forms.py:91
+#: apps/finance/forms.py:162 apps/tasks/forms.py:91
 msgid "Nombre"
 msgstr "Name"
 
@@ -1123,6 +1370,21 @@ msgstr "Household name"
 #: apps/core/views.py:200
 msgid "Nombre del hogar actualizado."
 msgstr "Household name updated."
+
+#: apps/finance/forms.py:99
+msgid "Notas"
+msgstr "Notes"
+
+#: apps/finance/templates/finance/categories.html:20
+msgid "Nueva categoría"
+msgstr "New category"
+
+#: apps/finance/templates/finance/account_form.html:4
+#: apps/finance/templates/finance/account_form.html:8 apps/finance/templates/finance/accounts.html:11
+#: apps/finance/templates/finance/summary.html:71
+#: apps/finance/templates/finance/transaction_form.html:18
+msgid "Nueva cuenta"
+msgstr "New account"
 
 #: apps/tasks/templates/tasks/labels.html:34
 msgid "Nueva etiqueta"
@@ -1147,11 +1409,21 @@ msgstr "New wish"
 msgid "Nuevo evento"
 msgstr "New event"
 
+#: apps/finance/templates/finance/partials/nav.html:4
+#: apps/finance/templates/finance/transaction_form.html:4
+#: apps/finance/templates/finance/transaction_form.html:11
+msgid "Nuevo movimiento"
+msgstr "New transaction"
+
 #: apps/places/templates/places/form.html:4 apps/places/templates/places/form.html:8
 msgid "Nuevo sitio"
 msgstr "New place"
 
-#: apps/places/models.py:18
+#: apps/finance/models.py:148
+msgid "Nómina"
+msgstr "Salary"
+
+#: apps/finance/models.py:142 apps/places/models.py:18
 msgid "Ocio"
 msgstr "Leisure"
 
@@ -1170,6 +1442,14 @@ msgstr "Another"
 #: apps/places/models.py:19 apps/places/templates/places/partials/random.html:13
 msgid "Otro"
 msgstr "Another"
+
+#: apps/finance/models.py:145
+msgid "Otros gastos"
+msgstr "Other expenses"
+
+#: apps/finance/models.py:149
+msgid "Otros ingresos"
+msgstr "Other income"
 
 #: templates/partials/user_menu.html:33
 msgid "Panel de administración"
@@ -1210,13 +1490,14 @@ msgid "Permisos"
 msgstr "Permissions"
 
 #: apps/core/models.py:223 apps/events/templates/events/event_detail.html:22
+#: apps/finance/templates/finance/accounts.html:21 apps/finance/templates/finance/partials/scope.html:5
 #: apps/media/templates/media/detail.html:21 apps/media/templates/media/list.html:50
 #: apps/places/templates/places/detail.html:21 apps/places/templates/places/list.html:49
 #: apps/tasks/templates/tasks/partials/task_card.html:19 apps/tasks/templates/tasks/task_detail.html:23
 msgid "Personal"
 msgstr "Personal"
 
-#: apps/media/forms.py:55 apps/tasks/forms.py:58
+#: apps/finance/forms.py:46 apps/media/forms.py:55 apps/tasks/forms.py:58
 msgid "Personal: solo la ves tú"
 msgstr "Personal: only you can see it"
 
@@ -1235,6 +1516,10 @@ msgstr "To buy"
 #: apps/media/templates/media/detail.html:54
 msgid "Por dónde vas"
 msgstr "Where you are"
+
+#: apps/finance/templates/finance/transaction_form.html:17
+msgid "Por ejemplo, la cuenta común del banco o el efectivo."
+msgstr "For example, the shared bank account or cash."
 
 #: apps/core/forms.py:108
 msgid "Por ejemplo: «Casa» o «Piso de Madrid». Se puede cambiar después."
@@ -1255,6 +1540,10 @@ msgstr "Approximate price"
 #: apps/shopping/forms.py:33
 msgid "Precio aproximado (€)"
 msgstr "Approximate price (€)"
+
+#: apps/finance/templates/finance/transaction_form.html:16
+msgid "Primero necesitas una cuenta"
+msgstr "First you need an account"
 
 #: apps/shopping/templates/shopping/wish_detail.html:39 apps/tasks/templates/tasks/task_detail.html:34
 msgid "Prioridad"
@@ -1328,6 +1617,10 @@ msgstr "Remove %(name)s"
 msgid "Quitar comprados"
 msgstr "Remove bought"
 
+#: apps/finance/templates/finance/partials/scope.html:2
+msgid "Qué mostrar"
+msgstr "What to show"
+
 #: apps/core/modules.py:69
 msgid "Qué ver y qué hemos visto"
 msgstr "What to watch and what we've watched"
@@ -1336,13 +1629,17 @@ msgstr "What to watch and what we've watched"
 msgid "Reabrir"
 msgstr "Reopen"
 
-#: apps/core/modules.py:95
+#: apps/core/modules.py:96
 msgid "Recetario del hogar"
 msgstr "Household recipe book"
 
-#: apps/core/modules.py:94
+#: apps/core/modules.py:95
 msgid "Recetas"
 msgstr "Recipes"
+
+#: apps/finance/templates/finance/account_form.html:34
+msgid "Recuperar cuenta"
+msgstr "Restore account"
 
 #: apps/events/templates/events/event_detail.html:47 apps/tasks/templates/tasks/task_detail.html:33
 #: templates/partials/recurrence_fields.html:3
@@ -1365,7 +1662,11 @@ msgstr "Assignee"
 msgid "Restaurante"
 msgstr "Restaurant"
 
-#: templates/core/home.html:55
+#: apps/finance/models.py:140
+msgid "Restaurantes"
+msgstr "Restaurants"
+
+#: apps/finance/templates/finance/partials/nav.html:8 templates/core/home.html:55
 msgid "Resumen"
 msgstr "Summary"
 
@@ -1381,6 +1682,14 @@ msgstr "Role updated."
 msgid "Rol no válido."
 msgstr "Invalid role."
 
+#: apps/finance/models.py:144
+msgid "Ropa"
+msgstr "Clothes"
+
+#: apps/finance/forms.py:30
+msgid "Saldo inicial (€)"
+msgstr "Opening balance (€)"
+
 #: templates/core/household.html:126 templates/core/household.html:132
 msgid "Salir del hogar"
 msgstr "Leave household"
@@ -1389,9 +1698,17 @@ msgstr "Leave household"
 msgid "Saltar al contenido"
 msgstr "Skip to content"
 
+#: apps/finance/models.py:143
+msgid "Salud"
+msgstr "Health"
+
 #: apps/shopping/templates/shopping/partials/tabs.html:4
 msgid "Secciones de compras"
 msgstr "Shopping sections"
+
+#: apps/finance/templates/finance/partials/nav.html:6
+msgid "Secciones de finanzas"
+msgstr "Finance sections"
 
 #: templates/core/profile.html:25
 msgid "Seguridad"
@@ -1417,6 +1734,10 @@ msgstr "Next week"
 msgid "Serie"
 msgstr "Series"
 
+#: apps/finance/templates/finance/transaction_form.html:51
+msgid "Si el movimiento toca una cuenta común, lo verá todo el hogar."
+msgstr "If the transaction involves a shared account, the whole household will see it."
+
 #: apps/events/templates/events/event_form.html:48
 msgid "Si no indicas el final, dura una hora."
 msgstr "If you leave the end empty, it lasts one hour."
@@ -1424,6 +1745,10 @@ msgstr "If you leave the end empty, it lasts one hour."
 #: apps/events/templates/events/partials/item.html:6
 msgid "Sigue"
 msgstr "Cont."
+
+#: apps/finance/forms.py:90 apps/finance/forms.py:96 apps/finance/services.py:226
+msgid "Sin categoría"
+msgstr "Uncategorised"
 
 #: apps/tasks/templates/tasks/task_detail.html:32
 msgid "Sin fecha"
@@ -1467,9 +1792,19 @@ msgstr "Only shared proposals can be commented on."
 msgid "Solo se vota en las propuestas comunes."
 msgstr "Only shared proposals can be voted on."
 
+#: apps/finance/templates/finance/categories.html:8
+msgid "Son comunes a todo el hogar. Si borras una, sus movimientos quedan «sin categoría»."
+msgstr ""
+"They are shared by the whole household. If you delete one, its transactions become "
+"“uncategorised”."
+
 #: apps/tasks/templates/tasks/task_detail.html:70
 msgid "Subtareas"
 msgstr "Subtasks"
+
+#: apps/finance/models.py:138
+msgid "Supermercado"
+msgstr "Groceries"
 
 #: apps/media/templates/media/detail.html:72
 #, python-format
@@ -1498,6 +1833,10 @@ msgstr "Task created."
 msgid "Tareas"
 msgstr "Tasks"
 
+#: apps/finance/models.py:19
+msgid "Tarjeta"
+msgstr "Card"
+
 #: templates/core/invitation.html:13
 msgid "Te han invitado a"
 msgstr "You've been invited to"
@@ -1523,7 +1862,7 @@ msgstr "Theme: system"
 msgid "Temporada"
 msgstr "Season"
 
-#: apps/media/services.py:97 apps/media/views.py:197
+#: apps/media/services.py:99 apps/media/views.py:199
 msgid "Temporada o episodio no válidos."
 msgstr "Invalid season or episode."
 
@@ -1543,7 +1882,8 @@ msgstr "Finish"
 msgid "Tienda"
 msgstr "Shop"
 
-#: apps/events/forms.py:21 apps/media/templates/media/list.html:23
+#: apps/events/forms.py:21 apps/finance/forms.py:70 apps/finance/forms.py:163
+#: apps/finance/templates/finance/transactions.html:21 apps/media/templates/media/list.html:23
 msgid "Tipo"
 msgstr "Type"
 
@@ -1551,13 +1891,21 @@ msgstr "Type"
 msgid "Tipo de deseos"
 msgstr "Wish type"
 
+#: apps/finance/services.py:115 apps/finance/services.py:140
+msgid "Tipo no válido."
+msgstr "Invalid type."
+
 #: apps/tasks/templates/tasks/board.html:29
 msgid "Todas"
 msgstr "All"
 
-#: apps/places/templates/places/list.html:24
+#: apps/finance/templates/finance/transactions.html:33 apps/places/templates/places/list.html:24
 msgid "Todas las categorías"
 msgstr "All categories"
+
+#: apps/finance/templates/finance/transactions.html:28
+msgid "Todas las cuentas"
+msgstr "All accounts"
 
 #: apps/tasks/templates/tasks/board.html:37
 msgid "Todas las etiquetas"
@@ -1568,7 +1916,11 @@ msgstr "All labels"
 msgid "Todavía no hay comentarios."
 msgstr "No comments yet."
 
-#: apps/media/templates/media/list.html:24
+#: apps/finance/templates/finance/summary.html:83
+msgid "Todavía no hay movimientos."
+msgstr "No transactions yet."
+
+#: apps/finance/templates/finance/partials/scope.html:3 apps/media/templates/media/list.html:24
 msgid "Todo"
 msgstr "All"
 
@@ -1577,6 +1929,26 @@ msgstr "All"
 #: templates/core/home.html:37
 msgid "Todo el día"
 msgstr "All day"
+
+#: apps/finance/templates/finance/transactions.html:23
+msgid "Todos los tipos"
+msgstr "All types"
+
+#: apps/finance/templates/finance/accounts.html:10
+msgid "Total en cuentas activas que ves:"
+msgstr "Total in the active accounts you can see:"
+
+#: apps/finance/templates/finance/summary.html:19
+msgid "Totales del mes"
+msgstr "Month totals"
+
+#: apps/finance/models.py:74
+msgid "Transferencia"
+msgstr "Transfer"
+
+#: apps/finance/models.py:141
+msgid "Transporte"
+msgstr "Transport"
 
 #: apps/core/forms.py:65
 msgid "Tu nombre"
@@ -1627,6 +1999,10 @@ msgstr "View in shop"
 #: apps/places/templates/places/partials/random.html:9
 msgid "Ver ficha"
 msgstr "View details"
+
+#: apps/finance/templates/finance/summary.html:78
+msgid "Ver todos"
+msgstr "View all"
 
 #: apps/events/models.py:22
 msgid "Viaje"
@@ -1699,6 +2075,10 @@ msgstr "And %(n)s older finished tasks."
 msgid "Ya existe otra cuenta con este correo."
 msgstr "Another account already uses this email."
 
+#: apps/finance/services.py:117
+msgid "Ya existe una categoría con ese nombre."
+msgstr "A category with that name already exists."
+
 #: apps/core/forms.py:85
 msgid "Ya existe una cuenta con este correo. Inicia sesión para continuar."
 msgstr "An account with this email already exists. Log in to continue."
@@ -1723,6 +2103,10 @@ msgstr "admin panel access"
 msgid "activo"
 msgstr "active"
 
+#: apps/finance/models.py:25
+msgid "archivada"
+msgstr "archived"
+
 #: apps/media/models.py:24
 msgid "año"
 msgstr "year"
@@ -1736,11 +2120,15 @@ msgstr "expires %(date)s"
 msgid "cantidad"
 msgstr "quantity"
 
-#: apps/places/models.py:27
+#: apps/finance/models.py:52 apps/finance/models.py:92 apps/places/models.py:27
 msgid "categoría"
 msgstr "category"
 
-#: apps/core/models.py:130 apps/tasks/models.py:26
+#: apps/finance/models.py:53
+msgid "categorías"
+msgstr "categories"
+
+#: apps/core/models.py:130 apps/finance/models.py:48 apps/tasks/models.py:26
 msgid "color"
 msgstr "color"
 
@@ -1752,6 +2140,10 @@ msgstr "comment"
 msgid "comentarios"
 msgstr "comments"
 
+#: apps/finance/models.py:98
+msgid "concepto"
+msgstr "description"
+
 #: apps/core/models.py:101
 msgid "configuración"
 msgstr "settings"
@@ -1759,6 +2151,18 @@ msgstr "settings"
 #: apps/core/models.py:55
 msgid "correo electrónico"
 msgstr "email"
+
+#: apps/finance/models.py:29 apps/finance/models.py:80
+msgid "cuenta"
+msgstr "account"
+
+#: apps/finance/models.py:84
+msgid "cuenta de destino"
+msgstr "destination account"
+
+#: apps/finance/models.py:30
+msgid "cuentas"
+msgstr "accounts"
 
 #: apps/events/models.py:26 apps/shopping/models.py:69 apps/tasks/models.py:67
 msgid "descripción"
@@ -1784,7 +2188,7 @@ msgstr "where to watch"
 msgid "enlace"
 msgstr "link"
 
-#: apps/media/models.py:68
+#: apps/media/models.py:70
 msgid "episodio"
 msgstr "episode"
 
@@ -1811,6 +2215,10 @@ msgstr "event"
 #: apps/events/models.py:41
 msgid "eventos"
 msgstr "events"
+
+#: apps/finance/models.py:78
+msgid "fecha"
+msgstr "date"
 
 #: apps/core/models.py:63
 msgid "fecha de alta"
@@ -1844,6 +2252,10 @@ msgstr "language"
 msgid "imagen (enlace)"
 msgstr "image (link)"
 
+#: apps/finance/models.py:77
+msgid "importe"
+msgstr "amount"
+
 #: apps/core/models.py:186
 msgid "invitaciones"
 msgstr "invitations"
@@ -1857,7 +2269,8 @@ msgid "j \\d\\e F"
 msgstr "F j"
 
 #: apps/events/templates/events/agenda.html:15 apps/events/templates/events/month.html:41
-#: apps/tasks/templates/tasks/task_detail.html:32 templates/core/home.html:8
+#: apps/finance/templates/finance/transactions.html:42 apps/tasks/templates/tasks/task_detail.html:32
+#: templates/core/home.html:8
 msgid "l, j \\d\\e F"
 msgstr "l, F j"
 
@@ -1885,12 +2298,20 @@ msgstr "members"
 msgid "moneda"
 msgstr "currency"
 
-#: apps/core/models.py:56 apps/core/models.py:98 apps/places/models.py:25 apps/shopping/models.py:68
-#: apps/tasks/models.py:25
+#: apps/finance/models.py:103
+msgid "movimiento"
+msgstr "transaction"
+
+#: apps/finance/models.py:104
+msgid "movimientos"
+msgstr "transactions"
+
+#: apps/core/models.py:56 apps/core/models.py:98 apps/finance/models.py:22 apps/finance/models.py:46
+#: apps/places/models.py:25 apps/shopping/models.py:68 apps/tasks/models.py:25
 msgid "nombre"
 msgstr "name"
 
-#: apps/places/models.py:30
+#: apps/finance/models.py:99 apps/places/models.py:30
 msgid "notas"
 msgstr "notes"
 
@@ -1901,6 +2322,10 @@ msgstr "participants"
 #: apps/media/models.py:35
 msgid "películas y series"
 msgstr "films and series"
+
+#: apps/finance/forms.py:136 apps/finance/templates/finance/partials/tx_row.html:12
+msgid "personal"
+msgstr "personal"
 
 #: apps/shopping/models.py:70
 msgid "precio aproximado"
@@ -1934,6 +2359,10 @@ msgstr "assignee"
 msgid "rol"
 msgstr "role"
 
+#: apps/finance/models.py:24
+msgid "saldo inicial"
+msgstr "opening balance"
+
 #: apps/media/models.py:27
 msgid "sinopsis"
 msgstr "synopsis"
@@ -1962,11 +2391,12 @@ msgstr "tasks"
 msgid "tema"
 msgstr "theme"
 
-#: apps/media/models.py:67
+#: apps/media/models.py:69
 msgid "temporada"
 msgstr "season"
 
-#: apps/events/models.py:25 apps/media/models.py:23
+#: apps/events/models.py:25 apps/finance/models.py:23 apps/finance/models.py:47
+#: apps/finance/models.py:76 apps/media/models.py:23
 msgid "tipo"
 msgstr "type"
 
@@ -2023,6 +2453,14 @@ msgstr "“%(name)s” deleted"
 msgid "«%(name)s» quitado de la lista"
 msgstr "“%(name)s” removed from the list"
 
+#: apps/finance/templates/finance/account_form.html:36
+msgid "¿Borrar la cuenta? Solo es posible si no tiene movimientos."
+msgstr "Delete the account? Only possible if it has no transactions."
+
+#: apps/finance/forms.py:40
+msgid "¿De quién es?"
+msgstr "Whose is it?"
+
 #: apps/places/templates/places/list.html:10 apps/places/templates/places/random.html:4
 #: apps/places/templates/places/random.html:8
 msgid "¿Dónde vamos?"
@@ -2058,4 +2496,8 @@ msgstr "Already have an account?"
 #: apps/shopping/templates/shopping/wish_detail.html:42
 msgid "Último cambio de estado"
 msgstr "Last status change"
+
+#: apps/finance/templates/finance/summary.html:77
+msgid "Últimos movimientos"
+msgstr "Latest transactions"
 

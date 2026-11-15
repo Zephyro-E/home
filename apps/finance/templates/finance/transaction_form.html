@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% if tx %}{% translate "Editar movimiento" %}{% else %}{% translate "Nuevo movimiento" %}{% endif %} · Hogar{% endblock %}
+
+{% block content %}
+{% url 'finance:transactions' as list_url %}
+<div x-data="deletable" {% if can_delete %}data-delete-url="{% url 'finance:transaction_delete' tx.pk %}"{% endif %} data-after-url="{{ list_url }}"
+     data-undo-message="{% translate 'Movimiento borrado' %}">
+<a href="{{ list_url }}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">{% icon "arrow-left" "size-4" %}{% translate "Movimientos" %}</a>
+<h1 class="mb-6 text-2xl font-semibold tracking-tight">{% if tx %}{% translate "Editar movimiento" %}{% else %}{% translate "Nuevo movimiento" %}{% endif %}</h1>
+<div x-show="gone" x-cloak class="max-w-xl rounded-2xl border border-dashed border-border px-6 py-12 text-center text-muted">{% translate "Borrando…" %}</div>
+
+{% if not form.fields.account.queryset.exists %}
+<div class="max-w-xl rounded-2xl border border-accent/30 bg-accent-soft p-5">
+  <p class="font-medium">{% translate "Primero necesitas una cuenta" %}</p>
+  <p class="mt-1 text-sm text-muted">{% translate "Por ejemplo, la cuenta común del banco o el efectivo." %}</p>
+  <a href="{% url 'finance:account_create' %}" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nueva cuenta" %}</a>
+</div>
+{% else %}
+<form method="post" x-show="!gone" class="max-w-xl space-y-4 rounded-2xl border border-border bg-surface p-5 shadow-sm" novalidate
+      x-data="{ kind: '{{ form.kind.value|default_if_none:'expense'|escapejs }}' }">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="rounded-xl border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200" role="alert">{% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}</div>{% endif %}
+
+  <fieldset>
+    <legend class="sr-only">{{ form.kind.label }}</legend>
+    <div class="grid grid-cols-3 gap-1 rounded-xl bg-surface-2 p-1 text-sm font-medium">
+      {% for radio in form.kind %}
+      <label class="cursor-pointer">
+        <input type="radio" name="{{ radio.data.name }}" value="{{ radio.data.value }}" x-model="kind" class="peer sr-only" {% if radio.data.selected %}checked{% endif %}>
+        <span class="block rounded-lg px-2 py-2 text-center text-muted peer-checked:bg-surface peer-checked:text-fg peer-checked:shadow-sm peer-focus-visible:ring-2 peer-focus-visible:ring-accent">{{ radio.choice_label }}</span>
+      </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <div class="grid grid-cols-2 gap-4">
+    {% include "partials/field.html" with field=form.amount %}
+    {% include "partials/field.html" with field=form.date %}
+  </div>
+  {% include "partials/field.html" with field=form.description %}
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>{% include "partials/field.html" with field=form.account %}</div>
+    <div x-show="kind === 'transfer'" x-cloak>{% include "partials/field.html" with field=form.to_account %}</div>
+    <div x-show="kind === 'expense'">{% include "partials/field.html" with field=form.expense_category %}</div>
+    <div x-show="kind === 'income'" x-cloak>{% include "partials/field.html" with field=form.income_category %}</div>
+  </div>
+  {% include "partials/field.html" with field=form.notes %}
+  <p class="text-xs text-muted">{% translate "Si el movimiento toca una cuenta común, lo verá todo el hogar." %}</p>
+
+  <div class="flex flex-wrap justify-between gap-2 pt-2">
+    {% if can_delete %}<button type="button" @click="remove()" class="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2.5 text-sm font-medium text-red-700 hover:bg-red-50 dark:text-red-300 dark:hover:bg-red-950">{% icon "trash-2" "size-4" %}{% translate "Borrar" %}</button>{% else %}<span></span>{% endif %}
+    <div class="flex gap-2">
+      {% if not tx %}<button type="submit" name="another" value="1" class="rounded-xl border border-border px-4 py-2.5 text-sm font-medium hover:bg-surface-2">{% translate "Guardar y añadir otro" %}</button>{% endif %}
+      <button type="submit" class="rounded-xl bg-accent px-5 py-2.5 font-semibold text-accent-fg hover:opacity-90">{% translate "Guardar" %}</button>
+    </div>
+  </div>
+</form>
+{% endif %}
+</div>
+{% endblock %}

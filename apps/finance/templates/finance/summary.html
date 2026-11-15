@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Finanzas" %} · Hogar{% endblock %}
+
+{% block content %}
+{% include "finance/partials/nav.html" with active="summary" %}
+
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+  <div class="flex items-center gap-1">
+    <a href="?mes={{ prev_month|date:'Y-m' }}{% if scope %}&amp;ver={{ scope }}{% endif %}" class="grid size-9 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes anterior' %}">{% icon "chevron-left" "size-5" %}</a>
+    <h2 class="min-w-36 text-center font-semibold first-letter:uppercase">{{ month|date:"F Y" }}</h2>
+    <a href="?mes={{ next_month|date:'Y-m' }}{% if scope %}&amp;ver={{ scope }}{% endif %}" class="grid size-9 place-items-center rounded-lg hover:bg-surface-2" aria-label="{% translate 'Mes siguiente' %}">{% icon "chevron-right" "size-5" %}</a>
+    {% if not is_current_month %}<a href="?{% if scope %}ver={{ scope }}{% endif %}" class="rounded-lg px-2 py-1 text-sm font-medium text-accent hover:bg-surface-2">{% translate "Hoy" %}</a>{% endif %}
+  </div>
+  {% include "finance/partials/scope.html" %}
+</div>
+
+<section class="mb-6 grid gap-3 sm:grid-cols-3" aria-label="{% translate 'Totales del mes' %}">
+  <div class="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+    <p class="flex items-center gap-1.5 text-sm text-muted">{% icon "trending-up" "size-4" %}{% translate "Ingresos" %}</p>
+    <p class="mt-1 text-2xl font-semibold tabular-nums text-emerald-700 dark:text-emerald-400">{{ summary.income|euros }}</p>
+  </div>
+  <div class="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+    <p class="flex items-center gap-1.5 text-sm text-muted">{% icon "trending-down" "size-4" %}{% translate "Gastos" %}</p>
+    <p class="mt-1 text-2xl font-semibold tabular-nums">{{ summary.expense|euros }}</p>
+  </div>
+  <div class="rounded-2xl border border-border bg-surface p-4 shadow-sm">
+    <p class="flex items-center gap-1.5 text-sm text-muted">{% icon "piggy-bank" "size-4" %}{% translate "Balance" %}</p>
+    <p class="mt-1 text-2xl font-semibold tabular-nums {% if summary.net < 0 %}text-red-700 dark:text-red-400{% endif %}">{{ summary.net|euros }}</p>
+  </div>
+</section>
+
+<div class="grid gap-6 lg:grid-cols-2">
+  <section class="min-w-0 rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="por-categoria">
+    <h2 id="por-categoria" class="mb-3 font-semibold">{% translate "Gastos por categoría" %}</h2>
+    {% if summary.by_category %}
+    <ul class="space-y-3">
+      {% for row in summary.by_category %}
+      <li>
+        <div class="flex items-center justify-between gap-2 text-sm">
+          <span class="flex items-center gap-2"><span class="size-2.5 rounded-full {% member_dot row.color %}"></span>{{ row.name }}</span>
+          <span class="tabular-nums"><span class="font-medium">{{ row.total|euros }}</span> <span class="text-muted">· {{ row.percent }} %</span></span>
+        </div>
+        <div class="mt-1 h-2 overflow-hidden rounded-full bg-surface-2"><div class="h-full rounded-full {% member_dot row.color %}" style="width: {{ row.percent }}%"></div></div>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-sm text-muted">{% translate "No hay gastos este mes." %}</p>
+    {% endif %}
+  </section>
+
+  <div class="min-w-0 space-y-6">
+    <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="cuentas">
+      <div class="mb-2 flex items-center justify-between">
+        <h2 id="cuentas" class="font-semibold">{% translate "Cuentas" %}</h2>
+        <a href="{% url 'finance:accounts' %}" class="text-sm font-medium text-accent hover:underline">{% translate "Gestionar" %}</a>
+      </div>
+      {% if accounts %}
+      <ul class="divide-y divide-border">
+        {% for account in accounts %}
+        <li class="flex items-center justify-between gap-2 py-2 text-sm">
+          <span class="flex min-w-0 items-center gap-2">{% icon "landmark" "size-4 shrink-0 text-muted" %}<span class="truncate">{{ account.name }}</span>{% if account.visibility == "private" %}{% icon "lock" "size-3.5 shrink-0 text-muted" %}{% endif %}</span>
+          <span class="shrink-0 font-semibold tabular-nums {% if account.balance < 0 %}text-red-700 dark:text-red-400{% endif %}">{{ account.balance|euros }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-sm text-muted">{% translate "Crea tu primera cuenta para empezar a apuntar movimientos." %}</p>
+      <a href="{% url 'finance:account_create' %}" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "plus" "size-4" %}{% translate "Nueva cuenta" %}</a>
+      {% endif %}
+    </section>
+
+    <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="ultimos">
+      <div class="mb-1 flex items-center justify-between">
+        <h2 id="ultimos" class="font-semibold">{% translate "Últimos movimientos" %}</h2>
+        <a href="{% url 'finance:transactions' %}" class="text-sm font-medium text-accent hover:underline">{% translate "Ver todos" %}</a>
+      </div>
+      {% if recent %}
+      <ul class="-mx-3">{% for tx in recent %}{% include "finance/partials/tx_row.html" %}{% endfor %}</ul>
+      {% else %}
+      <p class="text-sm text-muted">{% translate "Todavía no hay movimientos." %}</p>
+      {% endif %}
+    </section>
+  </div>
+</div>
+{% endblock %}

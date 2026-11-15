@@ -117,9 +117,23 @@ PlaceComment         place, author, body
 
 Valoraciones y comentarios heredan de `AbstractRating` / `AbstractComment` (`apps/core/social.py`).
 
+## Finanzas I (Fase 6, implementado en `apps/finance/models.py`)
+
+```
+Account              (HouseholdOwnedModel) name, kind ('bank'|'cash'|'card'|'savings'),
+                     initial_balance_cents (puede ser negativo), is_archived
+Category             (HouseholdOwnedModel, siempre shared) name, kind ('expense'|'income'),
+                     color   (único por hogar + tipo + nombre)
+Transaction          (HouseholdOwnedModel) kind ('expense'|'income'|'transfer'),
+                     amount_cents (> 0), date, account → Account (PROTECT),
+                     to_account → Account? (solo transferencias), category → Category?
+                     (SET_NULL; no en transferencias), description, notes
+                     visibility calculada: shared si toca alguna cuenta común (ADR-019)
+```
+
 ## Módulos posteriores (esbozo)
 
-- **Finanzas (F6–F7)**: `Account` (personal o común), `Category`, `Transaction` (tipo ingreso / gasto / transferencia, importe en céntimos, fecha, cuenta, visibilidad), `TransactionSplit` (persona, parte en céntimos), `Budget` (mes, categoría, importe), `SavingsGoal`, `Settlement` (liquidación de saldos entre miembros).
+- **Finanzas II (F7)**: `TransactionSplit` (persona, parte en céntimos), `Budget` (mes, categoría, importe), `SavingsGoal`, `Settlement` (liquidación de saldos entre miembros).
 - **Recetas (F8)**: `Recipe`, `RecipeIngredient` (cantidad, unidad, nombre), etiquetas, valoraciones; acción "añadir a la lista de la compra" → `GroceryItem`.
 
 ## Diagrama de relaciones del núcleo

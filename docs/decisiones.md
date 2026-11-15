@@ -23,6 +23,7 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 016 | "Deshacer": confirmación al salir de la página | Aceptada | 2026-11-15 |
 | 017 | Arrastrar y soltar con SortableJS | Aceptada | 2026-11-15 |
 | 018 | Calendario generado en el servidor (sin FullCalendar) | Aceptada | 2026-11-15 |
+| 019 | Privacidad en finanzas: la cuenta manda | Aceptada | 2026-11-15 |
 
 ---
 
@@ -187,3 +188,18 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 **Consecuencias.** Menos JavaScript y la misma lógica de permisos que el resto. No hay arrastrar eventos para cambiarlos de hora (se editan con el formulario). El rango consultado está limitado (400 días) para que nunca se expandan series enormes.
 
 **Nota.** La app se llama `apps/events` (el nombre `calendar` choca con el módulo estándar de Python), pero sus URL usan el espacio de nombres `calendar` y la ruta `/calendario/`.
+
+---
+
+## ADR-019 · Privacidad en finanzas: la cuenta manda
+
+**Contexto.** En finanzas conviven cuentas comunes y personales, y un mismo movimiento puede tocar dos cuentas (transferencias). Si el saldo de una cuenta común dependiera de movimientos que no todos ven, no cuadraría.
+
+**Decisión.**
+- Cada cuenta es común (la ven y usan todos) o personal (solo su dueño). No se puede cambiar después.
+- La visibilidad de un movimiento se calcula sola: es común si toca alguna cuenta común y personal si solo toca cuentas personales.
+- Quien ve un movimiento común que toca una cuenta personal ajena ve "Cuenta personal de X", nunca el nombre ni el saldo de esa cuenta.
+- Para crear, editar o borrar un movimiento hay que poder usar todas las cuentas que toca (además de la regla general de ADR-005).
+- Los saldos se calculan con todos los movimientos de cada cuenta (inicial + ingresos − gastos ± transferencias). Las transferencias no cuentan en ingresos ni gastos del resumen (ADR-007).
+
+**Consecuencias.** El saldo de una cuenta común es el mismo para todos los miembros. Los repartos de gastos entre personas (Fase 7) se apoyarán en estos movimientos comunes.
