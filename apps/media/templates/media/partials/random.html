@@ -1,0 +1,18 @@
+{% load i18n ui %}{# Resultado de "¿Qué vemos?". Parámetros: item (o None), kind #}
+<div id="random-pick" class="rounded-2xl border border-border bg-surface p-6 text-center shadow-sm">
+  {% if item %}
+    {% if item.image_url %}<img src="{{ item.image_url }}" alt="" referrerpolicy="no-referrer" class="mx-auto mb-4 h-48 rounded-xl bg-surface-2 object-cover">{% endif %}
+    <p class="text-sm text-muted">{{ item.get_kind_display }}{% if item.year %} · {{ item.year }}{% endif %}{% if item.platform %} · {{ item.platform }}{% endif %}</p>
+    <h2 class="mt-1 text-2xl font-semibold">{{ item.title }}</h2>
+    {% if item.synopsis %}<p class="mx-auto mt-3 max-w-md text-sm text-muted">{{ item.synopsis|truncatewords:40 }}</p>{% endif %}
+    <div class="mt-5 flex flex-wrap justify-center gap-2">
+      <a href="{% url 'media:detail' item.pk %}" class="rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% translate "Ver ficha" %}</a>
+      <a href="{% url 'media:random' %}?anterior={{ item.pk }}{% if kind %}&amp;tipo={{ kind }}{% endif %}"
+         hx-get="{% url 'media:random' %}?anterior={{ item.pk }}{% if kind %}&amp;tipo={{ kind }}{% endif %}" hx-target="#random-pick" hx-swap="outerHTML"
+         class="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-sm font-medium hover:bg-surface-2">{% icon "shuffle" "size-4" %}{% translate "Otra" %}</a>
+    </div>
+  {% else %}
+    <p class="font-medium">{% translate "No hay nada por ver." %}</p>
+    <p class="mt-1 text-sm text-muted">{% translate "Añade películas o series a la lista «Por ver»." %}</p>
+  {% endif %}
+</div>

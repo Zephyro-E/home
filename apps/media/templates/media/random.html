@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "¿Qué vemos?" %} · Hogar{% endblock %}
+
+{% block content %}
+<a href="{% url 'media:list' %}" class="mb-4 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg">{% icon "arrow-left" "size-4" %}{% translate "Películas y series" %}</a>
+<h1 class="mb-2 text-2xl font-semibold tracking-tight">{% translate "¿Qué vemos?" %}</h1>
+<div class="mb-5 flex gap-2 text-sm">
+  <a href="{% url 'media:random' %}" class="rounded-full border px-3 py-1 {% if not kind %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted{% endif %}">{% translate "Cualquiera" %}</a>
+  <a href="{% url 'media:random' %}?tipo=movie" class="rounded-full border px-3 py-1 {% if kind == 'movie' %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted{% endif %}">{% translate "Película" %}</a>
+  <a href="{% url 'media:random' %}?tipo=series" class="rounded-full border px-3 py-1 {% if kind == 'series' %}border-accent bg-accent-soft font-medium{% else %}border-border text-muted{% endif %}">{% translate "Serie" %}</a>
+</div>
+<div class="max-w-xl">{% include "media/partials/random.html" %}</div>
+{% endblock %}
