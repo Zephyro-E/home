@@ -11,9 +11,12 @@ redondear se asigna de forma determinista (ADR-007).
 from collections import defaultdict
 
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from apps.core.models import Membership, Visibility
+from apps.core.money import format_euros
+from apps.notifications.services import notify
 
 from .models import Settlement, Transaction, TransactionSplit
 
@@ -156,7 +159,7 @@ def create_settlement(
         raise ValidationError(_("Elige dos personas distintas."))
     if amount_cents <= 0:
         raise ValidationError(_("El importe debe ser mayor que cero."))
-    return Settlement.objects.create(
+    settlement = Settlement.objects.create(
         household=household,
         owner=user,
         from_user=from_user,
@@ -165,6 +168,11 @@ def create_settlement(
         date=date,
         note=" ".join((note or "").split())[:200],
     )
+    title = (
+        f"{format_euros(amount_cents)} ({from_user.get_short_name()} → {to_user.get_short_name()})"
+    )
+    notify(household, [from_user, to_user], user, "settlement", title, reverse("finance:shared"))
+    return settlement
 
 
 def delete_settlement(settlement: Settlement, user, membership) -> None:

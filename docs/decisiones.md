@@ -26,7 +26,8 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 | 019 | Privacidad en finanzas: la cuenta manda | Aceptada | 2026-11-15 |
 | 020 | Gráficos generados en el servidor (sin Chart.js) | Aceptada | 2026-11-15 |
 | 021 | Fotos: reprocesadas sin metadatos y servidas con permisos | Aceptada | 2026-11-15 |
-| 022 | Acceso desde fuera de casa con Tailscale | Aceptada | 2026-11-16 |
+| 022 | Acceso desde fuera de casa con Tailscale | Aceptada | 2026-11-15 |
+| 023 | Recuperar contraseña con enlace de la administración (sin email) | Aceptada | 2026-11-15 |
 
 ---
 
@@ -239,3 +240,13 @@ No se borran decisiones: si una cambia, se añade una nueva que la sustituye y s
 - `scripts/arrancar-al-iniciar.bat`: tarea programada que abre `servir.bat` al iniciar sesión.
 
 **Consecuencias.** Nadie fuera de la red privada llega a la app. Con las cookies seguras, el acceso por la IP local (`http://192.168…`) deja de servir para entrar; se usa la dirección de Tailscale también en casa (en el propio PC sigue funcionando `http://localhost:8000`). El PC debe estar encendido. Guía: `docs/acceso-remoto.md`.
+
+---
+
+## ADR-023 · Recuperar contraseña con enlace de la administración (sin email)
+
+**Contexto.** El plan preveía recuperar la contraseña por email, lo que exige configurar un servicio de correo (servidor SMTP y credenciales guardadas en el PC).
+
+**Decisión.** Como con las invitaciones (ADR-006), quien administra el hogar crea desde "Hogar y miembros" un enlace de un solo uso, válido 24 horas, y se lo envía a la persona (por ejemplo, por WhatsApp). Solo se guarda el hash del token. Crear un enlace anula los anteriores de esa persona. No se permite para otra cuenta con rol de administración (evita que una cuenta con permisos tome el control de otra igual) ni para uno mismo. Al cambiar la contraseña, las sesiones abiertas de esa cuenta se cierran. La página de entrada enlaza a "¿Has olvidado la contraseña?", que explica el proceso.
+
+**Consecuencias.** No hace falta ningún servicio externo. Quien administra, si olvida la suya, usa `manage.py changepassword` en el PC. El envío por email se podrá añadir más adelante sobre el mismo modelo.

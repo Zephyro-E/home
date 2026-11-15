@@ -2,12 +2,21 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
 
-## [0.10.1] - 2026-11-16
+## [0.11.0] - 2026-11-15 · Fase 9: transversales
+
+### Añadido
+- Buscador global (barra lateral y lupa en el móvil) en todos los módulos, respetando lo que cada persona puede ver.
+- Avisos internos con campana y contador: tareas asignadas, comentarios, propuestas de compra, eventos, gastos compartidos y pagos entre miembros.
+- Exportar datos: JSON completo o CSV por módulo (preparados para Excel en español), solo con lo visible.
+- Recuperar contraseña con enlace de un solo uso creado por la administración del hogar (ADR-023) y página "¿Has olvidado la contraseña?".
+- 502 pruebas automáticas.
+
+## [0.10.1] - 2026-11-15
 
 ### Corregido
 - Detrás de Tailscale, el bloqueo por intentos fallidos usa la IP real de cada dispositivo (cabecera `X-Forwarded-For`, solo si la conexión llega del propio PC), en lugar de contar a todo el hogar como una sola IP.
 
-## [0.10.0] - 2026-11-16 · Acceso desde fuera de casa
+## [0.10.0] - 2026-11-15 · Acceso desde fuera de casa
 
 ### Añadido
 - Acceso desde fuera de casa con Tailscale (ADR-022): `scripts/configurar-tailscale.bat` (`manage.py tailscale configurar|estado|quitar`) detecta la dirección del PC, activa HTTPS y ajusta la app.

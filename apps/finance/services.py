@@ -11,9 +11,12 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction as db_transaction
 from django.db.models import Q, Sum
 from django.db.models.deletion import ProtectedError
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from apps.core.models import Visibility
+from apps.core.money import format_euros
+from apps.notifications.services import notify
 
 from . import sharing
 from .models import DEFAULT_CATEGORIES, Account, Category, Transaction
@@ -186,6 +189,13 @@ def create_transaction(household, user, **data) -> Transaction:
     shares = data.pop("split_shares")
     tx = Transaction.objects.create(household=household, owner=user, **data)
     sharing.save_splits(tx, shares)
+    if tx.is_split:
+        label = tx.description or (tx.category.name if tx.category else "")
+        title = (
+            f"{label} · {format_euros(tx.amount_cents)}" if label else format_euros(tx.amount_cents)
+        )
+        people = [s.user for s in tx.splits.select_related("user")]
+        notify(household, people, user, "expense_split", title, reverse("finance:shared"))
     return tx
 
 

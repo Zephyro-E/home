@@ -1,0 +1,24 @@
+{% load i18n ui %}{# Buscar y avisos. Parámetro: placement ("header"|"sidebar") #}
+{% url 'notifications:list' as bell_url %}
+{% url 'core:search' as search_url %}
+{% if placement == "sidebar" %}
+<div class="space-y-1 px-3 pb-3">
+  <form method="get" action="{{ search_url }}" role="search" class="relative">
+    <label for="sidebar-search" class="sr-only">{% translate "Buscar en Hogar" %}</label>
+    <span class="pointer-events-none absolute inset-y-0 left-3 grid place-items-center text-muted">{% icon "search" "size-4" %}</span>
+    <input id="sidebar-search" type="search" name="q" value="{{ search_query|default:'' }}" placeholder="{% translate 'Buscar…' %}"
+           class="w-full rounded-lg border border-border bg-bg py-2 pl-9 pr-3 text-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30">
+  </form>
+  <a href="{{ bell_url }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors {% if nav_active == 'notifications' %}bg-accent-soft text-fg{% else %}text-muted hover:bg-surface-2 hover:text-fg{% endif %}">
+    {% icon "bell" "size-5" %}<span class="flex-1">{% translate "Avisos" %}</span>
+    {% if unread_notifications %}<span class="rounded-full bg-accent px-2 text-xs font-semibold leading-5 text-accent-fg">{{ unread_notifications }}<span class="sr-only"> {% translate "sin leer" %}</span></span>{% endif %}
+  </a>
+</div>
+{% else %}
+<a href="{{ search_url }}" class="grid size-9 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg" aria-label="{% translate 'Buscar en Hogar' %}">{% icon "search" "size-5" %}</a>
+<a href="{{ bell_url }}" class="relative grid size-9 place-items-center rounded-lg text-muted hover:bg-surface-2 hover:text-fg"
+   aria-label="{% if unread_notifications %}{% blocktranslate trimmed with n=unread_notifications %}Avisos ({{ n }} sin leer){% endblocktranslate %}{% else %}{% translate 'Avisos' %}{% endif %}">
+  {% icon "bell" "size-5" %}
+  {% if unread_notifications %}<span class="absolute right-1 top-1 grid min-w-4 place-items-center rounded-full bg-accent px-1 text-[10px] font-bold leading-4 text-accent-fg" aria-hidden="true">{{ unread_notifications }}</span>{% endif %}
+</a>
+{% endif %}

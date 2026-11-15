@@ -70,5 +70,6 @@ uv run python manage.py backup / restore <copia>
 - `apps/tasks/`: tablero de tareas (SortableJS, ADR-017; componente Alpine `taskColumn` en `app.js`). Ojo: en consultas con recuentos (`annotate(Count…)`) Django no aplica `Meta.ordering`: poner `order_by` explícito.
 - `apps/shopping/`: lista de la compra y deseos (modelo de referencia para los módulos siguientes: services, vistas con HTMX, pruebas de autorización).
 - Borrar con "Deshacer" (ADR-016): `x-data="deletable"` + `data-delete-url` / `data-ids` / `data-undo-message`; la vista responde 204 si llega `X-Undo-Commit`.
+- Fase 9: buscador `apps/core/search.py`, exportación `apps/core/exporting.py`, avisos `apps/notifications/` (llamar a `notify()` desde los services; nunca avisar de elementos que la persona no ve), recuperar contraseña `PasswordReset` (ADR-023).
 - Acceso remoto (ADR-022): `manage.py tailscale`, `/sw.js` y `/sin-conexion/` (vistas en `core/views.py`), guía `docs/acceso-remoto.md`.
 - `static/icons/`: iconos Lucide 0.460.0. Para añadir uno: descargar `https://cdn.jsdelivr.net/npm/lucide-static@0.460.0/icons/<nombre>.svg`.

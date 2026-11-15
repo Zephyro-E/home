@@ -17,7 +17,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 | **6. Finanzas I** | Cuentas, categorías, ingresos/gastos, transferencias internas, resumen mensual | L | ✅ 2026-11-15 |
 | **7. Finanzas II** | Gastos compartidos (50/50 configurable + excepciones), saldos y liquidaciones, presupuestos, ahorro, gráficos | L | ✅ 2026-11-15 |
 | **8. Recetas** | Recetario, raciones, ingredientes → lista de la compra, imágenes | M | ✅ 2026-11-15 |
-| **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ⬜ |
+| **9. Transversales** | Buscador global, notificaciones internas, exportación CSV/JSON, recuperación de contraseña | M | ✅ 2026-11-15 |
 | **10. Servidor** | Dockerfile + Docker Compose, HTTPS, posible paso a PostgreSQL, migración de datos desde el PC | M | ⬜ |
 | **Futuro** | Planificador de comidas, mapa de sitios, TMDB, votación de películas, mantenimiento, inventario, documentos, estadísticas | — | ⬜ |
 
@@ -31,7 +31,7 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 
 - Verificado: 66 pruebas automáticas (permisos, acceso, invitaciones, miembros, perfil, copias, traducciones) y recorrido completo en el navegador: asistente inicial → crear invitación → alta de un segundo miembro con el enlace → enlace reutilizado rechazado → perfil en inglés y modo oscuro → menú en móvil. Copia y restauración probadas con datos reales.
 - Cambios respecto al plan: el **avatar** es de iniciales con el color del miembro; la subida de fotos se hará con la gestión de archivos (Fase 8) (ADR-014). La **recuperación de contraseña** por email sigue en la Fase 9; mientras, se cambia desde el panel de administración o con `manage.py changepassword`.
-- HTTPS para la PWA: resuelto con Tailscale (ADR-022, 2026-11-16).
+- HTTPS para la PWA: resuelto con Tailscale (ADR-022, 2026-11-15).
 
 ## Notas de la Fase 2
 
@@ -86,11 +86,20 @@ Una fase no se da por terminada sin pruebas pasando y validación funcional real
 - Fotos (ADR-021): JPG/PNG/WEBP hasta 10 MB, se reprocesan con Pillow sin metadatos y se sirven por vistas que comprueban permisos. Foto de perfil visible solo para quien comparte hogar.
 - Pendiente de comprobar a mano en el navegador: subir la foto de perfil (cubierta por pruebas automáticas).
 
-## Acceso desde fuera de casa (2026-11-16)
+## Acceso desde fuera de casa (2026-11-15)
 
 - Tailscale (ADR-022): script de configuración de un clic, HTTPS con certificado válido, cookies seguras, app instalable con aviso "sin conexión" y arranque automático opcional. Guía: [acceso-remoto.md](acceso-remoto.md).
 - Verificado: 480 pruebas automáticas (configuración de Tailscale simulada, service worker y página sin conexión públicos). Página sin conexión revisada en móvil y modo oscuro.
 - Pendiente de comprobar en un móvil real: instalación de la app y aviso sin conexión (el navegador integrado del entorno de desarrollo no admite service workers).
+
+## Notas de la Fase 9
+
+- Verificado: 502 pruebas automáticas (recuperación de contraseña de principio a fin, avisos y su privacidad, buscador sin elementos privados ajenos ni de otros hogares, exportación JSON/CSV solo con lo visible) y recorrido en el navegador sobre una copia aparte: avisos de Luis (tarea asignada, comentario, propuesta, evento), buscador desde la barra lateral, exportación y cabecera del móvil con buscador y campana.
+- Recuperar contraseña (ADR-023): enlace de un solo uso (24 h) que crea la administración del hogar, sin servicio de correo. No sirve para otras cuentas de administración ni para uno mismo; quien administra usa `manage.py changepassword`.
+- Avisos: tarea asignada, comentario en algo tuyo, nueva propuesta común, te añaden a un evento, te toca parte de un gasto, pago entre miembros. Solo para miembros del hogar y nunca a quien hace la acción. Se borran los leídos de más de 90 días.
+- Buscador: lista de la compra, tareas, calendario, deseos, recetas (también por ingrediente), películas, sitios y movimientos.
+- Exportación: JSON completo o CSV por módulo, preparados para Excel en español; solo lo común y lo personal propio.
+- Pendiente (futuro): envío de avisos o de enlaces por email, notificaciones push al móvil.
 
 ## Requisitos transversales: cuándo llega cada uno
 

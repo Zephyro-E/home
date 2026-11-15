@@ -21,10 +21,11 @@ from .forms import (
     ProfileForm,
     SetupForm,
     StyledPasswordChangeForm,
+    StyledSetPasswordForm,
 )
 from .middleware import SESSION_KEY
 from .mixins import HouseholdAdminRequiredMixin, HouseholdRequiredMixin
-from .models import Invitation, Membership, User
+from .models import Invitation, Membership, PasswordReset, User
 
 UserModel = get_user_model()
 
@@ -189,6 +190,7 @@ class HouseholdSettingsView(HouseholdRequiredMixin, TemplateView):
             context["form"] = kwargs.get("form") or HouseholdForm(instance=household)
             context["invitations"] = household.invitations.pending()
             context["new_invite_url"] = self.request.session.pop("new_invite_url", None)
+            context["new_reset"] = self.request.session.pop("new_reset", None)
         return context
 
 
@@ -300,6 +302,108 @@ def save_theme(request):
     request.user.theme = theme
     request.user.save(update_fields=["theme"])
     return HttpResponse(status=204)
+
+
+# --- Buscador global -----------------------------------------------------------------------
+
+
+class SearchView(HouseholdRequiredMixin, TemplateView):
+    template_name = "core/search.html"
+
+    def get_context_data(self, **kwargs):
+        from . import search
+
+        context = super().get_context_data(**kwargs)
+        query = " ".join(self.request.GET.get("q", "").split())[:100]
+        context.update(
+            search_query=query,
+            too_short=0 < len(query) < search.MIN_LENGTH,
+            groups=search.search(self.request.user, self.request.household, query),
+        )
+        return context
+
+
+# --- Exportar datos ------------------------------------------------------------------------
+
+
+class ExportView(HouseholdRequiredMixin, TemplateView):
+    template_name = "core/export.html"
+
+    def get_context_data(self, **kwargs):
+        from .exporting import SECTIONS
+
+        context = super().get_context_data(**kwargs)
+        context["sections"] = [(key, label) for key, label, _builder in SECTIONS]
+        return context
+
+
+class ExportDownloadView(HouseholdRequiredMixin, View):
+    def get(self, request, fmt, section=None):
+        from . import exporting
+
+        user, household = request.user, request.household
+        stamp = timezone.localdate().strftime("%Y%m%d")
+        if fmt == "json":
+            content = exporting.to_json(user, household)
+            filename, ctype = f"hogar-{stamp}.json", "application/json"
+        else:
+            if section not in exporting.SECTION_KEYS:
+                raise Http404
+            content = exporting.to_csv(user, household, section)
+            filename, ctype = f"hogar-{section}-{stamp}.csv", "text/csv; charset=utf-8"
+        response = HttpResponse(content, content_type=ctype)
+        response["Content-Disposition"] = f'attachment; filename="{filename}"'
+        response["Cache-Control"] = "no-store"
+        return response
+
+
+# --- Recuperar contraseña (ADR-023) ---------------------------------------------------------
+
+
+class PasswordResetCreateView(HouseholdAdminRequiredMixin, View):
+    def post(self, request, pk):
+        target = get_object_or_404(request.household.memberships.select_related("user"), pk=pk)
+        try:
+            _reset, token = services.create_password_reset(request.membership, target)
+        except ValidationError as error:
+            messages.error(request, _error_text(error))
+            return redirect("core:household")
+        url = request.build_absolute_uri(reverse("core:password_reset", args=[token]))
+        request.session["new_reset"] = {"url": url, "name": str(target.user)}
+        return redirect(reverse("core:household") + "#miembros")
+
+
+@method_decorator(login_not_required, name="dispatch")
+class PasswordResetView(View):
+    """Página pública del enlace: elegir contraseña nueva."""
+
+    template_name = "core/password_reset.html"
+
+    def render_page(self, request, reset, form=None, status=200):
+        if reset is None:
+            status = 410
+        return render(request, self.template_name, {"reset": reset, "form": form}, status=status)
+
+    def get(self, request, token):
+        reset = PasswordReset.find_valid(token)
+        form = StyledSetPasswordForm(reset.user) if reset else None
+        return self.render_page(request, reset, form)
+
+    def post(self, request, token):
+        reset = PasswordReset.find_valid(token)
+        if reset is None:
+            return self.render_page(request, None)
+        form = StyledSetPasswordForm(reset.user, request.POST)
+        if not form.is_valid():
+            return self.render_page(request, reset, form, status=400)
+        services.use_password_reset(reset, form.cleaned_data["new_password1"])
+        messages.success(request, _("Contraseña cambiada. Ya puedes entrar con la nueva."))
+        return redirect("core:login")
+
+
+@login_not_required
+def forgot_password(request):
+    return render(request, "core/forgot_password.html")
 
 
 # --- App instalable (PWA) ----------------------------------------------------------------

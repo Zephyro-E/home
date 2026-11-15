@@ -13,7 +13,10 @@
     {% translate "Entrar" %}
   </button>
 </form>
-<p class="mt-6 text-center text-sm text-muted">
+<p class="mt-4 text-center text-sm">
+  <a href="{% url 'core:forgot_password' %}" class="font-medium text-accent hover:underline">{% translate "¿Has olvidado la contraseña?" %}</a>
+</p>
+<p class="mt-4 text-center text-sm text-muted">
   {% translate "¿No tienes cuenta? Pide a alguien de tu hogar un enlace de invitación." %}
 </p>
 {% endblock %}

@@ -5,10 +5,12 @@ from decimal import Decimal
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Count, Q
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from apps.core import images, social
 from apps.core.models import Visibility
+from apps.notifications.services import notify
 from apps.shopping import services as shopping
 
 from . import ingredients as ing
@@ -145,4 +147,7 @@ def rate(recipe, user, stars):
 
 
 def add_comment(recipe, user, body):
-    return social.add_comment(RecipeComment, "recipe", recipe, user, body)
+    comment = social.add_comment(RecipeComment, "recipe", recipe, user, body)
+    url = reverse("recipes:detail", args=[recipe.pk])
+    notify(recipe.household, [recipe.owner], user, "comment", recipe.title, url)
+    return comment

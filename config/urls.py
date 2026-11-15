@@ -14,5 +14,6 @@ urlpatterns = [
     path("sitios/", include("apps.places.urls")),
     path("finanzas/", include("apps.finance.urls")),
     path("recetas/", include("apps.recipes.urls")),
+    path("avisos/", include("apps.notifications.urls")),
     path("", include("apps.core.urls")),
 ]

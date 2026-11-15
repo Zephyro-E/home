@@ -2,7 +2,7 @@
 
 Aplicación web para gestionar la vida cotidiana de un hogar: lista de la compra y deseos, tareas, calendario, finanzas, recetas, sitios que visitar y películas/series. Pensada para usarse desde el móvil y el ordenador, compartida entre los miembros del hogar y con información personal privada.
 
-> **Estado:** Fases 0–8 terminadas (todos los módulos previstos). Siguiente: Fase 9 (buscador, notificaciones, exportación, recuperación de contraseña). Ver [docs/roadmap.md](docs/roadmap.md). Ver [docs/roadmap.md](docs/roadmap.md).
+> **Estado:** Fases 0–9 terminadas (todos los módulos, buscador, avisos, exportación y recuperación de contraseña) y acceso desde fuera de casa con Tailscale. Siguiente: Fase 10 (servidor). Ver [docs/roadmap.md](docs/roadmap.md). Ver [docs/roadmap.md](docs/roadmap.md).
 
 ## Tecnología
 
@@ -60,7 +60,7 @@ Los datos se guardan en la carpeta `data/` (base de datos, registros y clave sec
 ```bash
 uv run pytest                        # pruebas automáticas
 uv run ruff check . && uv run ruff format .   # revisar y formatear el código
-uv run python manage.py changepassword correo@ejemplo.com   # restablecer una contraseña olvidada
+uv run python manage.py changepassword correo@ejemplo.com   # contraseña olvidada de quien administra (el resto: enlace desde «Hogar y miembros»)
 uv run python manage.py tailwind build        # recompilar estilos
 uv run python manage.py translations update   # extraer textos nuevos para traducir
 ```

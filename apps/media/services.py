@@ -4,10 +4,12 @@ import random
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Q
+from django.urls import reverse
 from django.utils.translation import gettext as _
 
 from apps.core import social
 from apps.core.models import Visibility
+from apps.notifications.services import notify
 
 from .models import SeriesProgress, Title, TitleComment, TitleRating
 
@@ -87,7 +89,10 @@ def rate(item: Title, user, stars: int):
 
 
 def add_comment(item: Title, user, body: str):
-    return social.add_comment(TitleComment, "title", item, user, body)
+    comment = social.add_comment(TitleComment, "title", item, user, body)
+    url = reverse("media:detail", args=[item.pk])
+    notify(item.household, [item.owner], user, "comment", item.title, url)
+    return comment
 
 
 def set_progress(item: Title, user, season: int, episode: int) -> SeriesProgress:

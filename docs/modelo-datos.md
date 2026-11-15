@@ -148,6 +148,15 @@ Membership.default_share_bp   reparto por defecto (se normaliza para sumar 100 %
 
 Saldo de una persona = lo que adelantó en gastos compartidos − su parte de todos ellos + pagos hechos − pagos recibidos.
 
+## Fase 9
+
+```
+PasswordReset        user, household, token_hash (solo el hash), created_by, expires_at (24 h),
+                     used_at        (enlace de un solo uso para elegir contraseña, ADR-023)
+Notification         (HouseholdOwnedModel, siempre private; owner = quien recibe)
+                     kind, actor, title, url, read_at
+```
+
 ## Módulos posteriores (esbozo)
 
 - **Recetas (F8)**: `Recipe`, `RecipeIngredient` (cantidad, unidad, nombre), etiquetas, valoraciones; acción "añadir a la lista de la compra" → `GroceryItem`.

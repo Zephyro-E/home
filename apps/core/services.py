@@ -7,7 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from .models import MEMBER_COLORS, Household, Invitation, Membership
+from .models import MEMBER_COLORS, Household, Invitation, Membership, PasswordReset
 
 User = get_user_model()
 
@@ -141,3 +141,32 @@ def register_login_failure(ip: str, email: str) -> None:
 
 def reset_login_failures(ip: str, email: str) -> None:
     cache.delete(_login_keys(ip, email)[1])
+
+
+# --- Recuperar contraseña (ADR-023) ---------------------------------------------------------
+
+
+def create_password_reset(admin_membership: Membership, target: Membership):
+    """La administración crea un enlace para que un miembro elija contraseña nueva.
+
+    No se puede para otra persona con rol de administración (evita que una cuenta con
+    permisos tome el control de otra igual) ni para uno mismo (para eso está el perfil).
+    """
+    if not admin_membership.is_admin or target.household_id != admin_membership.household_id:
+        raise ValidationError(_("No tienes permiso para hacer esto."))
+    if target.user_id == admin_membership.user_id:
+        raise ValidationError(_("Cambia tu propia contraseña desde tu perfil."))
+    if target.is_admin:
+        raise ValidationError(
+            _("No se puede crear el enlace para otra persona con rol de administración.")
+        )
+    return PasswordReset.create_for(target.user, target.household, admin_membership.user)
+
+
+@transaction.atomic
+def use_password_reset(reset: PasswordReset, password: str) -> None:
+    """Pone la contraseña nueva y gasta el enlace (las sesiones abiertas se cierran)."""
+    reset.user.set_password(password)
+    reset.user.save(update_fields=["password"])
+    reset.used_at = timezone.now()
+    reset.save(update_fields=["used_at"])

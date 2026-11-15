@@ -222,6 +222,60 @@ class Invitation(models.Model):
         return self.used_at is None and self.expires_at > timezone.now()
 
 
+PASSWORD_RESET_HOURS = 24
+
+
+class PasswordReset(models.Model):
+    """Enlace de un solo uso para elegir contraseña nueva (ADR-023).
+
+    Lo crea quien administra el hogar para un miembro que la ha olvidado. Como en las
+    invitaciones, solo se guarda el hash del token.
+    """
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        conf.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="password_resets"
+    )
+    household = models.ForeignKey(Household, on_delete=models.CASCADE, related_name="+")
+    token_hash = models.CharField(max_length=64, unique=True)
+    created_by = models.ForeignKey(
+        conf.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name="+"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    used_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.user} ({self.created_at:%Y-%m-%d})"
+
+    @classmethod
+    def create_for(cls, user, household, created_by):
+        """Anula los enlaces anteriores de esa persona y crea uno nuevo: (enlace, token)."""
+        cls.objects.filter(user=user, used_at__isnull=True).update(used_at=timezone.now())
+        token = secrets.token_urlsafe(32)
+        reset = cls.objects.create(
+            user=user,
+            household=household,
+            token_hash=hash_token(token),
+            created_by=created_by,
+            expires_at=timezone.now() + timedelta(hours=PASSWORD_RESET_HOURS),
+        )
+        return reset, token
+
+    @classmethod
+    def find_valid(cls, token: str):
+        return (
+            cls.objects.filter(
+                token_hash=hash_token(token), used_at__isnull=True, expires_at__gt=timezone.now()
+            )
+            .select_related("user")
+            .first()
+        )
+
+
 # --- Patrón común de los módulos (ADR-005) -----------------------------------------------
 
 

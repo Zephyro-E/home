@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Hogar VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-11-15 18:33+0100\n"
+"POT-Creation-Date: 2026-11-15 19:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -39,7 +39,7 @@ msgstr "%(n)s min"
 msgid "%(n)s raciones"
 msgstr "%(n)s servings"
 
-#: apps/core/views.py:245
+#: apps/core/views.py:247
 #, python-format
 msgid "%(name)s ya no forma parte del hogar."
 msgstr "%(name)s is no longer part of the household."
@@ -57,6 +57,36 @@ msgstr "+50 or -20"
 #, python-format
 msgid ", hasta el %(date)s"
 msgstr ", until %(date)s"
+
+#: apps/notifications/templates/notifications/list.html:30
+#, python-format
+msgid "<strong>%(actor)s</strong> ha apuntado un gasto compartido: «%(title)s»"
+msgstr "<strong>%(actor)s</strong> recorded a shared expense: “%(title)s”"
+
+#: apps/notifications/templates/notifications/list.html:27
+#, python-format
+msgid "<strong>%(actor)s</strong> ha comentado en «%(title)s»"
+msgstr "<strong>%(actor)s</strong> commented on “%(title)s”"
+
+#: apps/notifications/templates/notifications/list.html:31
+#, python-format
+msgid "<strong>%(actor)s</strong> ha registrado un pago entre miembros: %(title)s"
+msgstr "<strong>%(actor)s</strong> recorded a payment between members: %(title)s"
+
+#: apps/notifications/templates/notifications/list.html:28
+#, python-format
+msgid "<strong>%(actor)s</strong> propone comprar «%(title)s»"
+msgstr "<strong>%(actor)s</strong> proposes buying “%(title)s”"
+
+#: apps/notifications/templates/notifications/list.html:26
+#, python-format
+msgid "<strong>%(actor)s</strong> te ha asignado la tarea «%(title)s»"
+msgstr "<strong>%(actor)s</strong> assigned you the task “%(title)s”"
+
+#: apps/notifications/templates/notifications/list.html:29
+#, python-format
+msgid "<strong>%(actor)s</strong> te ha añadido al evento «%(title)s»"
+msgstr "<strong>%(actor)s</strong> added you to the event “%(title)s”"
 
 #: apps/shopping/models.py:105
 msgid "A favor"
@@ -115,15 +145,19 @@ msgstr "The whole household can see it now."
 msgid "Ahorro"
 msgstr "Savings"
 
-#: apps/core/forms.py:73
+#: apps/core/forms.py:88
 msgid "Al menos 8 caracteres; evita contraseñas comunes o solo numéricas."
 msgstr "At least 8 characters; avoid common or numbers-only passwords."
+
+#: apps/notifications/templates/notifications/list.html:25
+msgid "Alguien"
+msgstr "Someone"
 
 #: apps/shopping/models.py:58 apps/tasks/models.py:64
 msgid "Alta"
 msgstr "High"
 
-#: templates/core/household.html:115
+#: templates/core/household.html:136
 msgid "Anular"
 msgstr "Revoke"
 
@@ -163,6 +197,12 @@ msgstr "Write down restaurants, outings or trips you fancy."
 msgid "Apuntar"
 msgstr "Record"
 
+#: apps/notifications/templates/notifications/list.html:46
+msgid "Aquí verás cuando te asignen una tarea, comenten algo tuyo o te toque parte de un gasto."
+msgstr ""
+"Here you will see when you are assigned a task, someone comments on something of yours or you owe"
+" part of an expense."
+
 #: apps/finance/templates/finance/accounts.html:43
 msgid "Archivadas"
 msgstr "Archived"
@@ -174,6 +214,17 @@ msgstr "Archive account"
 #: apps/finance/templates/finance/account_form.html:42
 msgid "Archivar oculta la cuenta del resumen y de los formularios, pero conserva sus movimientos."
 msgstr "Archiving hides the account from the summary and forms, but keeps its transactions."
+
+#: apps/notifications/apps.py:7 apps/notifications/templates/notifications/list.html:4
+#: apps/notifications/templates/notifications/list.html:8 templates/partials/header_actions.html:13
+#: templates/partials/header_actions.html:20
+msgid "Avisos"
+msgstr "Notifications"
+
+#: templates/partials/header_actions.html:20
+#, python-format
+msgid "Avisos (%(n)s sin leer)"
+msgstr "Notifications (%(n)s unread)"
 
 #: apps/events/templates/events/agenda.html:25
 msgid "Añade citas, cumpleaños o planes. Las tareas con fecha también aparecen aquí."
@@ -329,10 +380,20 @@ msgstr "Delete payment"
 msgid "Borrar toda la serie"
 msgstr "Delete the whole series"
 
+#: templates/core/search.html:41
+msgid "Busca en la lista de la compra, tareas, calendario, deseos, recetas, películas, sitios y finanzas."
+msgstr "Search the shopping list, tasks, calendar, wishes, recipes, films, places and finances."
+
 #: apps/media/templates/media/list.html:28 apps/places/templates/places/list.html:27
-#: apps/recipes/templates/recipes/list.html:13
+#: apps/recipes/templates/recipes/list.html:13 templates/core/search.html:4
+#: templates/core/search.html:7
 msgid "Buscar"
 msgstr "Search"
+
+#: templates/core/search.html:9 templates/partials/header_actions.html:7
+#: templates/partials/header_actions.html:18
+msgid "Buscar en Hogar"
+msgstr "Search Hogar"
 
 #: apps/places/templates/places/list.html:28
 msgid "Buscar nombre, zona…"
@@ -346,7 +407,11 @@ msgstr "Search recipe or ingredient…"
 msgid "Buscar título, género, plataforma…"
 msgstr "Search title, genre, platform…"
 
-#: apps/core/forms.py:146
+#: templates/partials/header_actions.html:9
+msgid "Buscar…"
+msgstr "Search…"
+
+#: apps/core/forms.py:161
 msgid "Cada"
 msgstr "Every"
 
@@ -386,8 +451,9 @@ msgstr "Every month"
 msgid "Cada semana"
 msgstr "Every week"
 
-#: apps/core/modules.py:58 apps/events/apps.py:7 apps/events/templates/events/event_detail.html:13
-#: apps/events/templates/events/month.html:4 apps/events/templates/events/partials/header.html:3
+#: apps/core/exporting.py:239 apps/core/modules.py:58 apps/core/search.py:90 apps/events/apps.py:7
+#: apps/events/templates/events/event_detail.html:13 apps/events/templates/events/month.html:4
+#: apps/events/templates/events/partials/header.html:3
 msgid "Calendario"
 msgstr "Calendar"
 
@@ -395,12 +461,16 @@ msgstr "Calendar"
 msgid "Calle, barrio o ciudad"
 msgstr "Street, area or city"
 
+#: apps/core/services.py:158
+msgid "Cambia tu propia contraseña desde tu perfil."
+msgstr "Change your own password from your profile."
+
 #: templates/core/password_change.html:4 templates/core/password_change.html:8
 #: templates/core/password_change.html:14 templates/core/profile.html:49
 msgid "Cambiar contraseña"
 msgstr "Change password"
 
-#: templates/partials/user_menu.html:21
+#: templates/partials/user_menu.html:22
 msgid "Cambiar de hogar"
 msgstr "Switch household"
 
@@ -431,7 +501,7 @@ msgstr "Quantity"
 msgid "Cantidades ajustadas (la receta es para %(n)s)."
 msgstr "Quantities adjusted (the recipe serves %(n)s)."
 
-#: apps/core/forms.py:107
+#: apps/core/forms.py:122
 msgid "Casa"
 msgstr "Home"
 
@@ -466,7 +536,7 @@ msgstr "Celebration"
 msgid "Cerrar"
 msgstr "Close"
 
-#: templates/partials/user_menu.html:38
+#: templates/partials/user_menu.html:39
 msgid "Cerrar sesión"
 msgstr "Log out"
 
@@ -492,8 +562,9 @@ msgstr "Colour"
 msgid "Columnas"
 msgstr "Columns"
 
-#: apps/shopping/forms.py:92 apps/shopping/templates/shopping/wish_detail.html:116
-#: apps/tasks/templates/tasks/task_detail.html:99 templates/partials/comments.html:27
+#: apps/notifications/models.py:17 apps/shopping/forms.py:92
+#: apps/shopping/templates/shopping/wish_detail.html:116 apps/tasks/templates/tasks/task_detail.html:99
+#: templates/partials/comments.html:27
 msgid "Comentario"
 msgstr "Comment"
 
@@ -507,7 +578,7 @@ msgstr "Comment deleted"
 msgid "Comentarios"
 msgstr "Comments"
 
-#: apps/core/models.py:230
+#: apps/core/models.py:284
 msgid "Compartido"
 msgstr "Shared"
 
@@ -554,27 +625,31 @@ msgstr "Description"
 msgid "Configuremos tu hogar"
 msgstr "Let's set up your household"
 
-#: apps/core/forms.py:70
+#: apps/core/forms.py:85
 msgid "Contraseña"
 msgstr "Password"
 
-#: apps/core/views.py:290
+#: apps/core/views.py:292
 msgid "Contraseña cambiada."
 msgstr "Password changed."
 
-#: templates/core/household.html:86
+#: apps/core/views.py:400
+msgid "Contraseña cambiada. Ya puedes entrar con la nueva."
+msgstr "Password changed. You can now sign in with the new one."
+
+#: templates/core/household.html:50 templates/core/household.html:107
 msgid "Copiado"
 msgstr "Copied"
 
-#: templates/core/household.html:86
+#: templates/core/household.html:50 templates/core/household.html:107
 msgid "Copiar"
 msgstr "Copy"
 
-#: apps/core/forms.py:38 apps/core/forms.py:67
+#: apps/core/forms.py:53 apps/core/forms.py:82
 msgid "Correo electrónico"
 msgstr "Email"
 
-#: apps/core/forms.py:43
+#: apps/core/forms.py:58
 msgid "Correo o contraseña incorrectos."
 msgstr "Incorrect email or password."
 
@@ -594,7 +669,7 @@ msgstr "Create your first account to start recording transactions."
 msgid "Crea un enlace de invitación para que se unan los demás miembros."
 msgstr "Create an invitation link so the other members can join."
 
-#: templates/core/household.html:76
+#: templates/core/household.html:97
 msgid ""
 "Crea un enlace y envíaselo (por WhatsApp, por ejemplo). Sirve para una sola persona y caduca en 7"
 " días."
@@ -619,9 +694,18 @@ msgstr "Create category"
 msgid "Crear cuenta y unirme"
 msgstr "Create account and join"
 
-#: templates/core/household.html:99
+#: templates/core/household.html:120
 msgid "Crear enlace de invitación"
 msgstr "Create invitation link"
+
+#: templates/core/household.html:68
+msgid "Crear enlace para cambiar la contraseña"
+msgstr "Create a password change link"
+
+#: templates/core/household.html:69
+#, python-format
+msgid "Crear enlace para que %(name)s cambie su contraseña"
+msgstr "Create a link for %(name)s to change their password"
 
 #: apps/tasks/templates/tasks/labels.html:50
 msgid "Crear etiqueta"
@@ -696,8 +780,9 @@ msgstr ""
 "Shared household expenses count (including split ones). To change or remove a budget, choose the "
 "category in the form."
 
-#: apps/finance/templates/finance/account_form.html:7 apps/finance/templates/finance/accounts.html:4
-#: apps/finance/templates/finance/partials/nav.html:15 apps/finance/templates/finance/summary.html:91
+#: apps/core/exporting.py:243 apps/finance/templates/finance/account_form.html:7
+#: apps/finance/templates/finance/accounts.html:4 apps/finance/templates/finance/partials/nav.html:15
+#: apps/finance/templates/finance/summary.html:91
 msgid "Cuentas"
 msgstr "Accounts"
 
@@ -717,7 +802,7 @@ msgstr "Personal details"
 msgid "De"
 msgstr "Owner"
 
-#: templates/core/household.html:127
+#: templates/core/household.html:148
 msgid "Dejarás de ver la información compartida de este hogar."
 msgstr "You will no longer see this household's shared information."
 
@@ -733,13 +818,26 @@ msgstr "Household: everyone can see it"
 msgid "Del hogar: lo ve todo el mundo"
 msgstr "Household: everyone can see it"
 
-#: apps/core/forms.py:45
+#: apps/core/forms.py:60
 msgid "Demasiados intentos fallidos. Espera unos minutos y vuelve a probar."
 msgstr "Too many failed attempts. Wait a few minutes and try again."
 
 #: apps/recipes/models.py:22
 msgid "Desayuno"
 msgstr "Breakfast"
+
+#: templates/core/export.html:9
+#, python-format
+msgid ""
+"Descarga los datos de «%(name)s» que puedes ver: lo común del hogar y lo personal tuyo. Lo "
+"personal de otras personas no se incluye."
+msgstr ""
+"Download the data of “%(name)s” that you can see: the household’s shared items and your personal "
+"ones. Other people’s personal items are not included."
+
+#: templates/core/export.html:14
+msgid "Descargar JSON"
+msgstr "Download JSON"
 
 #: apps/shopping/models.py:64
 msgid "Descartado"
@@ -773,6 +871,7 @@ msgstr "Personal wish"
 msgid "Deseo personal: solo lo ves tú"
 msgstr "Personal wish: only you can see it"
 
+#: apps/core/exporting.py:237 apps/core/search.py:55
 #: apps/shopping/templates/shopping/partials/tabs.html:9
 #: apps/shopping/templates/shopping/wish_detail.html:13 apps/shopping/templates/shopping/wishes.html:4
 msgid "Deseos"
@@ -845,8 +944,8 @@ msgstr "The file is not a valid image."
 msgid "El correo electrónico es obligatorio."
 msgstr "Email is required."
 
-#: apps/events/forms.py:97 apps/events/forms.py:112 apps/events/services.py:46
-#: apps/events/services.py:48
+#: apps/events/forms.py:97 apps/events/forms.py:112 apps/events/services.py:47
+#: apps/events/services.py:49
 msgid "El final no puede ser anterior al inicio."
 msgstr "The end cannot be before the start."
 
@@ -854,7 +953,7 @@ msgstr "The end cannot be before the start."
 msgid "El hogar debe tener al menos una persona con rol de administración."
 msgstr "The household must have at least one admin."
 
-#: apps/finance/services.py:145 apps/finance/sharing.py:158
+#: apps/finance/services.py:148 apps/finance/sharing.py:161
 msgid "El importe debe ser mayor que cero."
 msgstr "The amount must be greater than zero."
 
@@ -866,7 +965,7 @@ msgstr "The amount is too high."
 msgid "El importe no puede ser negativo."
 msgstr "The amount cannot be negative."
 
-#: apps/media/services.py:97
+#: apps/media/services.py:102
 msgid "El progreso solo se apunta en series."
 msgstr "Progress can only be tracked for series."
 
@@ -879,15 +978,15 @@ msgstr "The recipe book is empty"
 msgid "El reparto debe sumar el 100 %% (ahora suma %(n)s %%)."
 msgstr "The split must add up to 100 %% (it now adds up to %(n)s %%)."
 
-#: apps/finance/sharing.py:31 apps/finance/sharing.py:72 apps/finance/sharing.py:88
+#: apps/finance/sharing.py:34 apps/finance/sharing.py:75 apps/finance/sharing.py:91
 msgid "El reparto debe sumar el 100 %."
 msgstr "The split must add up to 100 %."
 
-#: apps/finance/sharing.py:86
+#: apps/finance/sharing.py:89
 msgid "El reparto solo puede incluir miembros del hogar."
 msgstr "The split can only include household members."
 
-#: apps/tasks/services.py:36
+#: apps/tasks/services.py:38
 msgid "El responsable debe ser miembro del hogar."
 msgstr "The assignee must be a member of the household."
 
@@ -895,7 +994,7 @@ msgstr "The assignee must be a member of the household."
 msgid "Elige al menos un ingrediente."
 msgstr "Choose at least one ingredient."
 
-#: apps/finance/sharing.py:156
+#: apps/finance/sharing.py:159
 msgid "Elige dos personas distintas."
 msgstr "Choose two different people."
 
@@ -903,11 +1002,15 @@ msgstr "Choose two different people."
 msgid "Elige una categoría de gastos."
 msgstr "Choose an expense category."
 
-#: apps/finance/services.py:157
+#: templates/core/password_reset.html:8
+msgid "Elige una contraseña nueva"
+msgstr "Choose a new password"
+
+#: apps/finance/services.py:160
 msgid "Elige una cuenta de destino distinta."
 msgstr "Choose a different destination account."
 
-#: apps/finance/services.py:153
+#: apps/finance/services.py:156
 msgid "Elige una cuenta."
 msgstr "Choose an account."
 
@@ -931,7 +1034,7 @@ msgstr "Against"
 msgid "En curso"
 msgstr "In progress"
 
-#: apps/events/forms.py:119 apps/events/services.py:41
+#: apps/events/forms.py:119 apps/events/services.py:42
 msgid "En un evento personal solo puedes participar tú."
 msgstr "Only you can take part in a personal event."
 
@@ -955,13 +1058,30 @@ msgstr "Image link"
 msgid "Enlace a una imagen (cartel)"
 msgstr "Image link (poster)"
 
-#: templates/core/household.html:80
+#: templates/core/household.html:101
 msgid "Enlace creado. Cópialo ahora: por seguridad no se volverá a mostrar."
 msgstr "Link created. Copy it now: for security it won't be shown again."
 
-#: templates/core/household.html:83
+#: templates/core/household.html:104
 msgid "Enlace de invitación"
 msgstr "Invitation link"
+
+#: templates/core/password_reset.html:16
+msgid "Enlace no válido"
+msgstr "Invalid link"
+
+#: templates/core/household.html:47
+msgid "Enlace para cambiar la contraseña"
+msgstr "Password change link"
+
+#: templates/core/household.html:44
+#, python-format
+msgid ""
+"Enlace para que %(name)s elija una contraseña nueva. Envíaselo ahora: sirve una vez, caduca en 24"
+" horas y no se volverá a mostrar."
+msgstr ""
+"Link for %(name)s to choose a new password. Send it now: it works once, expires in 24 hours and "
+"will not be shown again."
 
 #: apps/recipes/models.py:19
 msgid "Entrante"
@@ -988,19 +1108,23 @@ msgstr ""
 "This is the app's first start. Create your account and your household; then you can invite the "
 "other members."
 
+#: templates/core/search.html:16
+msgid "Escribe al menos 2 letras."
+msgstr "Type at least 2 letters."
+
 #: apps/finance/forms.py:23
 msgid "Escribe el importe."
 msgstr "Enter the amount."
 
-#: apps/finance/services.py:115
+#: apps/finance/services.py:118
 msgid "Escribe el nombre de la categoría."
 msgstr "Enter the category name."
 
-#: apps/finance/services.py:32
+#: apps/finance/services.py:35
 msgid "Escribe el nombre de la cuenta."
 msgstr "Enter the account name."
 
-#: apps/tasks/services.py:254
+#: apps/tasks/services.py:274
 msgid "Escribe el nombre de la etiqueta."
 msgstr "Enter the label name."
 
@@ -1008,27 +1132,27 @@ msgstr "Enter the label name."
 msgid "Escribe el nombre de la meta."
 msgstr "Enter the goal name."
 
-#: apps/shopping/services.py:28
+#: apps/shopping/services.py:30
 msgid "Escribe el nombre del producto."
 msgstr "Enter the item name."
 
-#: apps/places/services.py:42
+#: apps/places/services.py:44
 msgid "Escribe el nombre del sitio."
 msgstr "Enter the place name."
 
-#: apps/recipes/services.py:52
+#: apps/recipes/services.py:54
 msgid "Escribe el título de la receta."
 msgstr "Enter the recipe title."
 
-#: apps/tasks/services.py:103 apps/tasks/services.py:125
+#: apps/tasks/services.py:105 apps/tasks/services.py:138
 msgid "Escribe el título de la tarea."
 msgstr "Enter the task title."
 
-#: apps/events/services.py:59
+#: apps/events/services.py:60
 msgid "Escribe el título del evento."
 msgstr "Enter the event title."
 
-#: apps/media/services.py:43
+#: apps/media/services.py:45
 msgid "Escribe el título."
 msgstr "Enter the title."
 
@@ -1036,11 +1160,11 @@ msgstr "Enter the title."
 msgid "Escribe la cantidad delante para poder ajustar las raciones."
 msgstr "Write the quantity first so servings can be adjusted."
 
-#: apps/tasks/services.py:215
+#: apps/tasks/services.py:231
 msgid "Escribe la subtarea."
 msgstr "Enter the subtask."
 
-#: apps/core/social.py:77 apps/shopping/services.py:141 apps/tasks/services.py:238
+#: apps/core/social.py:77 apps/shopping/services.py:159 apps/tasks/services.py:254
 msgid "Escribe un comentario."
 msgstr "Write a comment."
 
@@ -1053,7 +1177,7 @@ msgstr "Write a comment…"
 msgid "Escribe un importe válido, por ejemplo 12,50."
 msgstr "Enter a valid amount, for example 12.50."
 
-#: apps/core/forms.py:44
+#: apps/core/forms.py:59
 msgid "Esta cuenta está desactivada."
 msgstr "This account is disabled."
 
@@ -1066,9 +1190,13 @@ msgstr "This goal follows its account balance: record transactions there."
 msgid "Estado"
 msgstr "Status"
 
-#: apps/media/services.py:65 apps/shopping/services.py:101 apps/tasks/services.py:48
+#: apps/media/services.py:67 apps/shopping/services.py:119 apps/tasks/services.py:50
 msgid "Estado no válido."
 msgstr "Invalid status."
+
+#: templates/core/password_reset.html:17
+msgid "Este enlace ya se ha usado o ha caducado. Pide uno nuevo a quien administra tu hogar."
+msgstr "This link has already been used or has expired. Ask your household’s administrator for a new one."
 
 #: apps/finance/templates/finance/shared.html:25
 msgid "Estáis en paz: nadie debe nada."
@@ -1097,7 +1225,7 @@ msgstr "Labels"
 msgid "Etiquetas del hogar"
 msgstr "Household labels"
 
-#: apps/events/models.py:18
+#: apps/events/models.py:18 apps/notifications/models.py:19
 msgid "Evento"
 msgstr "Event"
 
@@ -1112,6 +1240,10 @@ msgstr "Event saved."
 #: apps/core/modules.py:59
 msgid "Eventos, citas y cumpleaños"
 msgstr "Events, appointments and birthdays"
+
+#: templates/core/export.html:4 templates/core/export.html:8 templates/partials/user_menu.html:18
+msgid "Exportar datos"
+msgstr "Export data"
 
 #: templates/core/home.html:90
 #, python-format
@@ -1143,8 +1275,8 @@ msgstr "Filter by status"
 msgid "Filtrar tareas"
 msgstr "Filter tasks"
 
-#: apps/core/modules.py:86 apps/finance/apps.py:7 apps/finance/templates/finance/partials/nav.html:3
-#: apps/finance/templates/finance/summary.html:4
+#: apps/core/modules.py:86 apps/core/search.py:156 apps/finance/apps.py:7
+#: apps/finance/templates/finance/partials/nav.html:3 apps/finance/templates/finance/summary.html:4
 msgid "Finanzas"
 msgstr "Finances"
 
@@ -1156,7 +1288,7 @@ msgstr "Unsupported format. Use JPG, PNG or WEBP."
 msgid "Foto"
 msgstr "Photo"
 
-#: apps/core/views.py:364
+#: apps/core/views.py:468
 msgid "Foto actualizada."
 msgstr "Photo updated."
 
@@ -1164,13 +1296,17 @@ msgstr "Photo updated."
 msgid "Foto de perfil"
 msgstr "Profile photo"
 
-#: apps/core/views.py:355
+#: apps/core/views.py:459
 msgid "Foto quitada."
 msgstr "Photo removed."
 
 #: apps/finance/models.py:44 apps/finance/models.py:73
 msgid "Gasto"
 msgstr "Expense"
+
+#: apps/notifications/models.py:20
+msgid "Gasto compartido"
+msgstr "Shared expense"
 
 #: apps/finance/forms.py:108
 msgid "Gasto compartido: repartir entre el hogar"
@@ -1221,6 +1357,10 @@ msgstr "Save"
 msgid "Guardar cambios"
 msgstr "Save changes"
 
+#: templates/core/password_reset.html:13
+msgid "Guardar contraseña"
+msgstr "Save password"
+
 #: apps/finance/templates/finance/shared.html:72
 msgid "Guardar reparto"
 msgstr "Save split"
@@ -1234,26 +1374,34 @@ msgstr "Save and add another"
 msgid "Has iniciado sesión como %(email)s."
 msgstr "You are logged in as %(email)s."
 
-#: apps/core/views.py:260
+#: apps/core/views.py:262
 msgid "Has salido del hogar."
 msgstr "You have left the household."
 
-#: apps/core/forms.py:149
+#: apps/core/forms.py:164
 msgid "Hasta (opcional)"
 msgstr "Until (optional)"
+
+#: templates/core/forgot_password.html:4
+msgid "He olvidado la contraseña"
+msgstr "I forgot my password"
 
 #: templates/core/household.html:27
 msgid "Hogar"
 msgstr "Household"
 
-#: apps/core/views.py:165
+#: apps/core/views.py:166
 msgid "Hogar creado."
 msgstr "Household created."
 
 #: templates/core/household.html:4 templates/core/household.html:22
-#: templates/partials/user_menu.html:18
+#: templates/partials/user_menu.html:19
 msgid "Hogar y miembros"
 msgstr "Household & members"
+
+#: templates/core/export.html:19
+msgid "Hojas de cálculo preparadas para Excel en español (separador «;» y coma decimal)."
+msgstr "Spreadsheets prepared for Spanish-language Excel (“;” separator and decimal comma)."
 
 #: templates/core/home.html:9
 #, python-format
@@ -1291,7 +1439,7 @@ msgstr "Monthly amount (€)"
 msgid "Indica cuánto quieres ahorrar."
 msgstr "Enter how much you want to save."
 
-#: apps/finance/sharing.py:70
+#: apps/finance/sharing.py:73
 msgid "Indica el reparto de todos los miembros."
 msgstr "Enter the share of every member."
 
@@ -1325,7 +1473,7 @@ msgstr "Log in"
 msgid "Iniciar sesión"
 msgstr "Log in"
 
-#: templates/base.html:23 templates/base.html:56 templates/core/home.html:4
+#: templates/base.html:24 templates/base.html:58 templates/core/home.html:4
 msgid "Inicio"
 msgstr "Home"
 
@@ -1333,7 +1481,7 @@ msgstr "Home"
 msgid "Invita al resto del hogar"
 msgstr "Invite the rest of your household"
 
-#: templates/core/household.html:104
+#: templates/core/household.html:125
 msgid "Invitaciones pendientes"
 msgstr "Pending invitations"
 
@@ -1341,7 +1489,7 @@ msgstr "Pending invitations"
 msgid "Invitación"
 msgstr "Invitation"
 
-#: apps/core/views.py:222
+#: apps/core/views.py:224
 msgid "Invitación anulada."
 msgstr "Invitation revoked."
 
@@ -1353,9 +1501,13 @@ msgstr "Invalid invitation"
 msgid "Invitar"
 msgstr "Invite"
 
-#: templates/core/household.html:75
+#: templates/core/household.html:96
 msgid "Invitar a alguien"
 msgstr "Invite someone"
+
+#: templates/core/password_reset.html:18
+msgid "Ir a la entrada"
+msgstr "Go to sign in"
 
 #: templates/core/invitation.html:11 templates/core/invitation.html:19
 msgid "Ir al inicio"
@@ -1377,7 +1529,7 @@ msgstr ""
 msgid "La app vive en el PC de casa y ahora no responde. Comprueba que:"
 msgstr "The app lives on the home PC and it is not responding right now. Check that:"
 
-#: apps/finance/services.py:164
+#: apps/finance/services.py:167
 msgid "La categoría no corresponde a este tipo de movimiento."
 msgstr "The category does not match this type of transaction."
 
@@ -1385,7 +1537,7 @@ msgstr "The category does not match this type of transaction."
 msgid "La configuración inicial ya se realizó."
 msgstr "The initial setup has already been done."
 
-#: apps/finance/services.py:63
+#: apps/finance/services.py:66
 msgid "La cuenta tiene movimientos: archívala en lugar de borrarla."
 msgstr "The account has transactions: archive it instead of deleting it."
 
@@ -1405,7 +1557,7 @@ msgstr "The invitation is not valid, has already been used or has expired."
 msgid "La lista está vacía"
 msgstr "The list is empty"
 
-#: apps/events/services.py:43 apps/tasks/services.py:61
+#: apps/events/services.py:44 apps/tasks/services.py:63
 msgid "La repetición no es válida."
 msgstr "The repetition is not valid."
 
@@ -1413,15 +1565,21 @@ msgstr "The repetition is not valid."
 msgid "La valoración debe ser de 1 a 5 estrellas."
 msgstr "The rating must be from 1 to 5 stars."
 
-#: apps/core/forms.py:93
+#: apps/core/forms.py:108
 msgid "Las contraseñas no coinciden."
 msgstr "The passwords don't match."
 
-#: apps/finance/sharing.py:154
+#: templates/core/export.html:27
+msgid ""
+"Las copias de seguridad completas (con fotos y todos los datos) se hacen en el PC con el script "
+"copia.bat."
+msgstr "Full backups (with photos and all data) are made on the PC with the copia.bat script."
+
+#: apps/finance/sharing.py:157
 msgid "Las dos personas deben ser miembros del hogar."
 msgstr "Both people must be household members."
 
-#: apps/recipes/services.py:57
+#: apps/recipes/services.py:59
 msgid "Las raciones deben estar entre 1 y 50."
 msgstr "Servings must be between 1 and 50."
 
@@ -1429,7 +1587,8 @@ msgstr "Servings must be between 1 and 50."
 msgid "Lista"
 msgstr "List"
 
-#: apps/shopping/templates/shopping/grocery.html:4 templates/core/home.html:60
+#: apps/core/exporting.py:236 apps/core/search.py:43 apps/shopping/templates/shopping/grocery.html:4
+#: templates/core/home.html:60
 msgid "Lista de la compra"
 msgstr "Shopping list"
 
@@ -1450,7 +1609,7 @@ msgstr "What is coming up, until %(until)s."
 msgid "Los cambios se aplican a todas las repeticiones."
 msgstr "Changes apply to every repetition."
 
-#: apps/events/services.py:39
+#: apps/events/services.py:40
 msgid "Los participantes deben ser miembros del hogar."
 msgstr "Participants must be members of the household."
 
@@ -1470,6 +1629,10 @@ msgstr "Map"
 #, python-format
 msgid "Marcar %(name)s como comprado"
 msgstr "Mark %(name)s as bought"
+
+#: apps/notifications/templates/notifications/list.html:12
+msgid "Marcar todo como leído"
+msgstr "Mark all as read"
 
 #: apps/shopping/models.py:57 apps/tasks/models.py:63
 msgid "Media"
@@ -1540,7 +1703,8 @@ msgstr "Transaction deleted."
 msgid "Movimiento guardado."
 msgstr "Transaction saved."
 
-#: apps/finance/templates/finance/accounts.html:27 apps/finance/templates/finance/partials/nav.html:11
+#: apps/core/exporting.py:244 apps/finance/templates/finance/accounts.html:27
+#: apps/finance/templates/finance/partials/nav.html:11
 #: apps/finance/templates/finance/transaction_form.html:10
 #: apps/finance/templates/finance/transactions.html:4
 msgid "Movimientos"
@@ -1550,7 +1714,7 @@ msgstr "Transactions"
 msgid "Museo o cultura"
 msgstr "Museum or culture"
 
-#: templates/base.html:61
+#: templates/base.html:63
 msgid "Más"
 msgstr "More"
 
@@ -1600,11 +1764,11 @@ msgstr "Nobody"
 msgid "Naturaleza o excursión"
 msgstr "Nature or outing"
 
-#: templates/base.html:55
+#: templates/base.html:57
 msgid "Navegación inferior"
 msgstr "Bottom navigation"
 
-#: templates/base.html:22
+#: templates/base.html:23
 msgid "Navegación principal"
 msgstr "Main navigation"
 
@@ -1615,6 +1779,10 @@ msgstr "Netflix, cinema, DVD…"
 #: apps/finance/forms.py:278
 msgid "Ninguna: apuntaré las aportaciones a mano"
 msgstr "None: I will record contributions manually"
+
+#: apps/notifications/templates/notifications/list.html:45
+msgid "No hay avisos"
+msgstr "No notifications"
 
 #: apps/finance/templates/finance/shared.html:106
 msgid "No hay gastos compartidos este mes."
@@ -1649,6 +1817,11 @@ msgstr "No shared proposals"
 msgid "No hay resultados"
 msgstr "No results"
 
+#: templates/core/search.html:19
+#, python-format
+msgid "No hay resultados para «%(q)s»"
+msgstr "No results for “%(q)s”"
+
 #: apps/places/templates/places/partials/random.html:16
 msgid "No hay sitios pendientes."
 msgstr "No places to visit."
@@ -1657,7 +1830,7 @@ msgstr "No places to visit."
 msgid "No perteneces a ningún hogar. Puedes crear uno nuevo o pedir a alguien un enlace de invitación."
 msgstr "You don't belong to any household. You can create a new one or ask someone for an invitation link."
 
-#: apps/finance/planning.py:100 apps/finance/services.py:151
+#: apps/finance/planning.py:100 apps/finance/services.py:154
 msgid "No puedes usar esa cuenta."
 msgstr "You cannot use that account."
 
@@ -1669,19 +1842,27 @@ msgstr "It cannot be changed later, so balances always add up."
 msgid "No se puede conectar con Hogar"
 msgstr "Cannot connect to Hogar"
 
+#: apps/core/services.py:161
+msgid "No se puede crear el enlace para otra persona con rol de administración."
+msgstr "A link cannot be created for another person with the administrator role."
+
 #: apps/core/recurrence.py:18
 msgid "No se repite"
 msgstr "Does not repeat"
+
+#: apps/core/services.py:156
+msgid "No tienes permiso para hacer esto."
+msgstr "You do not have permission to do this."
 
 #: apps/finance/forms.py:214 apps/finance/forms.py:261 apps/tasks/forms.py:91
 msgid "Nombre"
 msgstr "Name"
 
-#: apps/core/forms.py:105
+#: apps/core/forms.py:120
 msgid "Nombre del hogar"
 msgstr "Household name"
 
-#: apps/core/views.py:200
+#: apps/core/views.py:202
 msgid "Nombre del hogar actualizado."
 msgstr "Household name updated."
 
@@ -1696,6 +1877,10 @@ msgstr "Notes"
 #: apps/finance/templates/finance/categories.html:20
 msgid "Nueva categoría"
 msgstr "New category"
+
+#: templates/core/password_reset.html:4
+msgid "Nueva contraseña"
+msgstr "New password"
 
 #: apps/finance/templates/finance/account_form.html:4
 #: apps/finance/templates/finance/account_form.html:8 apps/finance/templates/finance/accounts.html:11
@@ -1791,6 +1976,10 @@ msgstr "Pays"
 msgid "Pago borrado"
 msgstr "Payment deleted"
 
+#: apps/notifications/models.py:21
+msgid "Pago entre miembros"
+msgstr "Payment between members"
+
 #: apps/finance/views.py:403
 msgid "Pago registrado."
 msgstr "Payment recorded."
@@ -1804,7 +1993,7 @@ msgstr "Recorded payments"
 msgid "Pagó %(name)s"
 msgstr "Paid by %(name)s"
 
-#: templates/partials/user_menu.html:33
+#: templates/partials/user_menu.html:34
 msgid "Panel de administración"
 msgstr "Admin panel"
 
@@ -1819,6 +2008,11 @@ msgstr ""
 #: templates/core/home.html:28
 msgid "Para hoy"
 msgstr "For today"
+
+#: templates/core/password_reset.html:9
+#, python-format
+msgid "Para la cuenta %(email)s."
+msgstr "For the account %(email)s."
 
 #: apps/events/forms.py:41 apps/events/templates/events/event_detail.html:53
 msgid "Participantes"
@@ -1837,9 +2031,9 @@ msgstr "Steps"
 msgid "Película"
 msgstr "Film"
 
-#: apps/core/modules.py:68 apps/media/apps.py:7 apps/media/templates/media/detail.html:10
-#: apps/media/templates/media/list.html:4 apps/media/templates/media/list.html:8
-#: apps/media/templates/media/random.html:7
+#: apps/core/exporting.py:240 apps/core/modules.py:68 apps/core/search.py:101 apps/media/apps.py:7
+#: apps/media/templates/media/detail.html:10 apps/media/templates/media/list.html:4
+#: apps/media/templates/media/list.html:8 apps/media/templates/media/random.html:7
 msgid "Películas y series"
 msgstr "Movies & series"
 
@@ -1851,7 +2045,7 @@ msgstr "Pending"
 msgid "Pendientes"
 msgstr "To visit"
 
-#: apps/core/views.py:279
+#: apps/core/views.py:281
 msgid "Perfil guardado."
 msgstr "Profile saved."
 
@@ -1859,7 +2053,7 @@ msgstr "Profile saved."
 msgid "Permisos"
 msgstr "Permissions"
 
-#: apps/core/models.py:229 apps/events/templates/events/event_detail.html:22
+#: apps/core/models.py:283 apps/events/templates/events/event_detail.html:22
 #: apps/finance/templates/finance/accounts.html:21 apps/finance/templates/finance/partials/scope.html:5
 #: apps/media/templates/media/detail.html:21 apps/media/templates/media/list.html:50
 #: apps/places/templates/places/detail.html:21 apps/places/templates/places/list.html:49
@@ -1880,6 +2074,16 @@ msgstr "Personal: only you can see it"
 #: templates/core/invitation.html:10
 msgid "Pide a alguien del hogar que te envíe un enlace nuevo."
 msgstr "Ask someone in the household to send you a new link."
+
+#: templates/core/forgot_password.html:8
+msgid ""
+"Pide a quien administra tu hogar que te cree un enlace para elegir una nueva: lo encontrará en "
+"«Hogar y miembros», junto a tu nombre (icono de la llave). El enlace sirve una vez y caduca en 24"
+" horas."
+msgstr ""
+"Ask your household’s administrator to create a link for you to choose a new one: they will find "
+"it in “Household and members”, next to your name (key icon). The link works once and expires in "
+"24 hours."
 
 #: apps/finance/forms.py:247
 msgid "Pon 0 para quitar el presupuesto."
@@ -1905,9 +2109,13 @@ msgstr "For example, the shared bank account or cash."
 msgid "Por ejemplo: vacaciones, un fondo para imprevistos o un coche nuevo."
 msgstr "For example: holidays, an emergency fund or a new car."
 
-#: apps/core/forms.py:108
+#: apps/core/forms.py:123
 msgid "Por ejemplo: «Casa» o «Piso de Madrid». Se puede cambiar después."
 msgstr "For example: “Home” or “Madrid flat”. You can change it later."
+
+#: templates/core/export.html:18
+msgid "Por módulo (CSV para Excel)"
+msgstr "By module (CSV for Excel)"
 
 #: apps/media/models.py:17 apps/media/views.py:22
 msgid "Por ver"
@@ -1976,6 +2184,10 @@ msgstr "Item"
 msgid "Productos comprados quitados de la lista"
 msgstr "Bought items removed from the list"
 
+#: templates/core/search.html:11
+msgid "Productos, tareas, recetas, sitios…"
+msgstr "Items, tasks, recipes, places…"
+
 #: templates/core/household.html:15 templates/partials/nav_link.html:11
 msgid "Pronto"
 msgstr "Soon"
@@ -1991,6 +2203,10 @@ msgstr "Shared proposal"
 #: apps/shopping/forms.py:65
 msgid "Propuesta común: la ve todo el hogar"
 msgstr "Shared proposal: the whole household sees it"
+
+#: apps/notifications/models.py:18
+msgid "Propuesta de compra"
+msgstr "Purchase proposal"
 
 #: apps/shopping/templates/shopping/wishes.html:12
 msgid "Propuestas comunes"
@@ -2013,6 +2229,10 @@ msgstr "Proposed by %(name)s"
 msgid "Propón algo para el hogar y el resto podrá votarlo y comentarlo."
 msgstr "Propose something for the household and the others can vote and comment on it."
 
+#: templates/core/search.html:20
+msgid "Prueba con otra palabra."
+msgstr "Try another word."
+
 #: apps/finance/templates/finance/partials/budget_rows.html:13
 #, python-format
 msgid "Quedan %(left)s"
@@ -2023,7 +2243,7 @@ msgstr "%(left)s left"
 msgid "Quitar %(name)s"
 msgstr "Remove %(name)s"
 
-#: templates/core/household.html:62
+#: templates/core/household.html:83
 #, python-format
 msgid "Quitar a %(name)s"
 msgstr "Remove %(name)s"
@@ -2080,8 +2300,9 @@ msgstr "Original recipe (link)"
 msgid "Recetario del hogar"
 msgstr "Household recipe book"
 
-#: apps/core/modules.py:95 apps/recipes/apps.py:7 apps/recipes/templates/recipes/detail.html:10
-#: apps/recipes/templates/recipes/list.html:4 apps/recipes/templates/recipes/list.html:8
+#: apps/core/exporting.py:242 apps/core/modules.py:95 apps/core/search.py:135 apps/recipes/apps.py:7
+#: apps/recipes/templates/recipes/detail.html:10 apps/recipes/templates/recipes/list.html:4
+#: apps/recipes/templates/recipes/list.html:8
 msgid "Recetas"
 msgstr "Recipes"
 
@@ -2118,11 +2339,11 @@ msgstr "Default split saved."
 msgid "Repetición"
 msgstr "Repeats"
 
-#: apps/core/forms.py:143
+#: apps/core/forms.py:158
 msgid "Repetir"
 msgstr "Repeat"
 
-#: apps/core/forms.py:76
+#: apps/core/forms.py:91
 msgid "Repite la contraseña"
 msgstr "Repeat the password"
 
@@ -2146,11 +2367,11 @@ msgstr "Summary"
 msgid "Revisa los porcentajes."
 msgstr "Check the percentages."
 
-#: templates/core/household.html:53 templates/core/household.html:94
+#: templates/core/household.html:74 templates/core/household.html:115
 msgid "Rol"
 msgstr "Role"
 
-#: apps/core/views.py:231
+#: apps/core/views.py:233
 msgid "Rol actualizado."
 msgstr "Role updated."
 
@@ -2170,7 +2391,7 @@ msgstr "Each person’s balance"
 msgid "Saldo inicial (€)"
 msgstr "Opening balance (€)"
 
-#: templates/core/household.html:126 templates/core/household.html:132
+#: templates/core/household.html:147 templates/core/household.html:153
 msgid "Salir del hogar"
 msgstr "Leave household"
 
@@ -2230,6 +2451,10 @@ msgstr "If the transaction involves a shared account, the whole household will s
 msgid "Si eliges una cuenta, el progreso será su saldo."
 msgstr "If you choose an account, the progress will be its balance."
 
+#: templates/core/forgot_password.html:9
+msgid "Si eres tú quien administra el hogar, cámbiala en el PC donde está instalada la app con:"
+msgstr "If you are the household’s administrator, change it on the PC where the app is installed with:"
+
 #: apps/events/templates/events/event_form.html:48
 msgid "Si no indicas el final, dura una hora."
 msgstr "If you leave the end empty, it lasts one hour."
@@ -2243,7 +2468,7 @@ msgstr "Cont."
 msgid "Sigue el saldo de «%(name)s»"
 msgstr "Follows the balance of “%(name)s”"
 
-#: apps/finance/forms.py:96 apps/finance/forms.py:102 apps/finance/services.py:245
+#: apps/finance/forms.py:96 apps/finance/forms.py:102 apps/finance/services.py:255
 msgid "Sin categoría"
 msgstr "Uncategorised"
 
@@ -2258,6 +2483,10 @@ msgstr "No date"
 #: apps/recipes/templates/recipes/detail.html:67
 msgid "Sin ingredientes."
 msgstr "No ingredients."
+
+#: apps/notifications/templates/notifications/list.html:37
+msgid "Sin leer"
+msgstr "Unread"
 
 #: apps/recipes/templates/recipes/detail.html:83
 msgid "Sin pasos."
@@ -2287,21 +2516,21 @@ msgstr "Place deleted."
 msgid "Sitio guardado."
 msgstr "Place saved."
 
-#: apps/core/modules.py:77 apps/places/apps.py:7 apps/places/templates/places/detail.html:10
-#: apps/places/templates/places/list.html:4 apps/places/templates/places/list.html:8
-#: apps/places/templates/places/random.html:7
+#: apps/core/exporting.py:241 apps/core/modules.py:77 apps/core/search.py:118 apps/places/apps.py:7
+#: apps/places/templates/places/detail.html:10 apps/places/templates/places/list.html:4
+#: apps/places/templates/places/list.html:8 apps/places/templates/places/random.html:7
 msgid "Sitios"
 msgstr "Places"
 
-#: apps/shopping/services.py:143
+#: apps/shopping/services.py:161
 msgid "Solo se comenta en las propuestas comunes."
 msgstr "Only shared proposals can be commented on."
 
-#: apps/finance/sharing.py:81
+#: apps/finance/sharing.py:84
 msgid "Solo se reparten gastos pagados con una cuenta personal."
 msgstr "Only expenses paid from a personal account can be split."
 
-#: apps/shopping/services.py:123
+#: apps/shopping/services.py:141
 msgid "Solo se vota en las propuestas comunes."
 msgstr "Only shared proposals can be voted on."
 
@@ -2336,6 +2565,10 @@ msgstr "Household task board"
 msgid "Tarea"
 msgstr "Task"
 
+#: apps/notifications/models.py:16
+msgid "Tarea asignada"
+msgstr "Task assigned"
+
 #: apps/tasks/views.py:218
 msgid "Tarea borrada."
 msgstr "Task deleted."
@@ -2344,9 +2577,9 @@ msgstr "Task deleted."
 msgid "Tarea creada."
 msgstr "Task created."
 
-#: apps/core/modules.py:48 apps/tasks/apps.py:7 apps/tasks/templates/tasks/board.html:4
-#: apps/tasks/templates/tasks/board.html:9 apps/tasks/templates/tasks/labels.html:8
-#: apps/tasks/templates/tasks/task_detail.html:13
+#: apps/core/exporting.py:238 apps/core/modules.py:48 apps/core/search.py:70 apps/tasks/apps.py:7
+#: apps/tasks/templates/tasks/board.html:4 apps/tasks/templates/tasks/board.html:9
+#: apps/tasks/templates/tasks/labels.html:8 apps/tasks/templates/tasks/task_detail.html:13
 msgid "Tareas"
 msgstr "Tasks"
 
@@ -2358,7 +2591,7 @@ msgstr "Card"
 msgid "Te han invitado a"
 msgstr "You've been invited to"
 
-#: apps/core/views.py:106
+#: apps/core/views.py:107
 #, python-format
 msgid "Te has unido a %(name)s."
 msgstr "You have joined %(name)s."
@@ -2379,7 +2612,7 @@ msgstr "Theme: system"
 msgid "Temporada"
 msgstr "Season"
 
-#: apps/media/services.py:99 apps/media/views.py:199
+#: apps/media/services.py:104 apps/media/views.py:199
 msgid "Temporada o episodio no válidos."
 msgstr "Invalid season or episode."
 
@@ -2412,7 +2645,7 @@ msgstr "Wish type"
 msgid "Tipo de plato"
 msgstr "Course"
 
-#: apps/finance/services.py:117 apps/finance/services.py:142
+#: apps/finance/services.py:120 apps/finance/services.py:145
 msgid "Tipo no válido."
 msgstr "Invalid type."
 
@@ -2455,6 +2688,10 @@ msgstr "All"
 msgid "Todo el día"
 msgstr "All day"
 
+#: templates/core/export.html:12
+msgid "Todo en un archivo (JSON)"
+msgstr "Everything in one file (JSON)"
+
 #: apps/recipes/templates/recipes/list.html:18
 msgid "Todos los platos"
 msgstr "All courses"
@@ -2483,7 +2720,7 @@ msgstr "Transfer"
 msgid "Transporte"
 msgstr "Transport"
 
-#: apps/core/forms.py:65
+#: apps/core/forms.py:80
 msgid "Tu nombre"
 msgstr "Your name"
 
@@ -2499,15 +2736,21 @@ msgstr "Title"
 msgid "Un paso por línea."
 msgstr "One step per line."
 
+#: templates/core/export.html:13
+msgid ""
+"Un único archivo con todos los módulos. Útil como copia propia o para llevar los datos a otro "
+"programa."
+msgstr "A single file with every module. Useful as your own copy or to move the data to another program."
+
 #: apps/finance/planning.py:102
 msgid "Una meta común no puede vincularse a una cuenta personal."
 msgstr "A shared goal cannot be linked to a personal account."
 
-#: apps/tasks/forms.py:74 apps/tasks/services.py:38
+#: apps/tasks/forms.py:74 apps/tasks/services.py:40
 msgid "Una tarea personal solo puede asignarse a ti."
 msgstr "A personal task can only be assigned to you."
 
-#: apps/tasks/forms.py:76 apps/tasks/services.py:63
+#: apps/tasks/forms.py:76 apps/tasks/services.py:65
 msgid "Una tarea que se repite necesita fecha límite."
 msgstr "A repeating task needs a due date."
 
@@ -2602,6 +2845,10 @@ msgstr "Watched one more episode"
 msgid "Volver"
 msgstr "Back"
 
+#: templates/core/forgot_password.html:11
+msgid "Volver a la entrada"
+msgstr "Back to sign in"
+
 #: apps/places/templates/places/detail.html:42
 msgid "Volver a pendientes"
 msgstr "Back to to-visit"
@@ -2614,7 +2861,7 @@ msgstr "Vote in favour"
 msgid "Votar en contra"
 msgstr "Vote against"
 
-#: apps/shopping/services.py:125
+#: apps/shopping/services.py:143
 msgid "Voto no válido."
 msgstr "Invalid vote."
 
@@ -2627,19 +2874,19 @@ msgstr "Votes"
 msgid "Y %(n)s terminadas más antiguas."
 msgstr "And %(n)s older finished tasks."
 
-#: apps/core/forms.py:128
+#: apps/core/forms.py:143
 msgid "Ya existe otra cuenta con este correo."
 msgstr "Another account already uses this email."
 
-#: apps/finance/services.py:119
+#: apps/finance/services.py:122
 msgid "Ya existe una categoría con ese nombre."
 msgstr "A category with that name already exists."
 
-#: apps/core/forms.py:85
+#: apps/core/forms.py:100
 msgid "Ya existe una cuenta con este correo. Inicia sesión para continuar."
 msgstr "An account with this email already exists. Log in to continue."
 
-#: apps/tasks/services.py:256
+#: apps/tasks/services.py:276
 msgid "Ya existe una etiqueta con ese nombre."
 msgstr "A label with that name already exists."
 
@@ -2675,7 +2922,7 @@ msgstr "archived"
 msgid "año"
 msgstr "year"
 
-#: templates/core/household.html:111
+#: templates/core/household.html:132
 #, python-format
 msgid "caduca el %(date)s"
 msgstr "expires %(date)s"
@@ -3043,6 +3290,10 @@ msgstr "quick, vegetarian, oven…"
 msgid "saldo inicial"
 msgstr "opening balance"
 
+#: templates/partials/header_actions.html:14
+msgid "sin leer"
+msgstr "unread"
+
 #: apps/media/models.py:27
 msgid "sinopsis"
 msgstr "synopsis"
@@ -3093,7 +3344,7 @@ msgstr "all day"
 msgid "título"
 msgstr "title"
 
-#: templates/core/household.html:47
+#: templates/core/household.html:60
 msgid "tú"
 msgstr "you"
 
@@ -3105,7 +3356,7 @@ msgstr "user"
 msgid "usuarios"
 msgstr "users"
 
-#: apps/core/models.py:256
+#: apps/core/models.py:310
 msgid "visibilidad"
 msgstr "visibility"
 
@@ -3117,11 +3368,11 @@ msgstr "time zone"
 msgid "¡Conseguido!"
 msgstr "Done!"
 
-#: apps/core/views.py:66
+#: apps/core/views.py:67
 msgid "¡Listo! Tu hogar está creado."
 msgstr "Done! Your household has been created."
 
-#: apps/core/views.py:124
+#: apps/core/views.py:125
 #, python-format
 msgid "¡Te damos la bienvenida a %(name)s!"
 msgstr "Welcome to %(name)s!"
@@ -3156,7 +3407,11 @@ msgstr "Whose is it?"
 msgid "¿Dónde vamos?"
 msgstr "Where shall we go?"
 
-#: templates/core/login.html:17
+#: templates/core/forgot_password.html:7 templates/core/login.html:17
+msgid "¿Has olvidado la contraseña?"
+msgstr "Forgot your password?"
+
+#: templates/core/login.html:20
 msgid "¿No tienes cuenta? Pide a alguien de tu hogar un enlace de invitación."
 msgstr "Don't have an account? Ask someone in your household for an invitation link."
 
@@ -3165,7 +3420,7 @@ msgstr "Don't have an account? Ask someone in your household for an invitation l
 msgid "¿Para quién es?"
 msgstr "Who is it for?"
 
-#: templates/core/household.html:60
+#: templates/core/household.html:81
 #, python-format
 msgid "¿Quitar a %(name)s del hogar?"
 msgstr "Remove %(name)s from the household?"
@@ -3175,7 +3430,7 @@ msgstr "Remove %(name)s from the household?"
 msgid "¿Qué vemos?"
 msgstr "What shall we watch?"
 
-#: templates/core/household.html:130
+#: templates/core/household.html:151
 msgid "¿Seguro que quieres salir de este hogar?"
 msgstr "Are you sure you want to leave this household?"
 

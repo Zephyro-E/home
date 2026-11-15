@@ -15,6 +15,7 @@ from django.utils.translation import gettext as _
 
 from apps.core import recurrence
 from apps.core.models import Membership, Visibility
+from apps.notifications.services import notify
 from apps.tasks.models import Task
 
 from .models import KIND_COLORS, KIND_DOTS, TASK_COLOR, TASK_DOT, Event
@@ -66,7 +67,13 @@ def create_event(household, user, **data) -> Event:
     participants = data.pop("participants", [])
     event = Event.objects.create(household=household, owner=user, **data)
     event.participants.set(participants)
+    _notify_participants(event, user, participants)
     return event
+
+
+def _notify_participants(event, user, people):
+    url = reverse("calendar:detail", args=[event.pk])
+    notify(event.household, people, user, "event_added", event.title, url)
 
 
 def update_event(event: Event, user, **data) -> Event:
@@ -80,7 +87,9 @@ def update_event(event: Event, user, **data) -> Event:
         setattr(event, name, value)
     event.save()
     if participants is not None:
+        before = set(event.participants.values_list("pk", flat=True))
         event.participants.set(participants)
+        _notify_participants(event, user, [p for p in participants if p.pk not in before])
     return event
 
 

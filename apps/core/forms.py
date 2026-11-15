@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth import get_user_model, password_validation
-from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, SetPasswordForm
 from django.utils.translation import gettext_lazy as _
 
 from . import services
@@ -175,3 +175,7 @@ class RecurrenceFieldsMixin:
             self.cleaned_data.get("repeat_interval") or 1,
             self.cleaned_data.get("repeat_until"),
         )
+
+
+class StyledSetPasswordForm(StyledFormMixin, SetPasswordForm):
+    """Contraseña nueva sin pedir la anterior (enlace de recuperación)."""

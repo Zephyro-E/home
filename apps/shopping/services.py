@@ -3,10 +3,12 @@ aquí se aplican las reglas (quién puede editar, cambios de estado, votos)."""
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from apps.core.models import Visibility
+from apps.core.models import Membership, Visibility
+from apps.notifications.services import notify
 
 from .models import GroceryItem, WishComment, WishItem, WishVote
 
@@ -69,8 +71,23 @@ def _require_edit(item: WishItem, user):
         raise PermissionDenied
 
 
+def _wish_url(item):
+    return reverse("shopping:wish_detail", args=[item.pk])
+
+
+def _notify_proposal(item, user):
+    """Avisa al resto del hogar de una nueva propuesta común."""
+    members = [
+        m.user for m in Membership.objects.filter(household=item.household).select_related("user")
+    ]
+    notify(item.household, members, user, "wish_proposed", item.name, _wish_url(item))
+
+
 def create_wish(household, user, **data) -> WishItem:
-    return WishItem.objects.create(household=household, owner=user, **data)
+    item = WishItem.objects.create(household=household, owner=user, **data)
+    if item.is_shared:
+        _notify_proposal(item, user)
+    return item
 
 
 def update_wish(item: WishItem, user, **data) -> WishItem:
@@ -90,6 +107,7 @@ def make_shared(item: WishItem, user) -> WishItem:
     if item.visibility != Visibility.SHARED:
         item.visibility = Visibility.SHARED
         item.save(update_fields=["visibility", "updated_at"])
+        _notify_proposal(item, user)
     return item
 
 
@@ -141,7 +159,9 @@ def add_comment(item: WishItem, user, body: str) -> WishComment:
         raise ValidationError(_("Escribe un comentario."))
     if not item.is_shared:
         raise ValidationError(_("Solo se comenta en las propuestas comunes."))
-    return WishComment.objects.create(item=item, author=user, body=body[:2000])
+    comment = WishComment.objects.create(item=item, author=user, body=body[:2000])
+    notify(item.household, [item.owner], user, "comment", item.name, _wish_url(item))
+    return comment
 
 
 def delete_comment(comment: WishComment, user) -> None:

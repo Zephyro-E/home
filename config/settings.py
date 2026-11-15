@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
     "django_htmx",
     "django_tailwind_cli",
     "apps.core",
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     "apps.places",
     "apps.finance",
     "apps.recipes",
+    "apps.notifications",
 ]
 
 MIDDLEWARE = [

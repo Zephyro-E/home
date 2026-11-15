@@ -19,6 +19,7 @@
         <span class="grid size-9 place-items-center rounded-xl bg-accent text-accent-fg">{% icon "house" "size-5" %}</span>
         <span class="truncate">{{ request.household.name|default:"Hogar" }}</span>
       </a>
+      {% if request.household %}{% include "partials/header_actions.html" with placement="sidebar" %}{% endif %}
       <nav class="flex-1 space-y-1 overflow-y-auto px-3" aria-label="{% translate 'Navegación principal' %}">
         {% include "partials/nav_link.html" with url=home_url label=_("Inicio") icon_name="house" key="home" %}
         {% for m in modules %}
@@ -39,6 +40,7 @@
           <span class="truncate">{{ request.household.name|default:"Hogar" }}</span>
         </a>
         <div class="flex items-center gap-1">
+          {% if request.household %}{% include "partials/header_actions.html" with placement="header" %}{% endif %}
           {% include "partials/theme_switcher.html" with show_label=False %}
           {% include "partials/user_menu.html" with placement="header" %}
         </div>

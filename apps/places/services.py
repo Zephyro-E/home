@@ -4,11 +4,13 @@ import random
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Q
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.core import social
 from apps.core.models import Visibility
+from apps.notifications.services import notify
 
 from .models import Place, PlaceComment, PlaceRating
 
@@ -92,7 +94,10 @@ def rate(place: Place, user, stars: int):
 
 
 def add_comment(place: Place, user, body: str):
-    return social.add_comment(PlaceComment, "place", place, user, body)
+    comment = social.add_comment(PlaceComment, "place", place, user, body)
+    url = reverse("places:detail", args=[place.pk])
+    notify(place.household, [place.owner], user, "comment", place.name, url)
+    return comment
 
 
 def pick_random(user, household, category="", exclude=None) -> Place | None:

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Buscar" %} · Hogar{% endblock %}
+
+{% block content %}
+<h1 class="mb-4 text-2xl font-semibold tracking-tight">{% translate "Buscar" %}</h1>
+<form method="get" role="search" class="relative mb-6 max-w-xl">
+  <label for="search-q" class="sr-only">{% translate "Buscar en Hogar" %}</label>
+  <span class="pointer-events-none absolute inset-y-0 left-4 grid place-items-center text-muted">{% icon "search" "size-5" %}</span>
+  <input id="search-q" type="search" name="q" value="{{ search_query }}" placeholder="{% translate 'Productos, tareas, recetas, sitios…' %}" {% if not search_query %}autofocus{% endif %}
+         class="w-full rounded-2xl border border-border bg-surface py-3 pl-12 pr-4 shadow-sm placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30">
+</form>
+
+{% if search_query and too_short %}
+<p class="text-sm text-muted">{% translate "Escribe al menos 2 letras." %}</p>
+{% elif search_query and not groups %}
+<div class="rounded-2xl border border-dashed border-border px-6 py-12 text-center">
+  <p class="font-medium">{% blocktranslate trimmed with q=search_query %}No hay resultados para «{{ q }}»{% endblocktranslate %}</p>
+  <p class="mt-1 text-sm text-muted">{% translate "Prueba con otra palabra." %}</p>
+</div>
+{% elif groups %}
+<div class="grid gap-4 lg:grid-cols-2">
+  {% for group in groups %}
+  <section class="min-w-0 rounded-2xl border border-border bg-surface p-4 shadow-sm" aria-labelledby="g-{{ group.key }}">
+    <h2 id="g-{{ group.key }}" class="mb-2 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted">{% icon group.icon "size-4" %}{{ group.label }}</h2>
+    <ul class="-mx-2">
+      {% for title, detail, url in group.items %}
+      <li>
+        <a href="{{ url }}" class="flex items-center justify-between gap-3 rounded-xl px-2 py-2 hover:bg-surface-2">
+          <span class="min-w-0 truncate font-medium">{{ title }}</span>
+          {% if detail %}<span class="shrink-0 text-xs text-muted">{{ detail }}</span>{% endif %}
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-sm text-muted">{% translate "Busca en la lista de la compra, tareas, calendario, deseos, recetas, películas, sitios y finanzas." %}</p>
+{% endif %}
+{% endblock %}

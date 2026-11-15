@@ -3,11 +3,13 @@
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Max, Min, Q
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 
 from apps.core import recurrence
 from apps.core.models import Membership, Visibility
+from apps.notifications.services import notify
 
 from .models import Subtask, Task, TaskComment, TaskLabel
 
@@ -113,7 +115,18 @@ def create_task(household, user, title, labels=(), **data) -> Task:
         task.labels.set([lb for lb in labels if lb.household_id == household.pk])
     if task.is_done:
         spawn_next(task)
+    _notify_assignee(task, user)
     return task
+
+
+def _task_url(task):
+    return reverse("tasks:detail", args=[task.pk])
+
+
+def _notify_assignee(task, user):
+    """Avisa a quien le asignan la tarea (si no se la asigna a sí mismo)."""
+    if task.assignee_id:
+        notify(task.household, [task.assignee], user, "task_assigned", task.title, _task_url(task))
 
 
 def update_task(task: Task, user, labels=None, **data) -> Task:
@@ -125,9 +138,12 @@ def update_task(task: Task, user, labels=None, **data) -> Task:
             raise ValidationError(_("Escribe el título de la tarea."))
     _check_assignee(task.household, task.owner, task.visibility, data.get("assignee"))
     _check_recurrence({"due_date": task.due_date, **data})
+    previous_assignee = task.assignee_id
     for field, value in data.items():
         setattr(task, field, value)
     task.save()
+    if task.assignee_id != previous_assignee:
+        _notify_assignee(task, user)
     if labels is not None:
         task.labels.set([lb for lb in labels if lb.household_id == task.household_id])
     return task
@@ -236,7 +252,11 @@ def add_comment(task: Task, user, body: str) -> TaskComment:
     body = (body or "").strip()
     if not body:
         raise ValidationError(_("Escribe un comentario."))
-    return TaskComment.objects.create(task=task, author=user, body=body[:2000])
+    comment = TaskComment.objects.create(task=task, author=user, body=body[:2000])
+    notify(
+        task.household, [task.owner, task.assignee], user, "comment", task.title, _task_url(task)
+    )
+    return comment
 
 
 def delete_comment(comment: TaskComment, user) -> None:

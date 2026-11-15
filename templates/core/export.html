@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n ui %}
+
+{% block title %}{% translate "Exportar datos" %} · Hogar{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl">
+  <h1 class="mb-2 text-2xl font-semibold tracking-tight">{% translate "Exportar datos" %}</h1>
+  <p class="mb-6 text-sm text-muted">{% blocktranslate trimmed with name=request.household.name %}Descarga los datos de «{{ name }}» que puedes ver: lo común del hogar y lo personal tuyo. Lo personal de otras personas no se incluye.{% endblocktranslate %}</p>
+
+  <section class="mb-6 rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="todo">
+    <h2 id="todo" class="font-semibold">{% translate "Todo en un archivo (JSON)" %}</h2>
+    <p class="mt-1 text-sm text-muted">{% translate "Un único archivo con todos los módulos. Útil como copia propia o para llevar los datos a otro programa." %}</p>
+    <a href="{% url 'core:export_json' %}" class="mt-3 inline-flex items-center gap-1.5 rounded-xl bg-accent px-4 py-2 text-sm font-semibold text-accent-fg hover:opacity-90">{% icon "download" "size-4" %}{% translate "Descargar JSON" %}</a>
+  </section>
+
+  <section class="rounded-2xl border border-border bg-surface p-5 shadow-sm" aria-labelledby="por-modulo">
+    <h2 id="por-modulo" class="font-semibold">{% translate "Por módulo (CSV para Excel)" %}</h2>
+    <p class="mt-1 text-sm text-muted">{% translate "Hojas de cálculo preparadas para Excel en español (separador «;» y coma decimal)." %}</p>
+    <ul class="mt-3 grid gap-2 sm:grid-cols-2">
+      {% for key, label in sections %}
+      <li><a href="{% url 'core:export_csv' key %}" class="flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm font-medium hover:bg-surface-2">{% icon "download" "size-4 text-muted" %}{{ label }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <p class="mt-6 text-xs text-muted">{% translate "Las copias de seguridad completas (con fotos y todos los datos) se hacen en el PC con el script copia.bat." %}</p>
+</div>
+{% endblock %}
